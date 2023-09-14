@@ -52,8 +52,8 @@ export const UserPage = ({
   };
 
   return (
-    <div className="grid flex-col content-center justify-center w-full">
-      <form className="w-auto m-2 flex flex-col content-center justify-center bg-slate-100 rounded-2xl shadow-md bg-opacity-40">
+    <div className="grid content-center justify-center w-full p-4">
+      <form className="m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-40">
         <div className="container flex content-center justify-center">
           <input
             className="rounded-md p-2 m-2 text-center w-2/3"
@@ -81,12 +81,19 @@ export const UserPage = ({
           </button>
         </div>
       </form>
-      <div className="w-auto m-2 flex flex-col content-center justify-center bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
+      <div className="m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
         {publicKeys.length > 0 &&
           publicKeys.map((publicKey) => (
             <div className="flex flex-row" key={publicKey.address}>
-              <code className="m-1 p-1 bg-white bg-opacity-30 rounded-xl">{`${publicKey.address}`}</code>
-              <p className="m-1">{` - ${publicKey.type}`}</p>
+              <code
+                className={`m-1 p-1 bg-white rounded-xl break-all ${
+                  publicKey.type === "depositoor"
+                    ? "bg-opacity-30"
+                    : publicKey.type === "withdrawal_address"
+                    ? "bg-opacity-70"
+                    : ""
+                }`}
+              >{`${publicKey.address}`}</code>
               <button
                 className="w-6 h-6 m-2 rounded-sm bg-slate-400 shadow-2xl"
                 onClick={(evt) => {
@@ -97,6 +104,15 @@ export const UserPage = ({
               </button>
             </div>
           ))}
+      </div>
+      <div className="m-2 flex flex-col bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
+        <p className="m-1 p-1">Legend:</p>
+        <div className="w-auto h-auto m-1 p-1 bg-opacity-30 bg-white rounded-xl text-center">
+          <p>depositoor</p>
+        </div>
+        <div className="w-auto h-auto m-1 p-1 bg-opacity-70 bg-white rounded-xl text-center">
+          <p>withdrawal_address</p>
+        </div>
       </div>
     </div>
   );
