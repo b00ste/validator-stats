@@ -66,11 +66,9 @@ export const StatsPage = () => {
   // Fetch validators and filter them based on withdrawal address
   useEffect(() => {
     if (validatorArray.length === 0) {
-      const newValidatorArray = fetchValidators(publicKeys);
+      const fetchedData = fetchValidators(publicKeys);
 
-      setValidatorArray(newValidatorArray);
-
-      console.log(newValidatorArray);
+      fetchedData.then((data) => setValidatorArray(data));
     }
   }, [validatorArray.length, publicKeys, setValidatorArray]);
 

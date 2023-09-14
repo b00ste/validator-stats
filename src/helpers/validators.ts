@@ -10,11 +10,11 @@ import {
 } from "../typings/types";
 import { consensys_explorer } from "./constants";
 
-export const fetchValidators = (publicKeys: PublicKey[]) => {
+export const fetchValidators = async (publicKeys: PublicKey[]) => {
   const validatorArray: string[] = [];
   const validatorMap: Record<string, boolean> = {};
   for (let i = 0; i < publicKeys.length; i++) {
-    fetch(
+    await fetch(
       `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200`
     )
       .then((res) => res.json())
