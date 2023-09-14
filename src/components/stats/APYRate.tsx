@@ -1,16 +1,18 @@
-import percentage_yield from "../assets/percentage_yield.png";
+import percentage_yield from "../../assets/percentage_yield.png";
+
+type APYRateParams = {
+  timeframe: "monthly" | "annual";
+  tileStyle: string;
+  titleStyle: string;
+  stakedLYX: number;
+};
 
 export const APYRate = ({
   timeframe,
   tileStyle,
   titleStyle,
   stakedLYX,
-}: {
-  timeframe: "monthly" | "annual";
-  tileStyle: string;
-  titleStyle: string;
-  stakedLYX: number;
-}) => {
+}: APYRateParams) => {
   const getAnualBaseReward = () => {
     const EPOCHS_PER_YEAR = 82180;
 
