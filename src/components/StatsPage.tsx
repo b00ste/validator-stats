@@ -9,7 +9,6 @@ import { APYRate } from "./stats/APYRate";
 import { Luck } from "./stats/Luck";
 
 import {
-  fetchValidators,
   fetchValidatorsBalance,
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
@@ -26,17 +25,12 @@ import {
 import { Withdrawals } from "./stats/Withdrawals";
 import { WithdrawalBalance } from "./stats/WithdrawalBalance";
 
-export const StatsPage = () => {
-  const storedPublicKeys = localStorage.getItem("publicKeys");
-  const [publicKeys] = useState(
-    (storedPublicKeys ? JSON.parse(storedPublicKeys) : []) as PublicKey[]
-  );
+type StatsPageParams = {
+  publicKeys: PublicKey[];
+  validatorArray: string[];
+};
 
-  const storedValidatorArray = localStorage.getItem("validatorArray");
-  const [validatorArray, setValidatorArray] = useState(
-    (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
-  );
-
+export const StatsPage = ({ publicKeys, validatorArray }: StatsPageParams) => {
   const [activeValidators, setActiveValidators] = useState({} as ValidatorMap);
   const [pendingValidators, setPendingValidators] = useState(
     {} as ValidatorMap
@@ -62,15 +56,6 @@ export const StatsPage = () => {
 
   const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
-
-  // Fetch validators and filter them based on withdrawal address
-  useEffect(() => {
-    if (validatorArray.length === 0) {
-      const fetchedData = fetchValidators(publicKeys);
-
-      fetchedData.then((data) => setValidatorArray(data));
-    }
-  }, [validatorArray.length, publicKeys, setValidatorArray]);
 
   // Save validators to local storage
   useEffect(() => {

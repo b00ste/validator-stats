@@ -52,8 +52,8 @@ export const UserPage = ({
   };
 
   return (
-    <div className="grid content-center justify-center w-full p-4">
-      <form className="m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-40">
+    <div className="container max-w-6xl px-5 mx-auto my-28">
+      <form className="grid justify-center m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-40">
         <div className="container flex content-center justify-center">
           <input
             className="rounded-md p-2 m-2 text-center w-2/3"
@@ -81,7 +81,7 @@ export const UserPage = ({
           </button>
         </div>
       </form>
-      <div className="m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
+      <div className="grid justify-center m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
         {publicKeys.length > 0 &&
           publicKeys.map((publicKey) => (
             <div className="flex flex-row" key={publicKey.address}>
