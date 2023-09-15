@@ -1,13 +1,4 @@
-import { ValidatorMap } from "../../typings/types";
-
-type ValidatorsParams = {
-  tileClasses: string;
-  activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
-  validatorMapsNeedUpdate: boolean;
-};
+import { ValidatorsParams } from "../../typings/types";
 
 export const Validators = ({
   tileClasses,

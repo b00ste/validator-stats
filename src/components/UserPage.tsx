@@ -1,11 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { consensys_explorer } from "../helpers/constants";
-import { PublicKey } from "../typings/types";
-
-type UserPageParams = {
-  publicKeys: PublicKey[];
-  setPublicKeys: Function;
-};
+import { UserPageParams } from "../typings/types";
 
 export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
   const [error, setError] = useState("");

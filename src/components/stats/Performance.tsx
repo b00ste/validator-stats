@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import { ValidatorsPerformance } from "../../typings/types";
-
-type PerformanceParams = {
-  tileClasses: string;
-  validatorsPerformance: ValidatorsPerformance;
-  performanceNeedsUpdate: boolean;
-};
+import { PerformanceParams } from "../../typings/types";
 
 export const Performance = ({
   tileClasses,

@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
-import { PublicKey } from "../../typings/types";
+import { WithdrawalBalanceParams } from "../../typings/types";
 import { getWithdrawalAddressBalance } from "../../helpers/network";
-
-type WithdrawalBalanceParams = {
-  tileClasses: string;
-  publicKeys: PublicKey[];
-  eurPrice: string;
-  usdPrice: string;
-  withdrawalAddressesBalanceNeedsUpdate: boolean;
-  setWithdrawalAddressesBalanceNeedsUpdate: Function;
-};
 
 export const WithdrawalBalance = ({
   tileClasses,

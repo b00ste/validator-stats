@@ -11,11 +11,21 @@ import { PrivacyPolicy } from "./components/PrivacyPolicy";
 import { License } from "./components/License";
 
 // helpers
-import { fetchValidators, fetchValidatorsData } from "./helpers/validators";
+import {
+  fetchValidators,
+  fetchValidatorsData,
+  fetchValidatorsLuck,
+  fetchValidatorsPerformance,
+} from "./helpers/validators";
 import { getLastEpoch } from "./helpers/network";
 
 // ts types
-import { PublicKey, ValidatorMap } from "./typings/types";
+import {
+  PublicKey,
+  ValidatorMap,
+  ValidatorsLuck,
+  ValidatorsPerformance,
+} from "./typings/types";
 
 function App() {
   const [page, setPage] = useState("stats");
@@ -32,7 +42,7 @@ function App() {
     (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
   );
 
-  // Validator data for active/pending validators
+  // ------ Validator Data ------
   const [activeValidators, setActiveValidators] = useState({} as ValidatorMap);
   const [pendingValidators, setPendingValidators] = useState(
     {} as ValidatorMap
@@ -41,12 +51,34 @@ function App() {
     {} as ValidatorMap
   );
   const [otherValidators, setOtherValidators] = useState({} as ValidatorMap);
-  const [validatorMapsNeedUpdate, setValidatorMapsNeedUpdate] = useState(true);
+  const [validatorsLuck, setValidatorsLuck] = useState({} as ValidatorsLuck);
+  const [validatorsPerformance, setValidatorsPerformance] = useState(
+    {} as ValidatorsPerformance
+  );
+  // ----------------------------
 
+  // ------ Network Data ------
   const [stakedLYX, setStakedLYX] = useState(0);
   const [currentEpoch, setCurrentEpoch] = useState(0);
   const [networkValidators, setNetworkValidators] = useState(0);
+  // --------------------------
+
+  // ------ Price Data ------
+  const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
+  const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
+  // --------------------------
+
+  // ------ Update booleans ------
+  const [validatorMapsNeedUpdate, setValidatorMapsNeedUpdate] = useState(true);
   const [networkDataNeedsUpdate, setNetworkDataNeedsUpdate] = useState(true);
+  const [luckNeedsUpdate, setLuckNeedsUpdate] = useState(true);
+  const [performanceNeedsUpdate, setPerformanceNeedsUpdate] = useState(true);
+  const [LYXPriceNeedsUpdate, setLYXPriceNeedsUpdate] = useState(true);
+  const [
+    withdrawalAddressesBalanceNeedsUpdate,
+    setWithdrawalAddressesBalanceNeedsUpdate,
+  ] = useState(true);
+  // -----------------------------
 
   // Save validators to local storage
   useEffect(() => {
@@ -62,7 +94,7 @@ function App() {
     }
   }, [validatorArray.length, publicKeys, setValidatorArray]);
 
-  // Update validators data (active/pending)
+  // Update validators data (active/pending/slashed/other)
   useEffect(() => {
     if (validatorArray.length > 0 && validatorMapsNeedUpdate) {
       const fetchedData = fetchValidatorsData(validatorArray);
@@ -93,6 +125,77 @@ function App() {
     }
   }, [networkDataNeedsUpdate]);
 
+  // Fetch LYX price in both EUR & USD
+  useEffect(() => {
+    if (LYXPriceNeedsUpdate) {
+      fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setEurPrce(data["lukso-token-2"].eur);
+          setUsdPrce(data["lukso-token-2"].usd);
+        });
+
+      setLYXPriceNeedsUpdate(false);
+    }
+  }, [LYXPriceNeedsUpdate]);
+
+  // Update validators luck
+  useEffect(() => {
+    if (
+      Object.getOwnPropertyNames(activeValidators).length > 0 &&
+      luckNeedsUpdate
+    ) {
+      let fetchedData = fetchValidatorsLuck(activeValidators);
+
+      fetchedData.then((data) => setValidatorsLuck(data));
+      setLuckNeedsUpdate(false);
+    }
+  }, [activeValidators, luckNeedsUpdate]);
+
+  // Update validators performance
+  useEffect(() => {
+    if (
+      Object.getOwnPropertyNames(activeValidators).length > 0 &&
+      performanceNeedsUpdate
+    ) {
+      let fetchedData = fetchValidatorsPerformance(activeValidators);
+
+      fetchedData.then((data) => setValidatorsPerformance(data));
+      setPerformanceNeedsUpdate(false);
+    }
+  }, [activeValidators, performanceNeedsUpdate]);
+
+  // Refresh data every 5 minutes
+  useEffect(() => {
+    if (
+      !luckNeedsUpdate &&
+      !performanceNeedsUpdate &&
+      !LYXPriceNeedsUpdate &&
+      !networkDataNeedsUpdate &&
+      !validatorMapsNeedUpdate &&
+      !withdrawalAddressesBalanceNeedsUpdate
+    ) {
+      const id = setInterval(() => {
+        setLuckNeedsUpdate(true);
+        setPerformanceNeedsUpdate(true);
+        setLYXPriceNeedsUpdate(true);
+        setNetworkDataNeedsUpdate(true);
+        setValidatorMapsNeedUpdate(true);
+        setWithdrawalAddressesBalanceNeedsUpdate(true);
+      }, 300000);
+      return () => clearInterval(id);
+    }
+  }, [
+    luckNeedsUpdate,
+    performanceNeedsUpdate,
+    LYXPriceNeedsUpdate,
+    withdrawalAddressesBalanceNeedsUpdate,
+    validatorMapsNeedUpdate,
+    networkDataNeedsUpdate,
+  ]);
+
   switch (page) {
     case "stats": {
       return (
@@ -106,14 +209,25 @@ function App() {
           <StatsPage
             publicKeys={publicKeys}
             stakedLYX={stakedLYX}
+            eurPrice={eurPrice ? eurPrice : ""}
+            usdPrice={usdPrice ? usdPrice : ""}
             activeValidators={activeValidators}
             pendingValidators={pendingValidators}
             slashedValidators={slashedValidators}
             otherValidators={otherValidators}
+            validatorsLuck={validatorsLuck}
+            validatorsPerformance={validatorsPerformance}
             validatorMapsNeedUpdate={validatorMapsNeedUpdate}
-            setValidatorMapsNeedUpdate={setValidatorMapsNeedUpdate}
             networkDataNeedsUpdate={networkDataNeedsUpdate}
-            setNetworkDataNeedsUpdate={setNetworkDataNeedsUpdate}
+            luckNeedsUpdate={luckNeedsUpdate}
+            performanceNeedsUpdate={performanceNeedsUpdate}
+            LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
+            withdrawalAddressesBalanceNeedsUpdate={
+              withdrawalAddressesBalanceNeedsUpdate
+            }
+            setWithdrawalAddressesBalanceNeedsUpdate={
+              setWithdrawalAddressesBalanceNeedsUpdate
+            }
           />
           <Footer setPage={setPage} />
         </div>

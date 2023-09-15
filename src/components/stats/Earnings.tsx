@@ -1,14 +1,4 @@
-import { ValidatorsPerformance } from "../../typings/types";
-
-type EarningsParams = {
-  timeframe: "weekly" | "monthly" | "total";
-  tileClasses: string;
-  eurPrice: string;
-  usdPrice: string;
-  validatorsPerformance: ValidatorsPerformance;
-  LYXPriceNeedsUpdate: boolean;
-  performanceNeedsUpdate: boolean;
-};
+import { EarningsParams } from "../../typings/types";
 
 export const Earnings = ({
   timeframe,

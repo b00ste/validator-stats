@@ -1,9 +1,4 @@
-type LYXPriceParams = {
-  tileClasses: string;
-  eurPrice: string;
-  usdPrice: string;
-  LYXPriceNeedsUpdate: boolean;
-};
+import { LYXPriceParams } from "../../typings/types";
 
 export const LYXPrice = ({
   tileClasses,

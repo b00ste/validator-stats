@@ -1,14 +1,5 @@
 import { useEffect, useState } from "react";
-import { ValidatorMap } from "../../typings/types";
-
-type BalanceParams = {
-  tileClasses: string;
-  activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
-  validatorMapsNeedUpdate: boolean;
-};
+import { BalanceParams } from "../../typings/types";
 
 export const Balance = ({
   tileClasses,

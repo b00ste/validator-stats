@@ -1,4 +1,6 @@
-export const Footer = ({ setPage }: { setPage: Function }) => {
+import { FooterParams } from "../typings/types";
+
+export const Footer = ({ setPage }: FooterParams) => {
   return (
     <footer className="fixed bottom-0 left-4 right-4 rounded-t-3xl bg-pastel-white-pink p-2 text-center shadow">
       <div className="container mx-auto">

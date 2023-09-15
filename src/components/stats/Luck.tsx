@@ -1,10 +1,4 @@
-import { ValidatorsLuck } from "../../typings/types";
-
-type LuckParams = {
-  tileClasses: string;
-  validatorsLuck: ValidatorsLuck;
-  luckNeedsUpdate: boolean;
-};
+import { LuckParams } from "../../typings/types";
 
 export const Luck = ({
   tileClasses,

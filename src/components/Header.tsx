@@ -1,9 +1,4 @@
-type HeaderParams = {
-  setPage: Function;
-  stakedLYX: number;
-  currentEpoch: number;
-  networkValidators: number;
-};
+import { HeaderParams } from "../typings/types";
 
 export const Header = ({
   setPage,

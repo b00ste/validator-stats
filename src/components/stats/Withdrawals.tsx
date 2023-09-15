@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import { ValidatorMap } from "../../typings/types";
-
-type WithdrawalsParams = {
-  tileClasses: string;
-  activeValidators: ValidatorMap;
-  validatorMapsNeedUpdate: boolean;
-};
+import { WithdrawalsParams } from "../../typings/types";
 
 export const Withdrawals = ({
   tileClasses,

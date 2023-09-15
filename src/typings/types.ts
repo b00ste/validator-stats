@@ -98,3 +98,118 @@ export type ValidatorsWithdrawals = {
   validatorindex: number;
   withdrawalindex: number;
 };
+
+// ------------ COMPONENTS PARAM TYPES ------------
+
+export type StatsPageParams = {
+  publicKeys: PublicKey[];
+  stakedLYX: number;
+  eurPrice: string;
+  usdPrice: string;
+  activeValidators: ValidatorMap;
+  pendingValidators: ValidatorMap;
+  slashedValidators: ValidatorMap;
+  otherValidators: ValidatorMap;
+  validatorsLuck: ValidatorsLuck;
+  validatorsPerformance: ValidatorsPerformance;
+  validatorMapsNeedUpdate: boolean;
+  networkDataNeedsUpdate: boolean;
+  luckNeedsUpdate: boolean;
+  performanceNeedsUpdate: boolean;
+  LYXPriceNeedsUpdate: boolean;
+  withdrawalAddressesBalanceNeedsUpdate: boolean;
+  setWithdrawalAddressesBalanceNeedsUpdate: Function;
+};
+
+export type ValidatorsPageParams = {
+  validatorArray: string[];
+  activeValidators: ValidatorMap;
+  pendingValidators: ValidatorMap;
+  slashedValidators: ValidatorMap;
+  otherValidators: ValidatorMap;
+};
+
+export type UserPageParams = {
+  publicKeys: PublicKey[];
+  setPublicKeys: Function;
+};
+
+export type HeaderParams = {
+  setPage: Function;
+  stakedLYX: number;
+  currentEpoch: number;
+  networkValidators: number;
+};
+
+export type FooterParams = { setPage: Function };
+
+// ------------ STATS COMPONENTS PARAM TYPES ------------
+
+export type APYRateParams = {
+  timeframe: "monthly" | "annual";
+  tileClasses: string;
+  stakedLYX: number;
+  networkDataNeedsUpdate: boolean;
+};
+
+export type BalanceParams = {
+  tileClasses: string;
+  activeValidators: ValidatorMap;
+  pendingValidators: ValidatorMap;
+  slashedValidators: ValidatorMap;
+  otherValidators: ValidatorMap;
+  validatorMapsNeedUpdate: boolean;
+};
+
+export type EarningsParams = {
+  timeframe: "weekly" | "monthly" | "total";
+  tileClasses: string;
+  eurPrice: string;
+  usdPrice: string;
+  validatorsPerformance: ValidatorsPerformance;
+  LYXPriceNeedsUpdate: boolean;
+  performanceNeedsUpdate: boolean;
+};
+
+export type LuckParams = {
+  tileClasses: string;
+  validatorsLuck: ValidatorsLuck;
+  luckNeedsUpdate: boolean;
+};
+
+export type LYXPriceParams = {
+  tileClasses: string;
+  eurPrice: string;
+  usdPrice: string;
+  LYXPriceNeedsUpdate: boolean;
+};
+
+export type PerformanceParams = {
+  tileClasses: string;
+  validatorsPerformance: ValidatorsPerformance;
+  performanceNeedsUpdate: boolean;
+};
+
+export type ValidatorsParams = {
+  tileClasses: string;
+  activeValidators: ValidatorMap;
+  pendingValidators: ValidatorMap;
+  slashedValidators: ValidatorMap;
+  otherValidators: ValidatorMap;
+  validatorMapsNeedUpdate: boolean;
+};
+
+export type WithdrawalBalanceParams = {
+  tileClasses: string;
+  publicKeys: PublicKey[];
+  eurPrice: string;
+  usdPrice: string;
+  withdrawalAddressesBalanceNeedsUpdate: boolean;
+  setWithdrawalAddressesBalanceNeedsUpdate: Function;
+};
+
+export type WithdrawalsParams = {
+  tileClasses: string;
+  activeValidators: ValidatorMap;
+  validatorMapsNeedUpdate: boolean;
+};

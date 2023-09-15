@@ -1,9 +1,4 @@
-type APYRateParams = {
-  timeframe: "monthly" | "annual";
-  tileClasses: string;
-  stakedLYX: number;
-  networkDataNeedsUpdate: boolean;
-};
+import { APYRateParams } from "../../typings/types";
 
 export const APYRate = ({
   timeframe,

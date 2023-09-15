@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { consensys_explorer } from "../helpers/constants";
-import { ValidatorMap } from "../typings/types";
-
-type ValidatorsPageParams = {
-  validatorArray: string[];
-  activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
-};
+import { ValidatorsPageParams } from "../typings/types";
 
 export const ValidatorsPage = ({
   validatorArray,
