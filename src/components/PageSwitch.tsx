@@ -9,19 +9,19 @@ export const PageSwitch = ({ setPage }: { setPage: Function }) => {
         <img
           src={stats}
           alt="stats"
-          className="w-12 h-12 m-2"
+          className="w-12 h-12 m-2 cursor-pointer"
           onClick={() => setPage("stats")}
         />
         <img
           src={user}
           alt="user"
-          className="w-12 h-12 m-2"
+          className="w-12 h-12 m-2 cursor-pointer"
           onClick={() => setPage("user")}
         />
         <img
           src={list}
           alt="list"
-          className="w-12 h-12 m-2"
+          className="w-12 h-12 m-2 cursor-pointer"
           onClick={() => setPage("list")}
         />
       </div>

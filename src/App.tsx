@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { UserPage } from "./components/UserPage";
 import { StatsPage } from "./components/StatsPage";
 
-import { PublicKey } from "./typings/types";
-import { fetchValidators } from "./helpers/validators";
+import { PublicKey, ValidatorMap } from "./typings/types";
+import { fetchValidators, fetchValidatorsData } from "./helpers/validators";
 import { PageSwitch } from "./components/PageSwitch";
 import { ValidatorsPage } from "./components/ValidatorsPage";
 
@@ -20,6 +20,16 @@ function App() {
     (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
   );
 
+  const [activeValidators, setActiveValidators] = useState({} as ValidatorMap);
+  const [pendingValidators, setPendingValidators] = useState(
+    {} as ValidatorMap
+  );
+
+  // Save validators to local storage
+  useEffect(() => {
+    localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
+  }, [validatorArray]);
+
   // Fetch validators and filter them based on withdrawal address
   useEffect(() => {
     if (validatorArray.length === 0) {
@@ -29,13 +39,33 @@ function App() {
     }
   }, [validatorArray.length, publicKeys, setValidatorArray]);
 
+  // Update validators balance
+  useEffect(() => {
+    if (
+      validatorArray.length > 0 &&
+      Object.getOwnPropertyNames(activeValidators).length === 0 &&
+      Object.getOwnPropertyNames(pendingValidators).length === 0
+    ) {
+      const fetchedData = fetchValidatorsData(validatorArray);
+
+      fetchedData.then((data) => {
+        setActiveValidators(data.activeValidators);
+        setPendingValidators(data.pendingValidators);
+      });
+    }
+  }, [validatorArray, activeValidators, pendingValidators]);
+
   const [page, setPage] = useState("stats");
 
   switch (page) {
     case "stats": {
       return (
         <div className="flex items-center min-h-screen bg-pink-300 dark:bg-pink-500">
-          <StatsPage publicKeys={publicKeys} validatorArray={validatorArray} />
+          <StatsPage
+            publicKeys={publicKeys}
+            activeValidators={activeValidators}
+            pendingValidators={pendingValidators}
+          />
           <PageSwitch setPage={setPage} />
         </div>
       );
@@ -52,8 +82,9 @@ function App() {
       return (
         <div className="flex items-center min-h-screen bg-pink-300 dark:bg-pink-500">
           <ValidatorsPage
-            publicKeys={publicKeys}
             validatorArray={validatorArray}
+            activeValidators={activeValidators}
+            pendingValidators={pendingValidators}
           />
           <PageSwitch setPage={setPage} />
         </div>

@@ -3,6 +3,7 @@ import {
   ConsensusPerformance,
   ExecutionPerformance,
   PublicKey,
+  Validator,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
@@ -38,7 +39,7 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
   return validatorArray;
 };
 
-const fetchValidatorData = async (link: string, validators: string[]) => {
+const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
   if (validators.length === 0) {
     return [];
   } else if (validators.length <= 100) {
@@ -81,13 +82,13 @@ const fetchValidatorData = async (link: string, validators: string[]) => {
   }
 };
 
-export const fetchValidatorsBalance = async (validatorArray: string[]) => {
+export const fetchValidatorsData = async (validatorArray: string[]) => {
   const dataCollection: {
     pubkey: string;
     balance: number;
     status: string;
     validatorindex: number;
-  }[][] = await fetchValidatorData(
+  }[][] = await fetchValidatorDataByLink(
     `${consensys_explorer}/api/v1/validator/{validators}`,
     validatorArray
   );
@@ -96,11 +97,11 @@ export const fetchValidatorsBalance = async (validatorArray: string[]) => {
   let pendingValidators = {} as ValidatorMap;
   for (let i = 0; i < dataCollection.length; i++) {
     for (let j = 0; j < dataCollection[i].length; j++) {
-      const { pubkey, balance, status, validatorindex } = dataCollection[i][j];
-      if (status === "active_online") {
-        activeValidators[pubkey] = { validatorindex, balance };
-      } else if (status === "pending") {
-        pendingValidators[pubkey] = { validatorindex, balance };
+      const validatorData = dataCollection[i][j];
+      if (validatorData.status === "active_online") {
+        activeValidators[validatorData.pubkey] = validatorData as Validator;
+      } else if (validatorData.status === "pending") {
+        pendingValidators[validatorData.pubkey] = validatorData as Validator;
       } else continue;
     }
   }
@@ -129,18 +130,20 @@ export const fetchValidatorsPerformance = async (
   const pubkeys = Object.getOwnPropertyNames(activeValidators);
 
   const attestationEfficiency: AttestationEfficiency[] =
-    await fetchValidatorData(
+    await fetchValidatorDataByLink(
       `${consensys_explorer}/api/v1/validator/{validators}/attestationefficiency`,
       pubkeys
     );
-  const consensusPerformance: ConsensusPerformance[] = await fetchValidatorData(
-    `${consensys_explorer}/api/v1/validator/{validators}/performance`,
-    pubkeys
-  );
-  const executionPerformance: ExecutionPerformance[] = await fetchValidatorData(
-    `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
-    pubkeys
-  );
+  const consensusPerformance: ConsensusPerformance[] =
+    await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validator/{validators}/performance`,
+      pubkeys
+    );
+  const executionPerformance: ExecutionPerformance[] =
+    await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
+      pubkeys
+    );
 
   const performanceData: ValidatorsPerformance = {};
 
@@ -174,7 +177,7 @@ export const fetchValidatorsWithdrawals = async (
 ) => {
   const pubkeys = Object.getOwnPropertyNames(activeValidators);
 
-  const withdrawals: ValidatorsWithdrawals[] = await fetchValidatorData(
+  const withdrawals: ValidatorsWithdrawals[] = await fetchValidatorDataByLink(
     `${consensys_explorer}/api/v1/validator/{validators}/withdrawals`,
     pubkeys
   );

@@ -9,10 +9,8 @@ import { APYRate } from "./stats/APYRate";
 import { Luck } from "./stats/Luck";
 
 import {
-  fetchValidatorsBalance,
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
-  fetchValidatorsWithdrawals,
 } from "../helpers/validators";
 import { getLastEpoch } from "../helpers/network";
 import {
@@ -20,35 +18,29 @@ import {
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
-  ValidatorsWithdrawals,
 } from "../typings/types";
 import { Withdrawals } from "./stats/Withdrawals";
 import { WithdrawalBalance } from "./stats/WithdrawalBalance";
 
 type StatsPageParams = {
   publicKeys: PublicKey[];
-  validatorArray: string[];
+  activeValidators: ValidatorMap;
+  pendingValidators: ValidatorMap;
 };
 
-export const StatsPage = ({ publicKeys, validatorArray }: StatsPageParams) => {
-  const [activeValidators, setActiveValidators] = useState({} as ValidatorMap);
-  const [pendingValidators, setPendingValidators] = useState(
-    {} as ValidatorMap
-  );
+export const StatsPage = ({
+  publicKeys,
+  activeValidators,
+  pendingValidators,
+}: StatsPageParams) => {
   const [validatorsLuck, setValidatorsLuck] = useState({} as ValidatorsLuck);
 
   const [validatorsPerformance, setValidatorsPerformance] = useState(
     {} as ValidatorsPerformance
   );
 
-  const [validatorsWithdrawals, setValidatorsWithdrawals] = useState(
-    {} as ValidatorsWithdrawals[]
-  );
-
-  const [balanceNeedsUpdate, setBalanceNeedsUpdate] = useState(true);
   const [luckNeedsUpdate, setLuckNeedsUpdate] = useState(true);
   const [performanceNeedsUpdate, setPerformanceNeedsUpdate] = useState(true);
-  const [withdrawalsNeedsUpdate, setWithdrawalsNeedsUpdate] = useState(true);
 
   const [stakedLYX, setStakedLYX] = useState(0);
   const [currentEpoch, setCurrentEpoch] = useState(0);
@@ -56,11 +48,6 @@ export const StatsPage = ({ publicKeys, validatorArray }: StatsPageParams) => {
 
   const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
-
-  // Save validators to local storage
-  useEffect(() => {
-    localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
-  }, [validatorArray]);
 
   // Fetch validators count and staked LYX count
   useEffect(() => {
@@ -74,19 +61,6 @@ export const StatsPage = ({ publicKeys, validatorArray }: StatsPageParams) => {
       });
     }
   });
-
-  // Update validators balance
-  useEffect(() => {
-    if (balanceNeedsUpdate) {
-      const fetchedData = fetchValidatorsBalance(validatorArray);
-
-      fetchedData.then((data) => {
-        setActiveValidators(data.activeValidators);
-        setPendingValidators(data.pendingValidators);
-      });
-      setBalanceNeedsUpdate(false);
-    }
-  }, [validatorArray, balanceNeedsUpdate, setBalanceNeedsUpdate]);
 
   // Update validators luck
   useEffect(() => {
@@ -127,19 +101,6 @@ export const StatsPage = ({ publicKeys, validatorArray }: StatsPageParams) => {
         });
     }
   });
-
-  // Fetch withdrawals
-  useEffect(() => {
-    if (
-      Object.getOwnPropertyNames(activeValidators).length > 0 &&
-      withdrawalsNeedsUpdate
-    ) {
-      let fetchedData = fetchValidatorsWithdrawals(activeValidators);
-
-      fetchedData.then((data) => setValidatorsWithdrawals(data));
-      setWithdrawalsNeedsUpdate(false);
-    }
-  }, [activeValidators, withdrawalsNeedsUpdate]);
 
   const tileStyle =
     "flex items-center justify-center space-x-4 text-center bg-slate-100 rounded-2xl shadow-md p-5 m-2";
@@ -235,7 +196,7 @@ export const StatsPage = ({ publicKeys, validatorArray }: StatsPageParams) => {
         <Withdrawals
           tileStyle={`${tileStyle} bg-opacity-60`}
           titleStyle={titleStyle}
-          validatorsWithdrawals={validatorsWithdrawals}
+          activeValidators={activeValidators}
         />
         <WithdrawalBalance
           tileStyle={`${tileStyle} bg-opacity-60`}

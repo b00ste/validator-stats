@@ -1,34 +1,26 @@
-export type Validator = {
-  balance: string;
-  index: string;
-  status: string;
-  validator: {
-    activation_eligibility_epoch: string;
-    activation_epoch: string;
-    effective_balance: string;
-    exit_epoch: string;
-    pubkey: string;
-    slashed: boolean;
-    withdrawable_epoch: string;
-    withdrawal_credentials: string;
-  };
-};
-
-export type ValidatorList = {
-  data: Validator[];
-  execution_optimistic: boolean;
-  finalized: boolean;
-};
-
 export type PublicKey = {
   address: string;
   type: "depositoor" | "withdrawal_address";
 };
 
-export type ValidatorMap = Record<
-  string,
-  { balance: number; validatorindex: number; luck?: number }
->;
+export type Validator = {
+  activationeligibilityepoch: number;
+  activationepoch: number;
+  balance: number;
+  effectivebalance: number;
+  exitepoch: number;
+  lastattestationslot: number;
+  name: string;
+  pubkey: string;
+  slashed: boolean;
+  status: string;
+  total_withdrawals: number;
+  validatorindex: number;
+  withdrawableepoch: number;
+  withdrawalcredentials: string;
+};
+
+export type ValidatorMap = Record<string, Validator>;
 
 export type ValidatorsLuck = {
   average_proposal_interval: number;
