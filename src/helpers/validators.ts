@@ -83,30 +83,36 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
 };
 
 export const fetchValidatorsData = async (validatorArray: string[]) => {
-  const dataCollection: {
-    pubkey: string;
-    balance: number;
-    status: string;
-    validatorindex: number;
-  }[][] = await fetchValidatorDataByLink(
+  const dataCollection: Validator[][] = await fetchValidatorDataByLink(
     `${consensys_explorer}/api/v1/validator/{validators}`,
     validatorArray
   );
 
+  let slashedValidators = {} as ValidatorMap;
   let activeValidators = {} as ValidatorMap;
   let pendingValidators = {} as ValidatorMap;
+  let otherValidators = {} as ValidatorMap;
   for (let i = 0; i < dataCollection.length; i++) {
     for (let j = 0; j < dataCollection[i].length; j++) {
       const validatorData = dataCollection[i][j];
-      if (validatorData.status === "active_online") {
-        activeValidators[validatorData.pubkey] = validatorData as Validator;
+      if (validatorData.slashed) {
+        slashedValidators[validatorData.pubkey] = validatorData;
+      } else if (validatorData.status === "active_online") {
+        activeValidators[validatorData.pubkey] = validatorData;
       } else if (validatorData.status === "pending") {
-        pendingValidators[validatorData.pubkey] = validatorData as Validator;
-      } else continue;
+        pendingValidators[validatorData.pubkey] = validatorData;
+      } else {
+        otherValidators[validatorData.pubkey] = validatorData;
+      }
     }
   }
 
-  return { activeValidators, pendingValidators };
+  return {
+    slashedValidators,
+    activeValidators,
+    pendingValidators,
+    otherValidators,
+  };
 };
 
 export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {

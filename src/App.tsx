@@ -37,6 +37,10 @@ function App() {
   const [pendingValidators, setPendingValidators] = useState(
     {} as ValidatorMap
   );
+  const [slashedValidators, setSlashedValidators] = useState(
+    {} as ValidatorMap
+  );
+  const [otherValidators, setOtherValidators] = useState({} as ValidatorMap);
 
   const [stakedLYX, setStakedLYX] = useState(0);
   const [currentEpoch, setCurrentEpoch] = useState(0);
@@ -62,16 +66,26 @@ function App() {
     if (
       validatorArray.length > 0 &&
       Object.getOwnPropertyNames(activeValidators).length === 0 &&
-      Object.getOwnPropertyNames(pendingValidators).length === 0
+      Object.getOwnPropertyNames(pendingValidators).length === 0 &&
+      Object.getOwnPropertyNames(slashedValidators).length === 0 &&
+      Object.getOwnPropertyNames(otherValidators).length === 0
     ) {
       const fetchedData = fetchValidatorsData(validatorArray);
 
       fetchedData.then((data) => {
         setActiveValidators(data.activeValidators);
         setPendingValidators(data.pendingValidators);
+        setSlashedValidators(data.slashedValidators);
+        setOtherValidators(data.otherValidators);
       });
     }
-  }, [validatorArray, activeValidators, pendingValidators]);
+  }, [
+    validatorArray,
+    activeValidators,
+    pendingValidators,
+    slashedValidators,
+    otherValidators,
+  ]);
 
   // Fetch validators count, staked LYX count and current epoch
   useEffect(() => {
@@ -103,6 +117,8 @@ function App() {
             stakedLYX={stakedLYX}
             activeValidators={activeValidators}
             pendingValidators={pendingValidators}
+            slashedValidators={slashedValidators}
+            otherValidators={otherValidators}
             networkDataNeedsUpdate={networkDataNeedsUpdate}
             setNetworkDataNeedsUpdate={setNetworkDataNeedsUpdate}
           />
@@ -137,6 +153,8 @@ function App() {
             validatorArray={validatorArray}
             activeValidators={activeValidators}
             pendingValidators={pendingValidators}
+            slashedValidators={slashedValidators}
+            otherValidators={otherValidators}
           />
           <Footer setPage={setPage} />
         </div>

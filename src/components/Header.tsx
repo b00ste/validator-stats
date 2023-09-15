@@ -16,7 +16,7 @@ export const Header = ({
 
   return (
     <nav className="fixed top-0 left-4 right-4">
-      <div className="container mx-auto grid grid-cols-3 bg-white p-4 rounded-b-3xl">
+      <div className="container mx-auto grid grid-cols-3 bg-pastel-white-pink p-4 rounded-b-3xl shadow">
         <div className={`${tileClasses}`}>
           <div className="text-pastel-blue text-xl mb-2">Validators</div>
           <p className="text-gray-600">{networkValidators.toLocaleString()}</p>

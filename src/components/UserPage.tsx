@@ -78,7 +78,7 @@ export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
   return (
     <div className="container mx-auto mt-40 mb-16 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {/* <!-- Tile 1: Add Address Form --> */}
-      <div className="bg-white p-4 m-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
@@ -142,7 +142,7 @@ export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
       </div>
 
       {/* <!-- Tile 2: List of Saved Addresses --> */}
-      <div className="bg-white p-4 m-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
+      <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <ul className="space-y-4">
           {publicKeys.map((publicKey) => (

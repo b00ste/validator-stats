@@ -26,6 +26,8 @@ type StatsPageParams = {
   stakedLYX: number;
   activeValidators: ValidatorMap;
   pendingValidators: ValidatorMap;
+  slashedValidators: ValidatorMap;
+  otherValidators: ValidatorMap;
   networkDataNeedsUpdate: boolean;
   setNetworkDataNeedsUpdate: Function;
 };
@@ -35,6 +37,8 @@ export const StatsPage = ({
   stakedLYX,
   activeValidators,
   pendingValidators,
+  slashedValidators,
+  otherValidators,
   networkDataNeedsUpdate,
   setNetworkDataNeedsUpdate,
 }: StatsPageParams) => {
@@ -116,7 +120,7 @@ export const StatsPage = ({
   ]);
 
   const tileClasses =
-    "bg-white p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
+    "bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
 
   return (
     <div className="container mx-auto mt-40 mb-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
@@ -165,6 +169,8 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         activeValidators={activeValidators}
         pendingValidators={pendingValidators}
+        slashedValidators={slashedValidators}
+        otherValidators={otherValidators}
       />
       <Balance
         tileClasses={tileClasses}
