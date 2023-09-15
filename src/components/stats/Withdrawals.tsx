@@ -4,11 +4,13 @@ import { ValidatorMap } from "../../typings/types";
 type WithdrawalsParams = {
   tileClasses: string;
   activeValidators: ValidatorMap;
+  validatorMapsNeedUpdate: boolean;
 };
 
 export const Withdrawals = ({
   tileClasses,
   activeValidators,
+  validatorMapsNeedUpdate,
 }: WithdrawalsParams) => {
   const [totalWithdrawals, setTotalWithdrawals] = useState(0);
   const [totalWithdrawalsNeedsUpdate, setTotalWithdrawalsNeedsUpdate] =
@@ -33,7 +35,11 @@ export const Withdrawals = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Withdrawals</div>
-      <p className="text-gray-600">{`${totalWithdrawals / 1e9} LYX`}</p>
+      {validatorMapsNeedUpdate ? (
+        <div className="loading-animation" />
+      ) : (
+        <p className="text-gray-600">{`${totalWithdrawals / 1e9} LYX`}</p>
+      )}
     </div>
   );
 };

@@ -28,6 +28,8 @@ type StatsPageParams = {
   pendingValidators: ValidatorMap;
   slashedValidators: ValidatorMap;
   otherValidators: ValidatorMap;
+  validatorMapsNeedUpdate: boolean;
+  setValidatorMapsNeedUpdate: Function;
   networkDataNeedsUpdate: boolean;
   setNetworkDataNeedsUpdate: Function;
 };
@@ -39,6 +41,8 @@ export const StatsPage = ({
   pendingValidators,
   slashedValidators,
   otherValidators,
+  validatorMapsNeedUpdate,
+  setValidatorMapsNeedUpdate,
   networkDataNeedsUpdate,
   setNetworkDataNeedsUpdate,
 }: StatsPageParams) => {
@@ -53,6 +57,11 @@ export const StatsPage = ({
   const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
   const [LYXPriceNeedsUpdate, setLYXPriceNeedsUpdate] = useState(true);
+
+  const [
+    withdrawalAddressesBalanceNeedsUpdate,
+    setWithdrawalAddressesBalanceNeedsUpdate,
+  ] = useState(true);
 
   // Fetch LYX price in both EUR & USD
   useEffect(() => {
@@ -98,16 +107,20 @@ export const StatsPage = ({
 
   useEffect(() => {
     if (
-      !networkDataNeedsUpdate &&
       !luckNeedsUpdate &&
       !performanceNeedsUpdate &&
-      !LYXPriceNeedsUpdate
+      !LYXPriceNeedsUpdate &&
+      !networkDataNeedsUpdate &&
+      !validatorMapsNeedUpdate &&
+      !withdrawalAddressesBalanceNeedsUpdate
     ) {
       const id = setInterval(() => {
         setLuckNeedsUpdate(true);
         setPerformanceNeedsUpdate(true);
         setLYXPriceNeedsUpdate(true);
         setNetworkDataNeedsUpdate(true);
+        setValidatorMapsNeedUpdate(true);
+        setWithdrawalAddressesBalanceNeedsUpdate(true);
       }, 300000);
       return () => clearInterval(id);
     }
@@ -115,6 +128,9 @@ export const StatsPage = ({
     luckNeedsUpdate,
     performanceNeedsUpdate,
     LYXPriceNeedsUpdate,
+    withdrawalAddressesBalanceNeedsUpdate,
+    validatorMapsNeedUpdate,
+    setValidatorMapsNeedUpdate,
     networkDataNeedsUpdate,
     setNetworkDataNeedsUpdate,
   ]);
@@ -128,6 +144,7 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         eurPrice={eurPrice ? eurPrice : ""}
         usdPrice={usdPrice ? usdPrice : ""}
+        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
       />
       <Earnings
         timeframe="weekly"
@@ -135,6 +152,8 @@ export const StatsPage = ({
         eurPrice={eurPrice ? eurPrice : ""}
         usdPrice={usdPrice ? usdPrice : ""}
         validatorsPerformance={validatorsPerformance}
+        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
+        performanceNeedsUpdate={performanceNeedsUpdate}
       />
       <Earnings
         timeframe="monthly"
@@ -142,6 +161,8 @@ export const StatsPage = ({
         eurPrice={eurPrice ? eurPrice : ""}
         usdPrice={usdPrice ? usdPrice : ""}
         validatorsPerformance={validatorsPerformance}
+        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
+        performanceNeedsUpdate={performanceNeedsUpdate}
       />
       <Earnings
         timeframe="total"
@@ -149,43 +170,63 @@ export const StatsPage = ({
         eurPrice={eurPrice ? eurPrice : ""}
         usdPrice={usdPrice ? usdPrice : ""}
         validatorsPerformance={validatorsPerformance}
+        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
+        performanceNeedsUpdate={performanceNeedsUpdate}
       />
       <APYRate
         tileClasses={tileClasses}
         timeframe="annual"
         stakedLYX={stakedLYX}
+        networkDataNeedsUpdate={networkDataNeedsUpdate}
       />
       <APYRate
         tileClasses={tileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
+        networkDataNeedsUpdate={networkDataNeedsUpdate}
       />
       <Performance
         tileClasses={tileClasses}
         validatorsPerformance={validatorsPerformance}
+        performanceNeedsUpdate={performanceNeedsUpdate}
       />
-      <Luck tileClasses={tileClasses} validatorsLuck={validatorsLuck} />
+      <Luck
+        tileClasses={tileClasses}
+        validatorsLuck={validatorsLuck}
+        luckNeedsUpdate={luckNeedsUpdate}
+      />
       <Validators
         tileClasses={tileClasses}
         activeValidators={activeValidators}
         pendingValidators={pendingValidators}
         slashedValidators={slashedValidators}
         otherValidators={otherValidators}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <Balance
         tileClasses={tileClasses}
         activeValidators={activeValidators}
         pendingValidators={pendingValidators}
+        slashedValidators={slashedValidators}
+        otherValidators={otherValidators}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <Withdrawals
         tileClasses={tileClasses}
         activeValidators={activeValidators}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <WithdrawalBalance
         tileClasses={tileClasses}
         publicKeys={publicKeys}
         eurPrice={eurPrice ? eurPrice : ""}
         usdPrice={usdPrice ? usdPrice : ""}
+        withdrawalAddressesBalanceNeedsUpdate={
+          withdrawalAddressesBalanceNeedsUpdate
+        }
+        setWithdrawalAddressesBalanceNeedsUpdate={
+          setWithdrawalAddressesBalanceNeedsUpdate
+        }
       />
     </div>
   );

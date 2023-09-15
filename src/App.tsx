@@ -41,6 +41,7 @@ function App() {
     {} as ValidatorMap
   );
   const [otherValidators, setOtherValidators] = useState({} as ValidatorMap);
+  const [validatorMapsNeedUpdate, setValidatorMapsNeedUpdate] = useState(true);
 
   const [stakedLYX, setStakedLYX] = useState(0);
   const [currentEpoch, setCurrentEpoch] = useState(0);
@@ -63,13 +64,7 @@ function App() {
 
   // Update validators data (active/pending)
   useEffect(() => {
-    if (
-      validatorArray.length > 0 &&
-      Object.getOwnPropertyNames(activeValidators).length === 0 &&
-      Object.getOwnPropertyNames(pendingValidators).length === 0 &&
-      Object.getOwnPropertyNames(slashedValidators).length === 0 &&
-      Object.getOwnPropertyNames(otherValidators).length === 0
-    ) {
+    if (validatorArray.length > 0 && validatorMapsNeedUpdate) {
       const fetchedData = fetchValidatorsData(validatorArray);
 
       fetchedData.then((data) => {
@@ -78,14 +73,10 @@ function App() {
         setSlashedValidators(data.slashedValidators);
         setOtherValidators(data.otherValidators);
       });
+
+      setValidatorMapsNeedUpdate(false);
     }
-  }, [
-    validatorArray,
-    activeValidators,
-    pendingValidators,
-    slashedValidators,
-    otherValidators,
-  ]);
+  }, [validatorArray, validatorMapsNeedUpdate]);
 
   // Fetch validators count, staked LYX count and current epoch
   useEffect(() => {
@@ -119,6 +110,8 @@ function App() {
             pendingValidators={pendingValidators}
             slashedValidators={slashedValidators}
             otherValidators={otherValidators}
+            validatorMapsNeedUpdate={validatorMapsNeedUpdate}
+            setValidatorMapsNeedUpdate={setValidatorMapsNeedUpdate}
             networkDataNeedsUpdate={networkDataNeedsUpdate}
             setNetworkDataNeedsUpdate={setNetworkDataNeedsUpdate}
           />

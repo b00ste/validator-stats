@@ -34,6 +34,14 @@ export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
       return;
     }
 
+    if (
+      typeRef.current.value !== "depositor" &&
+      typeRef.current.value !== "withdrawal"
+    ) {
+      setError("Please select the type of the address");
+      return;
+    }
+
     setPublicKeys([
       ...publicKeys,
       {
@@ -124,6 +132,7 @@ export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
               id="addressType"
               name="addressType"
               className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              defaultValue="withdrawal"
               ref={typeRef}
             >
               <option value="depositor">Depositor</option>
