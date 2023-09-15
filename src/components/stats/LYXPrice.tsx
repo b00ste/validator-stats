@@ -1,26 +1,19 @@
-import token_price from "../../assets/token_price.png";
-
 type LYXPriceParams = {
-  tileStyle: string;
-  titleStyle: string;
+  tileClasses: string;
   eurPrice: string;
   usdPrice: string;
 };
 
 export const LYXPrice = ({
-  tileStyle,
-  titleStyle,
+  tileClasses,
   eurPrice,
   usdPrice,
 }: LYXPriceParams) => {
   return (
-    <div className={tileStyle}>
-      <img src={token_price} className="w-10 h-10" alt="token_price" />
-      <div>
-        <p className={titleStyle}>LYX price</p>
-        <p>{`${eurPrice} €`}</p>
-        <p>{`${usdPrice} $`}</p>
-      </div>
+    <div className={`${tileClasses}`}>
+      <div className="text-pastel-blue text-xl mb-2">LYX Price</div>
+      <p className="text-gray-600">{`${eurPrice} €`}</p>
+      <p className="text-gray-600">{`${usdPrice} $`}</p>
     </div>
   );
 };

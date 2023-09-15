@@ -1,48 +1,72 @@
-import { FormEvent, useEffect, useRef } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { consensys_explorer } from "../helpers/constants";
+import { PublicKey } from "../typings/types";
 
-export const UserPage = ({
-  publicKeys,
-  setPublicKeys,
-}: {
-  publicKeys: { address: string; type: string }[];
+type UserPageParams = {
+  publicKeys: PublicKey[];
   setPublicKeys: Function;
-}) => {
+};
+
+export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
+  const [error, setError] = useState("");
+
   useEffect(() => {
     localStorage.setItem("publicKeys", JSON.stringify(publicKeys));
   }, [publicKeys]);
 
   const addressRef = useRef<any>();
+  const nameRef = useRef<any>();
+  const typeRef = useRef<any>();
 
-  const handleDepositoorSubmit = (evt: FormEvent) => {
-    evt.preventDefault();
-    if (addressRef.current) {
-      if (
-        addressRef.current.value.startsWith("0x") &&
-        (addressRef.current.value.length === 66 ||
-          addressRef.current.value.length === 42)
-      )
-        setPublicKeys([
-          ...publicKeys,
-          { address: addressRef.current.value, type: "depositoor" },
-        ]);
-      addressRef.current.value = "";
+  const handleAddressSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (nameRef.current.value.length === 0) {
+      setError("Please set a name");
+      return;
     }
+
+    if (
+      !addressRef.current.value.startsWith("0x") ||
+      addressRef.current.value.length !== 42
+    ) {
+      setError("Please set a valid address");
+      return;
+    }
+
+    setPublicKeys([
+      ...publicKeys,
+      {
+        address: addressRef.current.value,
+        type: typeRef.current.value,
+        name: nameRef.current.value,
+      },
+    ]);
+
+    addressRef.current.value = "";
+    typeRef.current.value = "";
+    nameRef.current.value = "";
+    setError("");
   };
 
-  const handleWithdrawalAddressSubmit = (evt: FormEvent) => {
-    evt.preventDefault();
-    if (addressRef.current) {
-      if (
-        addressRef.current.value.startsWith("0x") &&
-        (addressRef.current.value.length === 66 ||
-          addressRef.current.value.length === 42)
-      )
-        setPublicKeys([
-          ...publicKeys,
-          { address: addressRef.current.value, type: "withdrawal_address" },
-        ]);
-      addressRef.current.value = "";
+  const handleNameEdit = (addressToEdit: string, event: FormEvent) => {
+    event.preventDefault();
+
+    if (nameRef.current.value.length === 0) {
+      setError("Please set a name");
+      return;
     }
+
+    setPublicKeys(() =>
+      publicKeys.map((publicKey) => {
+        if (publicKey.address === addressToEdit)
+          return { ...publicKey, name: nameRef.current.value };
+        return publicKey;
+      })
+    );
+
+    nameRef.current.value = "";
+    setError("");
   };
 
   const handleAddressDelete = (addressToDelete: string) => {
@@ -52,67 +76,113 @@ export const UserPage = ({
   };
 
   return (
-    <div className="container max-w-6xl px-5 mx-auto my-28">
-      <form className="grid justify-center m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-40">
-        <div className="container flex content-center justify-center">
-          <input
-            className="rounded-md p-2 m-2 text-center w-2/3"
-            type="text"
-            placeholder="address"
-            ref={addressRef}
-          />
-        </div>
-        <div className="container flex content-center justify-center">
+    <div className="container mx-auto mt-40 mb-16 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* <!-- Tile 1: Add Address Form --> */}
+      <div className="bg-white p-4 m-4 rounded-lg shadow text-center flex flex-col items-center">
+        <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
+        <form className="w-full max-w-md">
+          <div className="mb-4">
+            <label
+              htmlFor="ethAddress"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Ethereum Address:
+            </label>
+            <input
+              type="text"
+              id="ethAddress"
+              name="ethAddress"
+              placeholder="address"
+              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              ref={addressRef}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="name"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Name:
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="name"
+              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              ref={nameRef}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="addressType"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Select Type:
+            </label>
+            <select
+              id="addressType"
+              name="addressType"
+              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              ref={typeRef}
+            >
+              <option value="depositor">Depositor</option>
+              <option value="withdrawal">Withdrawal</option>
+            </select>
+          </div>
           <button
-            className="rounded-md bg-slate-200 p-2 m-2 w-1/3"
-            onClick={(evt) => {
-              handleDepositoorSubmit(evt);
-            }}
+            type="submit"
+            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink w-full"
+            onClick={(event) => handleAddressSubmit(event)}
           >
-            add depositoor
+            Add Address
           </button>
-          <button
-            className="rounded-md bg-slate-200 p-2 m-2 w-1/3"
-            onClick={(evt) => {
-              handleWithdrawalAddressSubmit(evt);
-            }}
-          >
-            add withdrawal address
-          </button>
-        </div>
-      </form>
-      <div className="grid justify-center m-2 bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
-        {publicKeys.length > 0 &&
-          publicKeys.map((publicKey) => (
-            <div className="flex flex-row" key={publicKey.address}>
-              <code
-                className={`m-1 p-1 bg-white rounded-xl break-all ${
-                  publicKey.type === "depositoor"
-                    ? "bg-opacity-30"
-                    : publicKey.type === "withdrawal_address"
-                    ? "bg-opacity-70"
-                    : ""
-                }`}
-              >{`${publicKey.address}`}</code>
-              <button
-                className="w-6 h-6 m-2 rounded-sm bg-slate-400 shadow-2xl"
-                onClick={(evt) => {
-                  handleAddressDelete(publicKey.address);
-                }}
-              >
-                X
-              </button>
-            </div>
-          ))}
+        </form>
+        {error ? <p className="text-pastel-red font-bold">{error}</p> : ""}
       </div>
-      <div className="m-2 flex flex-col bg-slate-100 rounded-2xl shadow-md bg-opacity-60 p-4">
-        <p className="m-1 p-1">Legend:</p>
-        <div className="w-auto h-auto m-1 p-1 bg-opacity-30 bg-white rounded-xl text-center">
-          <p>depositoor</p>
-        </div>
-        <div className="w-auto h-auto m-1 p-1 bg-opacity-70 bg-white rounded-xl text-center">
-          <p>withdrawal_address</p>
-        </div>
+
+      {/* <!-- Tile 2: List of Saved Addresses --> */}
+      <div className="bg-white p-4 m-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
+        <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
+        <ul className="space-y-4">
+          {publicKeys.map((publicKey) => (
+            <li
+              className="flex items-center justify-between"
+              key={publicKey.address}
+            >
+              <a
+                href={`${consensys_explorer}/address/${publicKey.address.substring(
+                  2
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-pastel-blue hover:underline"
+              >
+                {`${publicKey.address.substring(
+                  0,
+                  4
+                )}...${publicKey.address.substring(
+                  publicKey.address.length - 2,
+                  publicKey.address.length
+                )}`}
+              </a>
+              <span className="text-gray-700">{publicKey.name}</span>
+              <span className="text-gray-700">{publicKey.type}</span>
+              <button
+                className="text-pastel-green hover:text-green-500"
+                onClick={(event) => handleNameEdit(publicKey.address, event)}
+              >
+                Edit
+              </button>
+              <button
+                className="text-pastel-red hover:text-red-600"
+                onClick={() => handleAddressDelete(publicKey.address)}
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

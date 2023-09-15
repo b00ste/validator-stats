@@ -1,6 +1,7 @@
 export type PublicKey = {
   address: string;
-  type: "depositoor" | "withdrawal_address";
+  name: string;
+  type: "depositor" | "withdrawal";
 };
 
 export type Validator = {

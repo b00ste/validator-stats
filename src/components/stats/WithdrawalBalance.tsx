@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
-import withdrawal_balance from "../../assets/withdrawal_balance.png";
 import { PublicKey } from "../../typings/types";
 import { getWithdrawalAddressBalance } from "../../helpers/network";
 
 type WithdrawalBalanceParams = {
-  tileStyle: string;
-  titleStyle: string;
+  tileClasses: string;
   publicKeys: PublicKey[];
   eurPrice: string;
   usdPrice: string;
 };
 
 export const WithdrawalBalance = ({
-  tileStyle,
-  titleStyle,
+  tileClasses,
   publicKeys,
   eurPrice,
   usdPrice,
@@ -36,22 +33,23 @@ export const WithdrawalBalance = ({
   }, [withdrawalAddressesBalanceNeedsUpdate, publicKeys]);
 
   return (
-    <div className={`${tileStyle} bg-opacity-60`}>
-      <img
-        src={withdrawal_balance}
-        className="w-10 h-10"
-        alt="withdrawal_balance"
-      />
-      <div>
-        <p className={titleStyle}>Withdrawal addresses balance</p>
-        <p>{`${withdrawalAddressesBalance.toFixed(2)} LYX`}</p>
-        <p>{`${(
-          withdrawalAddressesBalance * Number.parseFloat(eurPrice)
-        ).toFixed(2)} €`}</p>
-        <p>{`${(
-          withdrawalAddressesBalance * Number.parseFloat(usdPrice)
-        ).toFixed(2)} $`}</p>
+    <div className={tileClasses}>
+      <div className="text-pastel-blue text-xl mb-2">
+        Withdrawal addresses balance
       </div>
+      <p className="text-gray-600">
+        {`${withdrawalAddressesBalance.toFixed(2)} LYX`}
+      </p>
+      <p className="text-gray-600">
+        {`${(withdrawalAddressesBalance * Number.parseFloat(eurPrice)).toFixed(
+          2
+        )} €`}
+      </p>
+      <p className="text-gray-600">
+        {`${(withdrawalAddressesBalance * Number.parseFloat(usdPrice)).toFixed(
+          2
+        )} $`}
+      </p>
     </div>
   );
 };

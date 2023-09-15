@@ -1,10 +1,8 @@
-import earnings from "../../assets/earnings.png";
 import { ValidatorsPerformance } from "../../typings/types";
 
 type EarningsParams = {
   timeframe: "weekly" | "monthly" | "total";
-  tileStyle: string;
-  titleStyle: string;
+  tileClasses: string;
   eurPrice: string;
   usdPrice: string;
   validatorsPerformance: ValidatorsPerformance;
@@ -12,8 +10,7 @@ type EarningsParams = {
 
 export const Earnings = ({
   timeframe,
-  tileStyle,
-  titleStyle,
+  tileClasses,
   eurPrice,
   usdPrice,
   validatorsPerformance,
@@ -33,24 +30,21 @@ export const Earnings = ({
     };
 
     return (
-      <div className={tileStyle}>
-        <img src={earnings} className="w-10 h-10" alt="earnings" />
-        <div>
-          <p className={titleStyle}>Weekly earnings</p>
-          <p>{calculateWeeklyEarnings().toFixed(2)} LYX</p>
-          <p>
-            {(calculateWeeklyEarnings() * Number.parseFloat(eurPrice)).toFixed(
-              2
-            )}{" "}
-            €
-          </p>
-          <p>
-            {(calculateWeeklyEarnings() * Number.parseFloat(usdPrice)).toFixed(
-              2
-            )}{" "}
-            $
-          </p>
-        </div>
+      <div className={tileClasses}>
+        <div className="text-pastel-blue text-xl mb-2">Weekly Earnings</div>
+        <p className="text-gray-600">
+          {`${calculateWeeklyEarnings().toFixed(2)} LYX`}
+        </p>
+        <p className="text-gray-600">
+          {`${(calculateWeeklyEarnings() * Number.parseFloat(eurPrice)).toFixed(
+            2
+          )} €`}
+        </p>
+        <p className="text-gray-600">
+          {`${(calculateWeeklyEarnings() * Number.parseFloat(usdPrice)).toFixed(
+            2
+          )} €`}
+        </p>
       </div>
     );
   } else if (timeframe === "monthly") {
@@ -69,24 +63,21 @@ export const Earnings = ({
     };
 
     return (
-      <div className={tileStyle}>
-        <img src={earnings} className="w-10 h-10" alt="earnings" />
-        <div>
-          <p className={titleStyle}>Monthly earnings</p>
-          <p>{calculateMonthlyEarnings().toFixed(2)} LYX</p>
-          <p>
-            {(calculateMonthlyEarnings() * Number.parseFloat(eurPrice)).toFixed(
-              2
-            )}{" "}
-            €
-          </p>
-          <p>
-            {(calculateMonthlyEarnings() * Number.parseFloat(usdPrice)).toFixed(
-              2
-            )}{" "}
-            $
-          </p>
-        </div>
+      <div className={tileClasses}>
+        <div className="text-pastel-blue text-xl mb-2">Yearly Earnings</div>
+        <p className="text-gray-600">
+          {`${calculateMonthlyEarnings().toFixed(2)} LYX`}
+        </p>
+        <p className="text-gray-600">
+          {`${(
+            calculateMonthlyEarnings() * Number.parseFloat(eurPrice)
+          ).toFixed(2)} €`}
+        </p>
+        <p className="text-gray-600">
+          {`${(
+            calculateMonthlyEarnings() * Number.parseFloat(usdPrice)
+          ).toFixed(2)} €`}
+        </p>
       </div>
     );
   } else if (timeframe === "total") {
@@ -105,24 +96,21 @@ export const Earnings = ({
     };
 
     return (
-      <div className={tileStyle}>
-        <img src={earnings} className="w-10 h-10" alt="earnings" />
-        <div>
-          <p className={titleStyle}>Total earnings</p>
-          <p>{calculateTotalEarnings().toFixed(2)} LYX</p>
-          <p>
-            {(calculateTotalEarnings() * Number.parseFloat(eurPrice)).toFixed(
-              2
-            )}{" "}
-            €
-          </p>
-          <p>
-            {(calculateTotalEarnings() * Number.parseFloat(usdPrice)).toFixed(
-              2
-            )}{" "}
-            $
-          </p>
-        </div>
+      <div className={tileClasses}>
+        <div className="text-pastel-blue text-xl mb-2">Total Earnings</div>
+        <p className="text-gray-600">
+          {`${calculateTotalEarnings().toFixed(2)} LYX`}
+        </p>
+        <p className="text-gray-600">
+          {`${(calculateTotalEarnings() * Number.parseFloat(eurPrice)).toFixed(
+            2
+          )} €`}
+        </p>
+        <p className="text-gray-600">
+          {`${(calculateTotalEarnings() * Number.parseFloat(usdPrice)).toFixed(
+            2
+          )} €`}
+        </p>
       </div>
     );
   }

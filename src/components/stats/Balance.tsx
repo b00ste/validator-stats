@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
-import balance from "../../assets/balance.png";
 import { ValidatorMap } from "../../typings/types";
 
 type BalanceParams = {
-  tileStyle: string;
-  titleStyle: string;
+  tileClasses: string;
   activeValidators: ValidatorMap;
   pendingValidators: ValidatorMap;
 };
 
 export const Balance = ({
-  tileStyle,
-  titleStyle,
+  tileClasses,
   activeValidators,
   pendingValidators,
 }: BalanceParams) => {
@@ -33,17 +30,14 @@ export const Balance = ({
   }, [activeValidators, pendingValidators]);
 
   return (
-    <div className={tileStyle}>
-      <img src={balance} className="w-10 h-10" alt="balance" />
-      <div>
-        <p className={titleStyle}>Validator balance</p>
-        <p className="text-green-600 font-bold">
-          {`Active: ${(activeBalance / 1e9).toFixed(2)} LYX`}
-        </p>
-        <p className="text-red-600 font-bold">
-          {`Pending: ${(pendingBalance / 1e9).toFixed(2)} LYX`}
-        </p>
-      </div>
+    <div className={tileClasses}>
+      <div className="text-pastel-blue text-xl mb-2">Validator Balance</div>
+      <p className="text-pastel-green font-bold">
+        {`Active: ${(activeBalance / 1e9).toFixed(2)} LYX`}
+      </p>
+      <p className="text-pastel-red font-bold">
+        {`Pending: ${(pendingBalance / 1e9).toFixed(2)} LYX`}
+      </p>
     </div>
   );
 };

@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
-import performance from "../../assets/performance.png";
 import { ValidatorsPerformance } from "../../typings/types";
 
 type PerformanceParams = {
-  tileStyle: string;
-  titleStyle: string;
+  tileClasses: string;
   validatorsPerformance: ValidatorsPerformance;
 };
 
 export const Performance = ({
-  tileStyle,
-  titleStyle,
+  tileClasses,
   validatorsPerformance,
 }: PerformanceParams) => {
   const [efficiency, setEfficiency] = useState(0);
@@ -37,12 +34,9 @@ export const Performance = ({
   }, [validatorsPerformance, efficiencyNeedsUpdate]);
 
   return (
-    <div className={tileStyle}>
-      <img src={performance} className="w-10 h-10" alt="performance" />
-      <div>
-        <p className={titleStyle}>Performance</p>
-        <p>{`${(efficiency * 100).toFixed(2)} %`}</p>
-      </div>
+    <div className={tileClasses}>
+      <div className="text-pastel-blue text-xl mb-2">Performance</div>
+      <p className="text-gray-600">{`${(efficiency * 100).toFixed(2)} %`}</p>
     </div>
   );
 };

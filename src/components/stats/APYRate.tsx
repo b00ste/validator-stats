@@ -1,16 +1,12 @@
-import percentage_yield from "../../assets/percentage_yield.png";
-
 type APYRateParams = {
   timeframe: "monthly" | "annual";
-  tileStyle: string;
-  titleStyle: string;
+  tileClasses: string;
   stakedLYX: number;
 };
 
 export const APYRate = ({
   timeframe,
-  tileStyle,
-  titleStyle,
+  tileClasses,
   stakedLYX,
 }: APYRateParams) => {
   const getAnualBaseReward = () => {
@@ -27,30 +23,20 @@ export const APYRate = ({
 
   if (timeframe === "annual") {
     return (
-      <div className={tileStyle}>
-        <img
-          src={percentage_yield}
-          className="w-10 h-10"
-          alt="percentage_yield"
-        />
-        <div>
-          <p className={titleStyle}>Annual rate</p>
-          <p>{getAnualPercentageYield().toFixed(2)} %</p>
-        </div>
+      <div className={tileClasses}>
+        <div className="text-pastel-blue text-xl mb-2">Annual Rate</div>
+        <p className="text-gray-600">
+          {`${getAnualPercentageYield().toFixed(2)} %`}
+        </p>
       </div>
     );
   } else if (timeframe === "monthly") {
     return (
-      <div className={tileStyle}>
-        <img
-          src={percentage_yield}
-          className="w-10 h-10"
-          alt="percentage_yield"
-        />
-        <div>
-          <p className={titleStyle}>Monthly rate</p>
-          <p>{(getAnualPercentageYield() / 12).toFixed(2)} %</p>
-        </div>
+      <div className={tileClasses}>
+        <div className="text-pastel-blue text-xl mb-2">Monthly Rate</div>
+        <p className="text-gray-600">
+          {`${(getAnualPercentageYield() / 12).toFixed(2)} %`}
+        </p>
       </div>
     );
   }

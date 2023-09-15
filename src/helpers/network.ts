@@ -17,7 +17,7 @@ export const getWithdrawalAddressBalance = async (publicKeys: PublicKey[]) => {
 
     let retrievedBalance = "";
     const tracker = {} as Record<string, boolean>;
-    if (publicKey.type === "withdrawal_address") {
+    if (publicKey.type === "withdrawal") {
       await fetch(
         `${consensys_explorer}/api/v1/execution/address/${publicKey.address}`
       )
