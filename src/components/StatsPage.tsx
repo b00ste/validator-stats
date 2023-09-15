@@ -33,25 +33,26 @@ export const StatsPage = ({
   activeValidators,
   pendingValidators,
 }: StatsPageParams) => {
+  const [stakedLYX, setStakedLYX] = useState(0);
+  const [currentEpoch, setCurrentEpoch] = useState(0);
+  const [networkValidators, setNetworkValidators] = useState(0);
+  const [networkDataNeedsUpdate, setNetworkDataNeedsUpdate] = useState(true);
+
   const [validatorsLuck, setValidatorsLuck] = useState({} as ValidatorsLuck);
+  const [luckNeedsUpdate, setLuckNeedsUpdate] = useState(true);
 
   const [validatorsPerformance, setValidatorsPerformance] = useState(
     {} as ValidatorsPerformance
   );
-
-  const [luckNeedsUpdate, setLuckNeedsUpdate] = useState(true);
   const [performanceNeedsUpdate, setPerformanceNeedsUpdate] = useState(true);
-
-  const [stakedLYX, setStakedLYX] = useState(0);
-  const [currentEpoch, setCurrentEpoch] = useState(0);
-  const [networkValidators, setNetworkValidators] = useState(0);
 
   const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
+  const [LYXPriceNeedsUpdate, setLYXPriceNeedsUpdate] = useState(true);
 
-  // Fetch validators count and staked LYX count
+  // Fetch validators count, staked LYX count and current epoch
   useEffect(() => {
-    if (stakedLYX === 0 || networkValidators === 0 || currentEpoch === 0) {
+    if (networkDataNeedsUpdate) {
       const fetchedData = getLastEpoch();
 
       fetchedData.then((epoch) => {
@@ -59,8 +60,26 @@ export const StatsPage = ({
         setCurrentEpoch(epoch.epoch);
         setNetworkValidators(epoch.validatorscount);
       });
+
+      setNetworkDataNeedsUpdate(false);
     }
-  });
+  }, [networkDataNeedsUpdate]);
+
+  // Fetch LYX price in both EUR & USD
+  useEffect(() => {
+    if (LYXPriceNeedsUpdate) {
+      fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setEurPrce(data["lukso-token-2"].eur);
+          setUsdPrce(data["lukso-token-2"].usd);
+        });
+
+      setLYXPriceNeedsUpdate(false);
+    }
+  }, [LYXPriceNeedsUpdate]);
 
   // Update validators luck
   useEffect(() => {
@@ -73,7 +92,7 @@ export const StatsPage = ({
       fetchedData.then((data) => setValidatorsLuck(data));
       setLuckNeedsUpdate(false);
     }
-  }, [activeValidators, luckNeedsUpdate, validatorsLuck, setValidatorsLuck]);
+  }, [activeValidators, luckNeedsUpdate]);
 
   // Update validators performance
   useEffect(() => {
@@ -86,21 +105,29 @@ export const StatsPage = ({
       fetchedData.then((data) => setValidatorsPerformance(data));
       setPerformanceNeedsUpdate(false);
     }
-  }, [performanceNeedsUpdate, activeValidators]);
+  }, [activeValidators, performanceNeedsUpdate]);
 
-  // Fetch LYX price in both EUR & USD
   useEffect(() => {
-    if (!eurPrice || !usdPrice) {
-      fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setEurPrce(data["lukso-token-2"].eur);
-          setUsdPrce(data["lukso-token-2"].usd);
-        });
+    if (
+      !networkDataNeedsUpdate &&
+      !luckNeedsUpdate &&
+      !performanceNeedsUpdate &&
+      !LYXPriceNeedsUpdate
+    ) {
+      const id = setInterval(() => {
+        setNetworkDataNeedsUpdate(true);
+        setLuckNeedsUpdate(true);
+        setPerformanceNeedsUpdate(true);
+        setLYXPriceNeedsUpdate(true);
+      }, 300000);
+      return () => clearInterval(id);
     }
-  });
+  }, [
+    networkDataNeedsUpdate,
+    luckNeedsUpdate,
+    performanceNeedsUpdate,
+    LYXPriceNeedsUpdate,
+  ]);
 
   const tileStyle =
     "flex items-center justify-center space-x-4 text-center bg-slate-100 rounded-2xl shadow-md p-5 m-2";
