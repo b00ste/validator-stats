@@ -11,6 +11,8 @@ import { WithdrawalBalance } from "./stats/WithdrawalBalance";
 
 // ts types
 import { StatsPageParams } from "../typings/types";
+import { WithdrawableAmount } from "./stats/WithdrawableAmount";
+import { useEffect, useState } from "react";
 
 export const StatsPage = ({
   stakedLYX,
@@ -30,6 +32,37 @@ export const StatsPage = ({
   LYXPriceNeedsUpdate,
   withdrawalAddressesBalanceNeedsUpdate,
 }: StatsPageParams) => {
+  const [activeBalance, setActiveBalance] = useState(0);
+  const [pendingBalance, setPendingBalance] = useState(0);
+  const [slashedBalance, setSlashedBalance] = useState(0);
+  const [otherBalance, setOtherBalance] = useState(0);
+
+  useEffect(() => {
+    let newActiveBalance = 0;
+    for (const activeValidator in activeValidators) {
+      newActiveBalance += activeValidators[activeValidator].balance;
+    }
+    setActiveBalance(newActiveBalance);
+
+    let newPendingBalance = 0;
+    for (const pendingValidator in pendingValidators) {
+      newPendingBalance += pendingValidators[pendingValidator].balance;
+    }
+    setPendingBalance(newPendingBalance);
+
+    let newSlashedBalance = 0;
+    for (const slashedValidator in slashedValidators) {
+      newSlashedBalance += slashedValidators[slashedValidator].balance;
+    }
+    setSlashedBalance(newSlashedBalance);
+
+    let newOtherBalance = 0;
+    for (const otherValidator in otherValidators) {
+      newOtherBalance += otherValidators[otherValidator].balance;
+    }
+    setOtherBalance(newOtherBalance);
+  }, [activeValidators, pendingValidators, slashedValidators, otherValidators]);
+
   const tileClasses =
     "bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
 
@@ -45,10 +78,22 @@ export const StatsPage = ({
       />
       <Balance
         tileClasses={tileClasses}
+        activeBalance={activeBalance}
+        pendingBalance={pendingBalance}
+        slashedBalance={slashedBalance}
+        otherBalance={otherBalance}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
+      />
+      <WithdrawableAmount
+        tileClasses={tileClasses}
         activeValidators={activeValidators}
         pendingValidators={pendingValidators}
         slashedValidators={slashedValidators}
         otherValidators={otherValidators}
+        activeBalance={activeBalance}
+        pendingBalance={pendingBalance}
+        slashedBalance={slashedBalance}
+        otherBalance={otherBalance}
         validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <TotalWithdrawals

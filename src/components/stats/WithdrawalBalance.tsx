@@ -9,7 +9,7 @@ export const WithdrawalBalance = ({
 }: WithdrawalBalanceParams) => {
   return (
     <div className={tileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Withdrawal balance</div>
+      <div className="text-pastel-blue text-xl mb-2">Withdrawal Balance</div>
       {withdrawalAddressesBalanceNeedsUpdate ? (
         <div className="loading-animation" />
       ) : (

@@ -153,10 +153,10 @@ export type APYRateParams = {
 
 export type BalanceParams = {
   tileClasses: string;
-  activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
+  activeBalance: number;
+  pendingBalance: number;
+  slashedBalance: number;
+  otherBalance: number;
   validatorMapsNeedUpdate: boolean;
 };
 
@@ -211,5 +211,18 @@ export type WithdrawalsParams = {
   activeValidators: ValidatorMap;
   eurPrice: string;
   usdPrice: string;
+  validatorMapsNeedUpdate: boolean;
+};
+
+export type WithdrawableAmountParams = {
+  tileClasses: string;
+  activeValidators: ValidatorMap;
+  pendingValidators: ValidatorMap;
+  slashedValidators: ValidatorMap;
+  otherValidators: ValidatorMap;
+  activeBalance: number;
+  pendingBalance: number;
+  slashedBalance: number;
+  otherBalance: number;
   validatorMapsNeedUpdate: boolean;
 };
