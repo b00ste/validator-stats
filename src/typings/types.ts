@@ -99,34 +99,35 @@ export type ValidatorsWithdrawals = {
   withdrawalindex: number;
 };
 
-// ------------ COMPONENTS PARAM TYPES ------------
-
-export type StatsPageParams = {
-  stakedLYX: number;
-  eurPrice: string;
-  usdPrice: string;
+export type ValidatorsMaps = {
   activeValidators: ValidatorMap;
   pendingValidators: ValidatorMap;
   slashedValidators: ValidatorMap;
   otherValidators: ValidatorMap;
+};
+
+export type ValidatorsData = {
+  validatorsMaps: ValidatorsMaps;
   validatorsLuck: ValidatorsLuck;
   validatorsPerformance: ValidatorsPerformance;
+};
+
+// ------------ COMPONENTS PARAM TYPES ------------
+
+export type StatsPageParams = {
+  stakedLYX: number;
+  tokenPrice: {
+    eurPrice: string;
+    usdPrice: string;
+  };
+  validatorsData: ValidatorsData;
   withdrawalAddressesBalance: number;
-  validatorMapsNeedUpdate: boolean;
-  networkDataNeedsUpdate: boolean;
-  luckNeedsUpdate: boolean;
-  performanceNeedsUpdate: boolean;
-  LYXPriceNeedsUpdate: boolean;
-  withdrawalAddressesBalanceNeedsUpdate: boolean;
 };
 
 export type ValidatorsPageParams = {
   publicKeys: PublicKey[];
   validatorArray: string[];
-  activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
+  validatorsMaps: ValidatorsMaps;
 };
 
 export type UserPageParams = {
@@ -139,8 +140,10 @@ export type HeaderParams = {
   stakedLYX: number;
   currentEpoch: number;
   networkValidators: number;
-  eurPrice: string;
-  usdPrice: string;
+  tokenPrice: {
+    eurPrice: string;
+    usdPrice: string;
+  };
 };
 
 export type FooterParams = {};

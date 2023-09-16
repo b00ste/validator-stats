@@ -18,7 +18,7 @@ import {
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
 } from "./helpers/validators";
-import { getLastEpoch, getWithdrawalAddressBalance } from "./helpers/network";
+import { getLastEpoch, getWithdrawalAddressesBalance } from "./helpers/network";
 
 // ts types
 import {
@@ -32,40 +32,51 @@ function App() {
   // ------ Deposior/Withdrawal Addresses ------
   const storedPublicKeys = localStorage.getItem("publicKeys");
   const [publicKeys, setPublicKeys] = useState(
-    (storedPublicKeys ? JSON.parse(storedPublicKeys) : []) as PublicKey[]
+    (storedPublicKeys ? JSON.parse(storedPublicKeys) : undefined) as PublicKey[]
   );
-  const [withdrawalAddressesBalance, setWithdrawalAddressesBalance] =
-    useState(0);
+  const [withdrawalAddressesBalance, setWithdrawalAddressesBalance] = useState(
+    undefined as number | undefined
+  );
   // -------------------------------------------
 
   // ------ Validators Pubkeys ------
   const storedValidatorArray = localStorage.getItem("validatorArray");
   const [validatorArray, setValidatorArray] = useState(
-    (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
+    (storedValidatorArray
+      ? JSON.parse(storedValidatorArray)
+      : undefined) as string[]
   );
-  const [validatorArrayNeedsUpdate, setValidatorArrayNeedsUpdate] =
-    useState(false);
   // --------------------------------
 
   // ------ Validator Data ------
-  const [activeValidators, setActiveValidators] = useState({} as ValidatorMap);
+  const [activeValidators, setActiveValidators] = useState(
+    undefined as ValidatorMap | undefined
+  );
   const [pendingValidators, setPendingValidators] = useState(
-    {} as ValidatorMap
+    undefined as ValidatorMap | undefined
   );
   const [slashedValidators, setSlashedValidators] = useState(
-    {} as ValidatorMap
+    undefined as ValidatorMap | undefined
   );
-  const [otherValidators, setOtherValidators] = useState({} as ValidatorMap);
-  const [validatorsLuck, setValidatorsLuck] = useState({} as ValidatorsLuck);
+  const [otherValidators, setOtherValidators] = useState(
+    undefined as ValidatorMap | undefined
+  );
+  const [validatorsLuck, setValidatorsLuck] = useState(
+    undefined as ValidatorsLuck | undefined
+  );
   const [validatorsPerformance, setValidatorsPerformance] = useState(
-    {} as ValidatorsPerformance
+    undefined as ValidatorsPerformance | undefined
   );
   // ----------------------------
 
   // ------ Network Data ------
-  const [stakedLYX, setStakedLYX] = useState(0);
-  const [currentEpoch, setCurrentEpoch] = useState(0);
-  const [networkValidators, setNetworkValidators] = useState(0);
+  const [stakedLYX, setStakedLYX] = useState(undefined as number | undefined);
+  const [currentEpoch, setCurrentEpoch] = useState(
+    undefined as number | undefined
+  );
+  const [networkValidators, setNetworkValidators] = useState(
+    undefined as number | undefined
+  );
   // --------------------------
 
   // ------ Price Data ------
@@ -73,54 +84,30 @@ function App() {
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
   // --------------------------
 
-  // ------ Update booleans ------
-  const [validatorMapsNeedUpdate, setValidatorMapsNeedUpdate] = useState(true);
-  const [networkDataNeedsUpdate, setNetworkDataNeedsUpdate] = useState(true);
-  const [luckNeedsUpdate, setLuckNeedsUpdate] = useState(true);
-  const [performanceNeedsUpdate, setPerformanceNeedsUpdate] = useState(true);
-  const [LYXPriceNeedsUpdate, setLYXPriceNeedsUpdate] = useState(true);
-  const [
-    withdrawalAddressesBalanceNeedsUpdate,
-    setWithdrawalAddressesBalanceNeedsUpdate,
-  ] = useState(true);
-  // -----------------------------
-
   // Save validators to local storage
   useEffect(() => {
     localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
   }, [validatorArray]);
 
-  // Fetch total balance of the withdrawal addrsses
+  // Update validators and withdrawal addresses balance if `publicKeys` changes
   useEffect(() => {
-    if (withdrawalAddressesBalanceNeedsUpdate) {
-      const fetchedData = getWithdrawalAddressBalance(publicKeys);
+    if (publicKeys.length > 0) {
+      const validators = fetchValidators(publicKeys);
 
-      fetchedData.then((data) => setWithdrawalAddressesBalance(data));
-      setWithdrawalAddressesBalanceNeedsUpdate(false);
+      validators.then((data) => setValidatorArray(data));
+
+      const newWithdrawalAddressesBalance =
+        getWithdrawalAddressesBalance(publicKeys);
+
+      newWithdrawalAddressesBalance.then((data) =>
+        setWithdrawalAddressesBalance(data)
+      );
     }
-  }, [publicKeys, withdrawalAddressesBalanceNeedsUpdate]);
+  }, [publicKeys]);
 
-  // Fetch validators and filter them based on withdrawal address
+  // Update validators data (active/pending/slashed/other) if `validatorArray` changes
   useEffect(() => {
-    if (validatorArray.length === 0) {
-      const fetchedData = fetchValidators(publicKeys);
-
-      fetchedData.then((data) => setValidatorArray(data));
-      setValidatorArrayNeedsUpdate(false);
-    }
-  }, [publicKeys, validatorArray.length]);
-
-  useEffect(() => {
-    if (validatorArrayNeedsUpdate) {
-      const fetchedData = fetchValidators(publicKeys);
-
-      fetchedData.then((data) => setValidatorArray(data));
-    }
-  }, [publicKeys, validatorArrayNeedsUpdate]);
-
-  // Update validators data (active/pending/slashed/other)
-  useEffect(() => {
-    if (validatorArray.length > 0 && validatorMapsNeedUpdate) {
+    if (validatorArray.length > 0) {
       const fetchedData = fetchValidatorsData(validatorArray);
 
       fetchedData.then((data) => {
@@ -129,14 +116,29 @@ function App() {
         setSlashedValidators(data.slashedValidators);
         setOtherValidators(data.otherValidators);
       });
-
-      setValidatorMapsNeedUpdate(false);
     }
-  }, [validatorArray, validatorMapsNeedUpdate]);
+  }, [validatorArray]);
+
+  // Update validators luck & performance if `activeValidators` changes
+  useEffect(() => {
+    if (
+      activeValidators &&
+      Object.getOwnPropertyNames(activeValidators).length > 0
+    ) {
+      let newValidatorsLuck = fetchValidatorsLuck(activeValidators);
+
+      newValidatorsLuck.then((data) => setValidatorsLuck(data));
+
+      let newValidatorsPerformance =
+        fetchValidatorsPerformance(activeValidators);
+
+      newValidatorsPerformance.then((data) => setValidatorsPerformance(data));
+    }
+  }, [activeValidators]);
 
   // Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
-    if (networkDataNeedsUpdate) {
+    if (!stakedLYX && !currentEpoch && !networkValidators) {
       const fetchedData = getLastEpoch();
 
       fetchedData.then((epochData) => {
@@ -144,14 +146,12 @@ function App() {
         setCurrentEpoch(epochData.epoch);
         setNetworkValidators(epochData.validatorscount);
       });
-
-      setNetworkDataNeedsUpdate(false);
     }
-  }, [networkDataNeedsUpdate]);
+  }, [stakedLYX, currentEpoch, networkValidators]);
 
   // Fetch LYX price in both EUR & USD
   useEffect(() => {
-    if (LYXPriceNeedsUpdate) {
+    if (!eurPrice && !usdPrice) {
       fetch(
         "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
       )
@@ -160,101 +160,58 @@ function App() {
           setEurPrce(data["lukso-token-2"].eur);
           setUsdPrce(data["lukso-token-2"].usd);
         });
-
-      setLYXPriceNeedsUpdate(false);
     }
-  }, [LYXPriceNeedsUpdate]);
+  }, [eurPrice, usdPrice]);
 
-  // Update validators luck
-  useEffect(() => {
-    if (
-      Object.getOwnPropertyNames(activeValidators).length > 0 &&
-      luckNeedsUpdate
-    ) {
-      let fetchedData = fetchValidatorsLuck(activeValidators);
-
-      fetchedData.then((data) => setValidatorsLuck(data));
-      setLuckNeedsUpdate(false);
-    }
-  }, [activeValidators, luckNeedsUpdate]);
-
-  // Update validators performance
-  useEffect(() => {
-    if (
-      Object.getOwnPropertyNames(activeValidators).length > 0 &&
-      performanceNeedsUpdate
-    ) {
-      let fetchedData = fetchValidatorsPerformance(activeValidators);
-
-      fetchedData.then((data) => setValidatorsPerformance(data));
-      setPerformanceNeedsUpdate(false);
-    }
-  }, [activeValidators, performanceNeedsUpdate]);
-
-  // Refresh data every minute
-  useEffect(() => {
-    if (
-      !luckNeedsUpdate &&
-      !performanceNeedsUpdate &&
-      !LYXPriceNeedsUpdate &&
-      !networkDataNeedsUpdate &&
-      !validatorMapsNeedUpdate &&
-      !withdrawalAddressesBalanceNeedsUpdate
-    ) {
-      const id = setInterval(() => {
-        setLuckNeedsUpdate(true);
-        setPerformanceNeedsUpdate(true);
-        setLYXPriceNeedsUpdate(true);
-        setNetworkDataNeedsUpdate(true);
-        setValidatorMapsNeedUpdate(true);
-        setWithdrawalAddressesBalanceNeedsUpdate(true);
-      }, 60000);
-      return () => clearInterval(id);
-    }
-  }, [
-    luckNeedsUpdate,
-    performanceNeedsUpdate,
-    LYXPriceNeedsUpdate,
-    withdrawalAddressesBalanceNeedsUpdate,
-    validatorMapsNeedUpdate,
-    networkDataNeedsUpdate,
-  ]);
-
+  // ------ Styling ------
   const bodyClasses =
-    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-36 pb-16";
+    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-44 pb-16";
+  // ---------------------
+
+  const validatorsMaps = {
+    activeValidators: activeValidators ? activeValidators : {},
+    pendingValidators: pendingValidators ? pendingValidators : {},
+    slashedValidators: slashedValidators ? slashedValidators : {},
+    otherValidators: otherValidators ? otherValidators : {},
+  };
+
+  const validatorsData = {
+    validatorsMaps,
+    validatorsLuck: validatorsLuck
+      ? validatorsLuck
+      : {
+          average_proposal_interval: 0,
+          next_proposal_estimate_ts: 0,
+          proposal_luck: 0,
+          time_frame_name: "",
+        },
+    validatorsPerformance: validatorsPerformance ? validatorsPerformance : {},
+  };
+
+  const tokenPrice = {
+    eurPrice: eurPrice ? eurPrice : "",
+    usdPrice: usdPrice ? usdPrice : "",
+  };
 
   return (
     <div className={bodyClasses}>
       <Router>
         <Header
-          stakedLYX={stakedLYX}
-          currentEpoch={currentEpoch}
-          networkValidators={networkValidators}
-          eurPrice={eurPrice ? eurPrice : ""}
-          usdPrice={usdPrice ? usdPrice : ""}
+          stakedLYX={stakedLYX ? stakedLYX : 0}
+          currentEpoch={currentEpoch ? currentEpoch : 0}
+          networkValidators={networkValidators ? networkValidators : 0}
+          tokenPrice={tokenPrice}
         />
         <Routes>
           <Route
             path="/"
             element={
               <StatsPage
-                stakedLYX={stakedLYX}
-                eurPrice={eurPrice ? eurPrice : ""}
-                usdPrice={usdPrice ? usdPrice : ""}
-                activeValidators={activeValidators}
-                pendingValidators={pendingValidators}
-                slashedValidators={slashedValidators}
-                otherValidators={otherValidators}
-                validatorsLuck={validatorsLuck}
-                validatorsPerformance={validatorsPerformance}
-                withdrawalAddressesBalance={withdrawalAddressesBalance}
-                validatorMapsNeedUpdate={validatorMapsNeedUpdate}
-                networkDataNeedsUpdate={networkDataNeedsUpdate}
-                luckNeedsUpdate={luckNeedsUpdate}
-                performanceNeedsUpdate={performanceNeedsUpdate}
-                LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
-                withdrawalAddressesBalanceNeedsUpdate={
-                  withdrawalAddressesBalanceNeedsUpdate
+                stakedLYX={stakedLYX ? stakedLYX : 0}
+                tokenPrice={tokenPrice}
+                validatorsData={validatorsData}
+                withdrawalAddressesBalance={
+                  withdrawalAddressesBalance ? withdrawalAddressesBalance : 0
                 }
               />
             }
@@ -275,10 +232,7 @@ function App() {
               <ValidatorsPage
                 publicKeys={publicKeys}
                 validatorArray={validatorArray}
-                activeValidators={activeValidators}
-                pendingValidators={pendingValidators}
-                slashedValidators={slashedValidators}
-                otherValidators={otherValidators}
+                validatorsMaps={validatorsMaps}
               />
             }
           ></Route>

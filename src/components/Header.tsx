@@ -5,8 +5,7 @@ export const Header = ({
   stakedLYX,
   currentEpoch,
   networkValidators,
-  eurPrice,
-  usdPrice,
+  tokenPrice: { eurPrice, usdPrice },
 }: HeaderParams) => {
   const navigate = useNavigate();
 

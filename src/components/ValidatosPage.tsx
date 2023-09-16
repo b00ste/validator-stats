@@ -5,10 +5,12 @@ import { ValidatorMap, ValidatorsPageParams } from "../typings/types";
 export const ValidatorsPage = ({
   publicKeys,
   validatorArray,
-  activeValidators,
-  pendingValidators,
-  slashedValidators,
-  otherValidators,
+  validatorsMaps: {
+    activeValidators,
+    pendingValidators,
+    slashedValidators,
+    otherValidators,
+  },
 }: ValidatorsPageParams) => {
   const [selectedValidators, setSelectedValidators] = useState("active");
 

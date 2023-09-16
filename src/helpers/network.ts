@@ -10,7 +10,9 @@ export const getLastEpoch = async () => {
   return lastEpoch;
 };
 
-export const getWithdrawalAddressBalance = async (publicKeys: PublicKey[]) => {
+export const getWithdrawalAddressesBalance = async (
+  publicKeys: PublicKey[]
+) => {
   let balance = 0;
   for (let i = 0; i < publicKeys.length; i++) {
     const publicKey = publicKeys[i];

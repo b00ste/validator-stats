@@ -177,7 +177,6 @@ export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
     dataCollection.forEach((elem) => {
       if (elem.proposal_luck) {
         validatorsLuck.proposal_luck += elem.proposal_luck;
-
         validatorsLuck.proposal_luck = validatorsLuck.proposal_luck / 2;
       }
     });
@@ -188,7 +187,7 @@ export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
         .replaceAll(",", "%2C")}`
     )
       .then((res) => res.json())
-      .then(({ data }) => (validatorsLuck = data));
+      .then(({ data }: { data: ValidatorsLuck }) => (validatorsLuck = data));
   }
 
   return validatorsLuck;

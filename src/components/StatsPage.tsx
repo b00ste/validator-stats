@@ -15,21 +15,18 @@ import { useEffect, useState } from "react";
 
 export const StatsPage = ({
   stakedLYX,
-  eurPrice,
-  usdPrice,
-  activeValidators,
-  pendingValidators,
-  slashedValidators,
-  otherValidators,
-  validatorsLuck,
-  validatorsPerformance,
+  tokenPrice: { eurPrice, usdPrice },
+  validatorsData: {
+    validatorsMaps: {
+      activeValidators,
+      pendingValidators,
+      slashedValidators,
+      otherValidators,
+    },
+    validatorsLuck,
+    validatorsPerformance,
+  },
   withdrawalAddressesBalance,
-  validatorMapsNeedUpdate,
-  networkDataNeedsUpdate,
-  luckNeedsUpdate,
-  performanceNeedsUpdate,
-  LYXPriceNeedsUpdate,
-  withdrawalAddressesBalanceNeedsUpdate,
 }: StatsPageParams) => {
   const [activeBalance, setActiveBalance] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
