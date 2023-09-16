@@ -11,34 +11,6 @@ import {
 } from "../typings/types";
 import { consensys_explorer } from "./constants";
 
-export const fetchValidators = async (publicKeys: PublicKey[]) => {
-  const validatorArray: string[] = [];
-  const validatorMap: Record<string, boolean> = {};
-  for (let i = 0; i < publicKeys.length; i++) {
-    await fetch(
-      `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200`
-    )
-      .then((res) => res.json())
-      .then(
-        ({
-          data,
-        }: {
-          data: { publickey: string; validatorindex: number }[];
-        }) => {
-          for (let j = 0; j < data.length; j++) {
-            if (!validatorMap[data[j].publickey]) {
-              validatorMap[data[j].publickey] = true;
-
-              // Add entry to array
-              validatorArray.push(data[j].publickey);
-            }
-          }
-        }
-      );
-  }
-  return validatorArray;
-};
-
 const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
   if (validators.length === 0) {
     return [];
@@ -80,6 +52,46 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
 
     return dataCollection;
   }
+};
+
+export const fetchValidators = async (publicKeys: PublicKey[]) => {
+  const validatorArray: string[] = [];
+  const validatorMap: Record<string, boolean> = {};
+  for (let i = 0; i < publicKeys.length; i++) {
+    let limitReached = false;
+    let offset = 0;
+    while (!limitReached) {
+      let elementsFound = 0;
+      await fetch(
+        `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200&offset=${offset}`
+      )
+        .then((res) => res.json())
+        .then(
+          ({
+            data,
+          }: {
+            data: { publickey: string; validatorindex: number }[];
+          }) => {
+            elementsFound = data.length;
+            for (let j = 0; j < data.length; j++) {
+              if (!validatorMap[data[j].publickey]) {
+                validatorMap[data[j].publickey] = true;
+
+                // Add entry to array
+                validatorArray.push(data[j].publickey);
+              }
+            }
+          }
+        );
+
+      if (elementsFound < 200) {
+        limitReached = true;
+      } else {
+        offset += 200;
+      }
+    }
+  }
+  return validatorArray;
 };
 
 export const fetchValidatorsData = async (validatorArray: string[]) => {
