@@ -9,7 +9,7 @@ module.exports = {
         "soft-pink": "#F5DADF",
         "strong-pink": "#FF6A8E",
         "dark-pink": "#FF4A6E",
-        "pastel-blue": "#88C3FF",
+        "pastel-blue": "#66A6D7",
         "pastel-green": "#7AE582",
         "pastel-orange": "#FFC57E",
         "pastel-red": "#FF4D4D",
