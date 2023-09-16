@@ -86,27 +86,23 @@ export const StatsPage = ({
       />
       <WithdrawableAmount
         tileClasses={tileClasses}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         activeValidators={activeValidators}
-        pendingValidators={pendingValidators}
-        slashedValidators={slashedValidators}
-        otherValidators={otherValidators}
         activeBalance={activeBalance}
-        pendingBalance={pendingBalance}
-        slashedBalance={slashedBalance}
-        otherBalance={otherBalance}
         validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <TotalWithdrawals
         tileClasses={tileClasses}
         activeValidators={activeValidators}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <WithdrawalBalance
         tileClasses={tileClasses}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         withdrawalAddressesBalance={withdrawalAddressesBalance}
         withdrawalAddressesBalanceNeedsUpdate={
           withdrawalAddressesBalanceNeedsUpdate
@@ -114,15 +110,15 @@ export const StatsPage = ({
       />
       <LYXPrice
         tileClasses={tileClasses}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
       />
       <Earnings
         timeframe="weekly"
         tileClasses={tileClasses}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         validatorsPerformance={validatorsPerformance}
         LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
         performanceNeedsUpdate={performanceNeedsUpdate}
@@ -130,8 +126,8 @@ export const StatsPage = ({
       <Earnings
         timeframe="monthly"
         tileClasses={tileClasses}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         validatorsPerformance={validatorsPerformance}
         LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
         performanceNeedsUpdate={performanceNeedsUpdate}
@@ -139,8 +135,8 @@ export const StatsPage = ({
       <Earnings
         timeframe="total"
         tileClasses={tileClasses}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
         validatorsPerformance={validatorsPerformance}
         LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
         performanceNeedsUpdate={performanceNeedsUpdate}

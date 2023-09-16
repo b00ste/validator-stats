@@ -218,13 +218,9 @@ export type WithdrawalsParams = {
 
 export type WithdrawableAmountParams = {
   tileClasses: string;
+  eurPrice: string;
+  usdPrice: string;
   activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
   activeBalance: number;
-  pendingBalance: number;
-  slashedBalance: number;
-  otherBalance: number;
   validatorMapsNeedUpdate: boolean;
 };
