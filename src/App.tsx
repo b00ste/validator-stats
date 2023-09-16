@@ -36,11 +36,14 @@ function App() {
     (storedPublicKeys ? JSON.parse(storedPublicKeys) : []) as PublicKey[]
   );
 
-  // The pubkeys of the validators
+  // ------ Validators Pubkeys ------
   const storedValidatorArray = localStorage.getItem("validatorArray");
   const [validatorArray, setValidatorArray] = useState(
     (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
   );
+  const [validatorArrayNeedsUpdate, setValidatorArrayNeedsUpdate] =
+    useState(false);
+  // --------------------------------
 
   // ------ Validator Data ------
   const [activeValidators, setActiveValidators] = useState({} as ValidatorMap);
@@ -92,7 +95,15 @@ function App() {
 
       fetchedData.then((data) => setValidatorArray(data));
     }
-  }, [validatorArray.length, publicKeys, setValidatorArray]);
+  }, [validatorArray.length, publicKeys]);
+
+  useEffect(() => {
+    if (validatorArrayNeedsUpdate) {
+      const fetchedData = fetchValidators(publicKeys);
+
+      fetchedData.then((data) => setValidatorArray(data));
+    }
+  }, [validatorArrayNeedsUpdate, publicKeys]);
 
   // Update validators data (active/pending/slashed/other)
   useEffect(() => {
@@ -167,7 +178,7 @@ function App() {
     }
   }, [activeValidators, performanceNeedsUpdate]);
 
-  // Refresh data every 5 minutes
+  // Refresh data every minute
   useEffect(() => {
     if (
       !luckNeedsUpdate &&
@@ -184,7 +195,7 @@ function App() {
         setNetworkDataNeedsUpdate(true);
         setValidatorMapsNeedUpdate(true);
         setWithdrawalAddressesBalanceNeedsUpdate(true);
-      }, 300000);
+      }, 60000);
       return () => clearInterval(id);
     }
   }, [
@@ -195,6 +206,16 @@ function App() {
     validatorMapsNeedUpdate,
     networkDataNeedsUpdate,
   ]);
+
+  const handleRefresh = () => {
+    setValidatorArrayNeedsUpdate(true);
+    setValidatorMapsNeedUpdate(true);
+    setNetworkDataNeedsUpdate(true);
+    setLuckNeedsUpdate(true);
+    setPerformanceNeedsUpdate(true);
+    setLYXPriceNeedsUpdate(true);
+    setWithdrawalAddressesBalanceNeedsUpdate(true);
+  };
 
   const bodyClasses =
     "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-36 pb-16 sm:pb-8";
@@ -208,6 +229,7 @@ function App() {
             stakedLYX={stakedLYX}
             currentEpoch={currentEpoch}
             networkValidators={networkValidators}
+            handleRefresh={handleRefresh}
           />
           <StatsPage
             publicKeys={publicKeys}
@@ -244,6 +266,7 @@ function App() {
             stakedLYX={stakedLYX}
             currentEpoch={currentEpoch}
             networkValidators={networkValidators}
+            handleRefresh={handleRefresh}
           />
           <UserPage publicKeys={publicKeys} setPublicKeys={setPublicKeys} />
           <Footer setPage={setPage} />
@@ -258,6 +281,7 @@ function App() {
             stakedLYX={stakedLYX}
             currentEpoch={currentEpoch}
             networkValidators={networkValidators}
+            handleRefresh={handleRefresh}
           />
           <ValidatorsPage
             validatorArray={validatorArray}
@@ -278,6 +302,7 @@ function App() {
             stakedLYX={stakedLYX}
             currentEpoch={currentEpoch}
             networkValidators={networkValidators}
+            handleRefresh={handleRefresh}
           />
           <TermsAndConditions />
           <Footer setPage={setPage} />
@@ -292,6 +317,7 @@ function App() {
             stakedLYX={stakedLYX}
             currentEpoch={currentEpoch}
             networkValidators={networkValidators}
+            handleRefresh={handleRefresh}
           />
           <PrivacyPolicy />
           <Footer setPage={setPage} />
@@ -306,6 +332,7 @@ function App() {
             stakedLYX={stakedLYX}
             currentEpoch={currentEpoch}
             networkValidators={networkValidators}
+            handleRefresh={handleRefresh}
           />
           <License />
           <Footer setPage={setPage} />

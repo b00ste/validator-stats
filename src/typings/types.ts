@@ -139,6 +139,7 @@ export type HeaderParams = {
   stakedLYX: number;
   currentEpoch: number;
   networkValidators: number;
+  handleRefresh: Function;
 };
 
 export type FooterParams = { setPage: Function };

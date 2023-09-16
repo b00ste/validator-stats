@@ -5,9 +5,13 @@ export const Header = ({
   stakedLYX,
   currentEpoch,
   networkValidators,
+  handleRefresh,
 }: HeaderParams) => {
   const tileClasses =
     "mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis";
+
+  const buttonClasses =
+    "bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink ";
 
   return (
     <nav className="absolute top-0 left-4 right-4">
@@ -32,23 +36,17 @@ export const Header = ({
         </div>
       </div>
       <div className="flex justify-center space-x-4">
-        <button
-          className="bg-strong-pink text-white px-4 py-2 rounded-b-lg hover:bg-dark-pink"
-          onClick={() => setPage("stats")}
-        >
+        <button className={buttonClasses} onClick={() => setPage("stats")}>
           stats
         </button>
-        <button
-          className="bg-strong-pink text-white px-4 py-2 rounded-b-lg hover:bg-dark-pink"
-          onClick={() => setPage("validators")}
-        >
+        <button className={buttonClasses} onClick={() => setPage("validators")}>
           validators
         </button>
-        <button
-          className="bg-strong-pink text-white px-4 py-2 rounded-b-lg hover:bg-dark-pink"
-          onClick={() => setPage("user")}
-        >
+        <button className={buttonClasses} onClick={() => setPage("user")}>
           user
+        </button>
+        <button className={buttonClasses} onClick={() => handleRefresh()}>
+          refresh
         </button>
       </div>
     </nav>
