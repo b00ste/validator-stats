@@ -95,18 +95,49 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
 };
 
 export const fetchValidatorsData = async (validatorArray: string[]) => {
-  const dataCollection: Validator[][] = await fetchValidatorDataByLink(
-    `${consensys_explorer}/api/v1/validator/{validators}`,
-    validatorArray
-  );
+  if (validatorArray.length > 100) {
+    const dataCollection: Validator[][] = await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validator/{validators}`,
+      validatorArray
+    );
 
-  let slashedValidators = {} as ValidatorMap;
-  let activeValidators = {} as ValidatorMap;
-  let pendingValidators = {} as ValidatorMap;
-  let otherValidators = {} as ValidatorMap;
-  for (let i = 0; i < dataCollection.length; i++) {
-    for (let j = 0; j < dataCollection[i].length; j++) {
-      const validatorData = dataCollection[i][j];
+    let slashedValidators = {} as ValidatorMap;
+    let activeValidators = {} as ValidatorMap;
+    let pendingValidators = {} as ValidatorMap;
+    let otherValidators = {} as ValidatorMap;
+    for (let i = 0; i < dataCollection.length; i++) {
+      for (let j = 0; j < dataCollection[i].length; j++) {
+        const validatorData = dataCollection[i][j];
+        if (validatorData.slashed) {
+          slashedValidators[validatorData.pubkey] = validatorData;
+        } else if (validatorData.status === "active_online") {
+          activeValidators[validatorData.pubkey] = validatorData;
+        } else if (validatorData.status === "pending") {
+          pendingValidators[validatorData.pubkey] = validatorData;
+        } else {
+          otherValidators[validatorData.pubkey] = validatorData;
+        }
+      }
+    }
+
+    return {
+      slashedValidators,
+      activeValidators,
+      pendingValidators,
+      otherValidators,
+    };
+  } else {
+    const dataCollection: Validator[] = await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validator/{validators}`,
+      validatorArray
+    );
+
+    let slashedValidators = {} as ValidatorMap;
+    let activeValidators = {} as ValidatorMap;
+    let pendingValidators = {} as ValidatorMap;
+    let otherValidators = {} as ValidatorMap;
+    for (let i = 0; i < dataCollection.length; i++) {
+      const validatorData = dataCollection[i];
       if (validatorData.slashed) {
         slashedValidators[validatorData.pubkey] = validatorData;
       } else if (validatorData.status === "active_online") {
@@ -117,14 +148,14 @@ export const fetchValidatorsData = async (validatorArray: string[]) => {
         otherValidators[validatorData.pubkey] = validatorData;
       }
     }
-  }
 
-  return {
-    slashedValidators,
-    activeValidators,
-    pendingValidators,
-    otherValidators,
-  };
+    return {
+      slashedValidators,
+      activeValidators,
+      pendingValidators,
+      otherValidators,
+    };
+  }
 };
 
 export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
