@@ -220,7 +220,10 @@ function App() {
   ]);
 
   const handleRefresh = () => {
-    setValidatorArrayNeedsUpdate(true);
+    const fetchedData = fetchValidators(publicKeys);
+
+    fetchedData.then((data) => setValidatorArray(data));
+
     setValidatorMapsNeedUpdate(true);
     setNetworkDataNeedsUpdate(true);
     setLuckNeedsUpdate(true);
@@ -277,6 +280,7 @@ function App() {
             path="/validators"
             element={
               <ValidatorsPage
+                publicKeys={publicKeys}
                 validatorArray={validatorArray}
                 activeValidators={activeValidators}
                 pendingValidators={pendingValidators}

@@ -121,6 +121,7 @@ export type StatsPageParams = {
 };
 
 export type ValidatorsPageParams = {
+  publicKeys: PublicKey[];
   validatorArray: string[];
   activeValidators: ValidatorMap;
   pendingValidators: ValidatorMap;
