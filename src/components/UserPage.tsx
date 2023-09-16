@@ -2,7 +2,11 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { consensys_explorer } from "../helpers/constants";
 import { UserPageParams } from "../typings/types";
 
-export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
+export const UserPage = ({
+  publicKeys,
+  setPublicKeys,
+  setValidatorArray,
+}: UserPageParams) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -76,6 +80,7 @@ export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
     setPublicKeys(() =>
       publicKeys.filter((publicKey) => publicKey.address !== addressToDelete)
     );
+    setValidatorArray([]);
   };
 
   return (

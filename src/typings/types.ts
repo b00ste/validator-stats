@@ -132,6 +132,7 @@ export type ValidatorsPageParams = {
 export type UserPageParams = {
   publicKeys: PublicKey[];
   setPublicKeys: React.Dispatch<React.SetStateAction<PublicKey[]>>;
+  setValidatorArray: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 export type HeaderParams = {

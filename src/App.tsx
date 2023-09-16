@@ -274,7 +274,11 @@ function App() {
           <Route
             path="/user"
             element={
-              <UserPage publicKeys={publicKeys} setPublicKeys={setPublicKeys} />
+              <UserPage
+                publicKeys={publicKeys}
+                setPublicKeys={setPublicKeys}
+                setValidatorArray={setValidatorArray}
+              />
             }
           ></Route>
           <Route
