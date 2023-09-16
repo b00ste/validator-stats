@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { consensys_explorer } from "../helpers/constants";
-import {
-  Validator,
-  ValidatorMap,
-  ValidatorsPageParams,
-} from "../typings/types";
+import { ValidatorMap, ValidatorsPageParams } from "../typings/types";
 
 export const ValidatorsPage = ({
   publicKeys,

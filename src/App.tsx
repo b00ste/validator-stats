@@ -106,6 +106,7 @@ function App() {
       const fetchedData = fetchValidators(publicKeys);
 
       fetchedData.then((data) => setValidatorArray(data));
+      setValidatorArrayNeedsUpdate(false);
     }
   }, [publicKeys, validatorArray.length]);
 
