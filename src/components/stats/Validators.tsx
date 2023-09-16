@@ -15,25 +15,25 @@ export const Validators = ({
         <div className="loading-animation" />
       ) : (
         <>
-          <p className="font-bold">
+          <p className="text-gray-600 font-bold">
             Active:
             <span className="text-pastel-green ">
               {` ${Object.getOwnPropertyNames(activeValidators).length}`}
             </span>
           </p>
-          <p className="font-bold">
+          <p className="text-gray-600 font-bold">
             Pending:
             <span className="text-pastel-orange">{` ${
               Object.getOwnPropertyNames(pendingValidators).length
             }`}</span>
           </p>
-          <p className="font-bold">
+          <p className="text-gray-600 font-bold">
             Slashed:
             <span className="text-pastel-red">{` ${
               Object.getOwnPropertyNames(slashedValidators).length
             }`}</span>
           </p>
-          <p className="font-bold">
+          <p className="text-gray-600 font-bold">
             Other:
             <span className="text-pastel-red">{` ${
               Object.getOwnPropertyNames(otherValidators).length

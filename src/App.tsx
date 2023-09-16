@@ -110,15 +110,15 @@ function App() {
     }
   }, [validatorArray, validatorMapsNeedUpdate]);
 
-  // Fetch validators count, staked LYX count and current epoch
+  // Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
     if (networkDataNeedsUpdate) {
       const fetchedData = getLastEpoch();
 
-      fetchedData.then((epoch) => {
-        setStakedLYX(epoch.totalvalidatorbalance);
-        setCurrentEpoch(epoch.epoch);
-        setNetworkValidators(epoch.validatorscount);
+      fetchedData.then((epochData) => {
+        setStakedLYX(epochData.totalvalidatorbalance);
+        setCurrentEpoch(epochData.epoch);
+        setNetworkValidators(epochData.validatorscount);
       });
 
       setNetworkDataNeedsUpdate(false);
@@ -196,10 +196,13 @@ function App() {
     networkDataNeedsUpdate,
   ]);
 
+  const bodyClasses =
+    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-36 pb-16 sm:pb-8";
+
   switch (page) {
     case "stats": {
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <Header
             setPage={setPage}
             stakedLYX={stakedLYX}
@@ -235,7 +238,7 @@ function App() {
     }
     case "user": {
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <Header
             setPage={setPage}
             stakedLYX={stakedLYX}
@@ -249,7 +252,7 @@ function App() {
     }
     case "validators": {
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <Header
             setPage={setPage}
             stakedLYX={stakedLYX}
@@ -269,7 +272,7 @@ function App() {
     }
     case "terms": {
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <Header
             setPage={setPage}
             stakedLYX={stakedLYX}
@@ -283,7 +286,7 @@ function App() {
     }
     case "privacy": {
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <Header
             setPage={setPage}
             stakedLYX={stakedLYX}
@@ -297,7 +300,7 @@ function App() {
     }
     case "license": {
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <Header
             setPage={setPage}
             stakedLYX={stakedLYX}
@@ -311,7 +314,7 @@ function App() {
     }
     default:
       return (
-        <div className="bg-soft-pink flex flex-col justify-center items-center min-h-screen">
+        <div className={bodyClasses}>
           <p className="font-extrabold text-3xl">
             Error! Something unexpected happened.
           </p>

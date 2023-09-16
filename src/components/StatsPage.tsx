@@ -35,7 +35,7 @@ export const StatsPage = ({
     "bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
 
   return (
-    <div className="container mx-auto mt-40 mb-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       <LYXPrice
         tileClasses={tileClasses}
         eurPrice={eurPrice ? eurPrice : ""}
@@ -110,6 +110,8 @@ export const StatsPage = ({
       <Withdrawals
         tileClasses={tileClasses}
         activeValidators={activeValidators}
+        eurPrice={eurPrice ? eurPrice : ""}
+        usdPrice={usdPrice ? usdPrice : ""}
         validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <WithdrawalBalance

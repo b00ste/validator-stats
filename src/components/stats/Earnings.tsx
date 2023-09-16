@@ -30,15 +30,15 @@ export const Earnings = ({
           <div className="loading-animation" />
         ) : (
           <>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${calculateWeeklyEarnings().toFixed(2)} LYX`}
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${(
                 calculateWeeklyEarnings() * Number.parseFloat(eurPrice)
               ).toFixed(2)} €`}
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${(
                 calculateWeeklyEarnings() * Number.parseFloat(usdPrice)
               ).toFixed(2)} €`}
@@ -69,15 +69,15 @@ export const Earnings = ({
           <div className="loading-animation" />
         ) : (
           <>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${calculateMonthlyEarnings().toFixed(2)} LYX`}
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${(
                 calculateMonthlyEarnings() * Number.parseFloat(eurPrice)
               ).toFixed(2)} €`}
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${(
                 calculateMonthlyEarnings() * Number.parseFloat(usdPrice)
               ).toFixed(2)} €`}
@@ -108,15 +108,15 @@ export const Earnings = ({
           <div className="loading-animation" />
         ) : (
           <>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${calculateTotalEarnings().toFixed(2)} LYX`}
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${(
                 calculateTotalEarnings() * Number.parseFloat(eurPrice)
               ).toFixed(2)} €`}
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 font-bold">
               {`${(
                 calculateTotalEarnings() * Number.parseFloat(usdPrice)
               ).toFixed(2)} €`}

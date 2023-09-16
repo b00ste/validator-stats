@@ -118,16 +118,37 @@ export const fetchValidatorsData = async (validatorArray: string[]) => {
 export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
   const pubkeys = Object.getOwnPropertyNames(activeValidators);
 
-  let dataCollection = {} as ValidatorsLuck;
-  await fetch(
-    `${consensys_explorer}/api/v1/validators/proposalLuck?validators=${pubkeys
-      .toString()
-      .replaceAll(",", "%2C")}`
-  )
-    .then((res) => res.json())
-    .then(({ data }) => (dataCollection = data));
+  let validatorsLuck: ValidatorsLuck = {
+    average_proposal_interval: 0,
+    next_proposal_estimate_ts: 0,
+    proposal_luck: 0,
+    time_frame_name: "",
+  };
 
-  return dataCollection;
+  if (pubkeys.length > 100) {
+    let dataCollection = (await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validators/proposalLuck?validators={validators}`,
+      pubkeys
+    )) as ValidatorsLuck[];
+
+    dataCollection.forEach((elem) => {
+      if (elem.proposal_luck) {
+        validatorsLuck.proposal_luck += elem.proposal_luck;
+
+        validatorsLuck.proposal_luck = validatorsLuck.proposal_luck / 2;
+      }
+    });
+  } else {
+    await fetch(
+      `${consensys_explorer}/api/v1/validators/proposalLuck?validators=${pubkeys
+        .toString()
+        .replaceAll(",", "%2C")}`
+    )
+      .then((res) => res.json())
+      .then(({ data }) => (validatorsLuck = data));
+  }
+
+  return validatorsLuck;
 };
 
 export const fetchValidatorsPerformance = async (
@@ -135,44 +156,90 @@ export const fetchValidatorsPerformance = async (
 ) => {
   const pubkeys = Object.getOwnPropertyNames(activeValidators);
 
-  const attestationEfficiency: AttestationEfficiency[] =
-    await fetchValidatorDataByLink(
-      `${consensys_explorer}/api/v1/validator/{validators}/attestationefficiency`,
-      pubkeys
-    );
-  const consensusPerformance: ConsensusPerformance[] =
-    await fetchValidatorDataByLink(
-      `${consensys_explorer}/api/v1/validator/{validators}/performance`,
-      pubkeys
-    );
-  const executionPerformance: ExecutionPerformance[] =
-    await fetchValidatorDataByLink(
-      `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
-      pubkeys
-    );
-
   const performanceData: ValidatorsPerformance = {};
 
-  for (let i = 0; i < attestationEfficiency.length; i++) {
-    const { validatorindex } = attestationEfficiency[i];
-    performanceData[validatorindex] = {
-      ...performanceData[validatorindex],
-      attestationEfficiency: attestationEfficiency[i],
-    };
-  }
-  for (let i = 0; i < consensusPerformance.length; i++) {
-    const { validatorindex } = consensusPerformance[i];
-    performanceData[validatorindex] = {
-      ...performanceData[validatorindex],
-      consensusPerformance: consensusPerformance[i],
-    };
-  }
-  for (let i = 0; i < executionPerformance.length; i++) {
-    const { validatorindex } = executionPerformance[i];
-    performanceData[validatorindex] = {
-      ...performanceData[validatorindex],
-      executionPerformance: executionPerformance[i],
-    };
+  if (pubkeys.length > 100) {
+    const attestationEfficiency: AttestationEfficiency[][] =
+      await fetchValidatorDataByLink(
+        `${consensys_explorer}/api/v1/validator/{validators}/attestationefficiency`,
+        pubkeys
+      );
+    const consensusPerformance: ConsensusPerformance[][] =
+      await fetchValidatorDataByLink(
+        `${consensys_explorer}/api/v1/validator/{validators}/performance`,
+        pubkeys
+      );
+    const executionPerformance: ExecutionPerformance[][] =
+      await fetchValidatorDataByLink(
+        `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
+        pubkeys
+      );
+
+    for (let i = 0; i < attestationEfficiency.length; i++) {
+      for (let j = 0; j < attestationEfficiency[i].length; j++) {
+        const { validatorindex } = attestationEfficiency[i][j];
+        performanceData[validatorindex] = {
+          ...performanceData[validatorindex],
+          attestationEfficiency: attestationEfficiency[i][j],
+        };
+      }
+    }
+    for (let i = 0; i < consensusPerformance.length; i++) {
+      for (let j = 0; j < consensusPerformance[i].length; j++) {
+        const { validatorindex } = consensusPerformance[i][j];
+        performanceData[validatorindex] = {
+          ...performanceData[validatorindex],
+          consensusPerformance: consensusPerformance[i][j],
+        };
+      }
+    }
+    for (let i = 0; i < executionPerformance.length; i++) {
+      for (let j = 0; j < executionPerformance[i].length; j++) {
+        const { validatorindex } = executionPerformance[i][j];
+        performanceData[validatorindex] = {
+          ...performanceData[validatorindex],
+          executionPerformance: executionPerformance[i][j],
+        };
+      }
+    }
+  } else {
+    const attestationEfficiency: AttestationEfficiency[] =
+      await fetchValidatorDataByLink(
+        `${consensys_explorer}/api/v1/validator/{validators}/attestationefficiency`,
+        pubkeys
+      );
+    const consensusPerformance: ConsensusPerformance[] =
+      await fetchValidatorDataByLink(
+        `${consensys_explorer}/api/v1/validator/{validators}/performance`,
+        pubkeys
+      );
+    const executionPerformance: ExecutionPerformance[] =
+      await fetchValidatorDataByLink(
+        `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
+        pubkeys
+      );
+
+    for (let i = 0; i < attestationEfficiency.length; i++) {
+      const { validatorindex } = attestationEfficiency[i];
+      performanceData[validatorindex] = {
+        ...performanceData[validatorindex],
+        attestationEfficiency: attestationEfficiency[i],
+      };
+    }
+    for (let i = 0; i < consensusPerformance.length; i++) {
+      const { validatorindex } = consensusPerformance[i];
+      performanceData[validatorindex] = {
+        ...performanceData[validatorindex],
+        consensusPerformance: consensusPerformance[i],
+      };
+    }
+    for (let i = 0; i < executionPerformance.length; i++) {
+      const { validatorindex } = executionPerformance[i];
+      performanceData[validatorindex] = {
+        ...performanceData[validatorindex],
+        executionPerformance: executionPerformance[i],
+      };
+    }
   }
 
   return performanceData;

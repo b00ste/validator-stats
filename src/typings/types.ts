@@ -211,5 +211,7 @@ export type WithdrawalBalanceParams = {
 export type WithdrawalsParams = {
   tileClasses: string;
   activeValidators: ValidatorMap;
+  eurPrice: string;
+  usdPrice: string;
   validatorMapsNeedUpdate: boolean;
 };

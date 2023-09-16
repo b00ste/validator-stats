@@ -25,7 +25,7 @@ export const APYRate = ({
         {networkDataNeedsUpdate ? (
           <div className="loading-animation" />
         ) : (
-          <p className="text-gray-600">
+          <p className="text-gray-600 font-bold">
             {`${getAnualPercentageYield().toFixed(2)} %`}
           </p>
         )}
@@ -38,7 +38,7 @@ export const APYRate = ({
         {networkDataNeedsUpdate ? (
           <div className="loading-animation" />
         ) : (
-          <p className="text-gray-600">
+          <p className="text-gray-600 font-bold">
             {`${(getAnualPercentageYield() / 12).toFixed(2)} %`}
           </p>
         )}

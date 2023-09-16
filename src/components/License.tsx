@@ -1,6 +1,6 @@
 export const License = () => {
   return (
-    <div className="bg-pastel-light-pink mt-40 mb-16 p-4 m-8 rounded-lg shadow">
+    <div className="bg-pastel-light-pink p-4 m-8 rounded-lg shadow">
       <h2 className="text-pastel-blue text-2xl mb-4 font-bold">MIT License</h2>
       <p className="block m-2 text-gray-700">
         B00ste ("the Company") hereby grants permission to any person or entity

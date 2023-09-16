@@ -13,8 +13,8 @@ export const LYXPrice = ({
         <div className="loading-animation" />
       ) : (
         <>
-          <p className="text-gray-600">{`${eurPrice} €`}</p>
-          <p className="text-gray-600">{`${usdPrice} $`}</p>
+          <p className="text-gray-600 font-bold">{`${eurPrice} €`}</p>
+          <p className="text-gray-600 font-bold">{`${usdPrice} $`}</p>
         </>
       )}
     </div>

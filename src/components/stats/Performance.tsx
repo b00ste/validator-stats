@@ -35,7 +35,9 @@ export const Performance = ({
       {performanceNeedsUpdate ? (
         <div className="loading-animation" />
       ) : (
-        <p className="text-gray-600">{`${(efficiency * 100).toFixed(2)} %`}</p>
+        <p className="text-gray-600 font-bold">{`${(efficiency * 100).toFixed(
+          2
+        )} %`}</p>
       )}
     </div>
   );

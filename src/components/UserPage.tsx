@@ -79,7 +79,7 @@ export const UserPage = ({ publicKeys, setPublicKeys }: UserPageParams) => {
   };
 
   return (
-    <div className="container mx-auto mt-40 mb-16 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="container mx-auto grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {/* <!-- Tile 1: Add Address Form --> */}
       <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>

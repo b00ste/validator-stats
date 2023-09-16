@@ -4,6 +4,8 @@ import { WithdrawalsParams } from "../../typings/types";
 export const Withdrawals = ({
   tileClasses,
   activeValidators,
+  eurPrice,
+  usdPrice,
   validatorMapsNeedUpdate,
 }: WithdrawalsParams) => {
   const [totalWithdrawals, setTotalWithdrawals] = useState(0);
@@ -15,12 +17,14 @@ export const Withdrawals = ({
       Object.getOwnPropertyNames(activeValidators).length > 0 &&
       totalWithdrawalsNeedsUpdate
     ) {
+      let newTotalWithdrawals = 0;
       for (const validatorAddress in activeValidators) {
-        const newTotalWithdrawals =
-          totalWithdrawals +
-          activeValidators[validatorAddress].total_withdrawals;
-        setTotalWithdrawals(newTotalWithdrawals);
+        if (activeValidators[validatorAddress].total_withdrawals) {
+          newTotalWithdrawals +=
+            activeValidators[validatorAddress].total_withdrawals;
+        }
       }
+      setTotalWithdrawals(newTotalWithdrawals);
 
       setTotalWithdrawalsNeedsUpdate(false);
     }
@@ -32,7 +36,23 @@ export const Withdrawals = ({
       {validatorMapsNeedUpdate ? (
         <div className="loading-animation" />
       ) : (
-        <p className="text-gray-600">{`${totalWithdrawals / 1e9} LYX`}</p>
+        <>
+          <p className="text-gray-600 font-bold">{`${(
+            totalWithdrawals / 1e9
+          ).toFixed(2)} LYX`}</p>
+          <p className="text-gray-600 font-bold">
+            {`${(
+              (totalWithdrawals / 1e9) *
+              Number.parseFloat(eurPrice)
+            ).toFixed(2)} €`}
+          </p>
+          <p className="text-gray-600 font-bold">
+            {`${(
+              (totalWithdrawals / 1e9) *
+              Number.parseFloat(usdPrice)
+            ).toFixed(2)} $`}
+          </p>
+        </>
       )}
     </div>
   );
