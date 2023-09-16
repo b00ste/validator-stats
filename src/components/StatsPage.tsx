@@ -1,5 +1,4 @@
 // Stats Tiles
-import { LYXPrice } from "./stats/LYXPrice";
 import { Earnings } from "./stats/Earnings";
 import { APYRate } from "./stats/APYRate";
 import { Performance } from "./stats/Performance";
@@ -74,7 +73,6 @@ export const StatsPage = ({
         pendingValidators={pendingValidators}
         slashedValidators={slashedValidators}
         otherValidators={otherValidators}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <Balance
         tileClasses={tileClasses}
@@ -82,7 +80,6 @@ export const StatsPage = ({
         pendingBalance={pendingBalance}
         slashedBalance={slashedBalance}
         otherBalance={otherBalance}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <WithdrawableAmount
         tileClasses={tileClasses}
@@ -90,29 +87,18 @@ export const StatsPage = ({
         usdPrice={usdPrice}
         activeValidators={activeValidators}
         activeBalance={activeBalance}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <TotalWithdrawals
         tileClasses={tileClasses}
         activeValidators={activeValidators}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
       />
       <WithdrawalBalance
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
         withdrawalAddressesBalance={withdrawalAddressesBalance}
-        withdrawalAddressesBalanceNeedsUpdate={
-          withdrawalAddressesBalanceNeedsUpdate
-        }
-      />
-      <LYXPrice
-        tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
-        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
       />
       <Earnings
         timeframe="weekly"
@@ -120,8 +106,6 @@ export const StatsPage = ({
         eurPrice={eurPrice}
         usdPrice={usdPrice}
         validatorsPerformance={validatorsPerformance}
-        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
-        performanceNeedsUpdate={performanceNeedsUpdate}
       />
       <Earnings
         timeframe="monthly"
@@ -129,8 +113,6 @@ export const StatsPage = ({
         eurPrice={eurPrice}
         usdPrice={usdPrice}
         validatorsPerformance={validatorsPerformance}
-        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
-        performanceNeedsUpdate={performanceNeedsUpdate}
       />
       <Earnings
         timeframe="total"
@@ -138,31 +120,22 @@ export const StatsPage = ({
         eurPrice={eurPrice}
         usdPrice={usdPrice}
         validatorsPerformance={validatorsPerformance}
-        LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
-        performanceNeedsUpdate={performanceNeedsUpdate}
       />
       <APYRate
         tileClasses={tileClasses}
         timeframe="annual"
         stakedLYX={stakedLYX}
-        networkDataNeedsUpdate={networkDataNeedsUpdate}
       />
       <APYRate
         tileClasses={tileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
-        networkDataNeedsUpdate={networkDataNeedsUpdate}
       />
       <Performance
         tileClasses={tileClasses}
         validatorsPerformance={validatorsPerformance}
-        performanceNeedsUpdate={performanceNeedsUpdate}
       />
-      <Luck
-        tileClasses={tileClasses}
-        validatorsLuck={validatorsLuck}
-        luckNeedsUpdate={luckNeedsUpdate}
-      />
+      <Luck tileClasses={tileClasses} validatorsLuck={validatorsLuck} />
     </div>
   );
 };

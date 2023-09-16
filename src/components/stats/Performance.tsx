@@ -4,7 +4,6 @@ import { PerformanceParams } from "../../typings/types";
 export const Performance = ({
   tileClasses,
   validatorsPerformance,
-  performanceNeedsUpdate,
 }: PerformanceParams) => {
   const [efficiency, setEfficiency] = useState(0);
   const [efficiencyNeedsUpdate, setEfficiencyNeedsUpdate] = useState(true);
@@ -32,13 +31,9 @@ export const Performance = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Performance</div>
-      {performanceNeedsUpdate ? (
-        <div className="loading-animation" />
-      ) : (
-        <p className="text-gray-600 font-bold">{`${(efficiency * 100).toFixed(
-          2
-        )} %`}</p>
-      )}
+      <p className="text-gray-600 font-bold">{`${(efficiency * 100).toFixed(
+        2
+      )} %`}</p>
     </div>
   );
 };

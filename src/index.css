@@ -20,22 +20,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-/* Add this CSS to your stylesheet to style the loading animation */
-.loading-animation {
-  width: 50px; /* Adjust the width and height as needed */
-  height: 50px;
-  border: 5px solid transparent;
-  border-top: 5px solid #ff6a8e; /* Use your desired pink color */
-  border-radius: 50%;
-  animation: spin 1s linear infinite; /* Adjust the animation duration as needed */
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}

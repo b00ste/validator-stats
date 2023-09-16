@@ -4,7 +4,6 @@ export const APYRate = ({
   timeframe,
   tileClasses,
   stakedLYX,
-  networkDataNeedsUpdate,
 }: APYRateParams) => {
   const getAnualBaseReward = () => {
     const EPOCHS_PER_YEAR = 82180;
@@ -22,26 +21,18 @@ export const APYRate = ({
     return (
       <div className={tileClasses}>
         <div className="text-pastel-blue text-xl mb-2">Annual Rate</div>
-        {networkDataNeedsUpdate ? (
-          <div className="loading-animation" />
-        ) : (
-          <p className="text-gray-600 font-bold">
-            {`${getAnualPercentageYield().toFixed(2)} %`}
-          </p>
-        )}
+        <p className="text-gray-600 font-bold">
+          {`${getAnualPercentageYield().toFixed(2)} %`}
+        </p>
       </div>
     );
   } else if (timeframe === "monthly") {
     return (
       <div className={tileClasses}>
         <div className="text-pastel-blue text-xl mb-2">Monthly Rate</div>
-        {networkDataNeedsUpdate ? (
-          <div className="loading-animation" />
-        ) : (
-          <p className="text-gray-600 font-bold">
-            {`${(getAnualPercentageYield() / 12).toFixed(2)} %`}
-          </p>
-        )}
+        <p className="text-gray-600 font-bold">
+          {`${(getAnualPercentageYield() / 12).toFixed(2)} %`}
+        </p>
       </div>
     );
   }

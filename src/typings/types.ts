@@ -139,7 +139,8 @@ export type HeaderParams = {
   stakedLYX: number;
   currentEpoch: number;
   networkValidators: number;
-  handleRefresh: Function;
+  eurPrice: string;
+  usdPrice: string;
 };
 
 export type FooterParams = {};
@@ -150,7 +151,6 @@ export type APYRateParams = {
   timeframe: "monthly" | "annual";
   tileClasses: string;
   stakedLYX: number;
-  networkDataNeedsUpdate: boolean;
 };
 
 export type BalanceParams = {
@@ -159,7 +159,6 @@ export type BalanceParams = {
   pendingBalance: number;
   slashedBalance: number;
   otherBalance: number;
-  validatorMapsNeedUpdate: boolean;
 };
 
 export type EarningsParams = {
@@ -168,27 +167,22 @@ export type EarningsParams = {
   eurPrice: string;
   usdPrice: string;
   validatorsPerformance: ValidatorsPerformance;
-  LYXPriceNeedsUpdate: boolean;
-  performanceNeedsUpdate: boolean;
 };
 
 export type LuckParams = {
   tileClasses: string;
   validatorsLuck: ValidatorsLuck;
-  luckNeedsUpdate: boolean;
 };
 
 export type LYXPriceParams = {
   tileClasses: string;
   eurPrice: string;
   usdPrice: string;
-  LYXPriceNeedsUpdate: boolean;
 };
 
 export type PerformanceParams = {
   tileClasses: string;
   validatorsPerformance: ValidatorsPerformance;
-  performanceNeedsUpdate: boolean;
 };
 
 export type ValidatorsParams = {
@@ -197,7 +191,6 @@ export type ValidatorsParams = {
   pendingValidators: ValidatorMap;
   slashedValidators: ValidatorMap;
   otherValidators: ValidatorMap;
-  validatorMapsNeedUpdate: boolean;
 };
 
 export type WithdrawalBalanceParams = {
@@ -205,7 +198,6 @@ export type WithdrawalBalanceParams = {
   eurPrice: string;
   usdPrice: string;
   withdrawalAddressesBalance: number;
-  withdrawalAddressesBalanceNeedsUpdate: boolean;
 };
 
 export type WithdrawalsParams = {
@@ -213,7 +205,6 @@ export type WithdrawalsParams = {
   activeValidators: ValidatorMap;
   eurPrice: string;
   usdPrice: string;
-  validatorMapsNeedUpdate: boolean;
 };
 
 export type WithdrawableAmountParams = {
@@ -222,5 +213,4 @@ export type WithdrawableAmountParams = {
   usdPrice: string;
   activeValidators: ValidatorMap;
   activeBalance: number;
-  validatorMapsNeedUpdate: boolean;
 };

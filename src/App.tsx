@@ -220,19 +220,6 @@ function App() {
     networkDataNeedsUpdate,
   ]);
 
-  const handleRefresh = () => {
-    const fetchedData = fetchValidators(publicKeys);
-
-    fetchedData.then((data) => setValidatorArray(data));
-
-    setValidatorMapsNeedUpdate(true);
-    setNetworkDataNeedsUpdate(true);
-    setLuckNeedsUpdate(true);
-    setPerformanceNeedsUpdate(true);
-    setLYXPriceNeedsUpdate(true);
-    setWithdrawalAddressesBalanceNeedsUpdate(true);
-  };
-
   const bodyClasses =
     "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-36 pb-16";
 
@@ -243,7 +230,8 @@ function App() {
           stakedLYX={stakedLYX}
           currentEpoch={currentEpoch}
           networkValidators={networkValidators}
-          handleRefresh={handleRefresh}
+          eurPrice={eurPrice ? eurPrice : ""}
+          usdPrice={usdPrice ? usdPrice : ""}
         />
         <Routes>
           <Route
