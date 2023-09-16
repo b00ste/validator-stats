@@ -6,14 +6,13 @@ import { Performance } from "./stats/Performance";
 import { Luck } from "./stats/Luck";
 import { Validators } from "./stats/Validators";
 import { Balance } from "./stats/Balance";
-import { Withdrawals } from "./stats/Withdrawals";
+import { TotalWithdrawals } from "./stats/TotalWithdrawals";
 import { WithdrawalBalance } from "./stats/WithdrawalBalance";
 
 // ts types
 import { StatsPageParams } from "../typings/types";
 
 export const StatsPage = ({
-  publicKeys,
   stakedLYX,
   eurPrice,
   usdPrice,
@@ -23,19 +22,51 @@ export const StatsPage = ({
   otherValidators,
   validatorsLuck,
   validatorsPerformance,
+  withdrawalAddressesBalance,
   validatorMapsNeedUpdate,
   networkDataNeedsUpdate,
   luckNeedsUpdate,
   performanceNeedsUpdate,
   LYXPriceNeedsUpdate,
   withdrawalAddressesBalanceNeedsUpdate,
-  setWithdrawalAddressesBalanceNeedsUpdate,
 }: StatsPageParams) => {
   const tileClasses =
     "bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
 
   return (
     <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      <Validators
+        tileClasses={tileClasses}
+        activeValidators={activeValidators}
+        pendingValidators={pendingValidators}
+        slashedValidators={slashedValidators}
+        otherValidators={otherValidators}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
+      />
+      <Balance
+        tileClasses={tileClasses}
+        activeValidators={activeValidators}
+        pendingValidators={pendingValidators}
+        slashedValidators={slashedValidators}
+        otherValidators={otherValidators}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
+      />
+      <TotalWithdrawals
+        tileClasses={tileClasses}
+        activeValidators={activeValidators}
+        eurPrice={eurPrice ? eurPrice : ""}
+        usdPrice={usdPrice ? usdPrice : ""}
+        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
+      />
+      <WithdrawalBalance
+        tileClasses={tileClasses}
+        eurPrice={eurPrice ? eurPrice : ""}
+        usdPrice={usdPrice ? usdPrice : ""}
+        withdrawalAddressesBalance={withdrawalAddressesBalance}
+        withdrawalAddressesBalanceNeedsUpdate={
+          withdrawalAddressesBalanceNeedsUpdate
+        }
+      />
       <LYXPrice
         tileClasses={tileClasses}
         eurPrice={eurPrice ? eurPrice : ""}
@@ -90,41 +121,6 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         validatorsLuck={validatorsLuck}
         luckNeedsUpdate={luckNeedsUpdate}
-      />
-      <Validators
-        tileClasses={tileClasses}
-        activeValidators={activeValidators}
-        pendingValidators={pendingValidators}
-        slashedValidators={slashedValidators}
-        otherValidators={otherValidators}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
-      />
-      <Balance
-        tileClasses={tileClasses}
-        activeValidators={activeValidators}
-        pendingValidators={pendingValidators}
-        slashedValidators={slashedValidators}
-        otherValidators={otherValidators}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
-      />
-      <Withdrawals
-        tileClasses={tileClasses}
-        activeValidators={activeValidators}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
-        validatorMapsNeedUpdate={validatorMapsNeedUpdate}
-      />
-      <WithdrawalBalance
-        tileClasses={tileClasses}
-        publicKeys={publicKeys}
-        eurPrice={eurPrice ? eurPrice : ""}
-        usdPrice={usdPrice ? usdPrice : ""}
-        withdrawalAddressesBalanceNeedsUpdate={
-          withdrawalAddressesBalanceNeedsUpdate
-        }
-        setWithdrawalAddressesBalanceNeedsUpdate={
-          setWithdrawalAddressesBalanceNeedsUpdate
-        }
       />
     </div>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { WithdrawalsParams } from "../../typings/types";
 
-export const Withdrawals = ({
+export const TotalWithdrawals = ({
   tileClasses,
   activeValidators,
   eurPrice,
@@ -32,7 +32,7 @@ export const Withdrawals = ({
 
   return (
     <div className={tileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Withdrawals</div>
+      <div className="text-pastel-blue text-xl mb-2">Total Withdrawals</div>
       {validatorMapsNeedUpdate ? (
         <div className="loading-animation" />
       ) : (

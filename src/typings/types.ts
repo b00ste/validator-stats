@@ -102,7 +102,6 @@ export type ValidatorsWithdrawals = {
 // ------------ COMPONENTS PARAM TYPES ------------
 
 export type StatsPageParams = {
-  publicKeys: PublicKey[];
   stakedLYX: number;
   eurPrice: string;
   usdPrice: string;
@@ -112,13 +111,13 @@ export type StatsPageParams = {
   otherValidators: ValidatorMap;
   validatorsLuck: ValidatorsLuck;
   validatorsPerformance: ValidatorsPerformance;
+  withdrawalAddressesBalance: number;
   validatorMapsNeedUpdate: boolean;
   networkDataNeedsUpdate: boolean;
   luckNeedsUpdate: boolean;
   performanceNeedsUpdate: boolean;
   LYXPriceNeedsUpdate: boolean;
   withdrawalAddressesBalanceNeedsUpdate: boolean;
-  setWithdrawalAddressesBalanceNeedsUpdate: Function;
 };
 
 export type ValidatorsPageParams = {
@@ -131,18 +130,17 @@ export type ValidatorsPageParams = {
 
 export type UserPageParams = {
   publicKeys: PublicKey[];
-  setPublicKeys: Function;
+  setPublicKeys: React.Dispatch<React.SetStateAction<PublicKey[]>>;
 };
 
 export type HeaderParams = {
-  setPage: Function;
   stakedLYX: number;
   currentEpoch: number;
   networkValidators: number;
   handleRefresh: Function;
 };
 
-export type FooterParams = { setPage: Function };
+export type FooterParams = {};
 
 // ------------ STATS COMPONENTS PARAM TYPES ------------
 
@@ -202,11 +200,10 @@ export type ValidatorsParams = {
 
 export type WithdrawalBalanceParams = {
   tileClasses: string;
-  publicKeys: PublicKey[];
   eurPrice: string;
   usdPrice: string;
+  withdrawalAddressesBalance: number;
   withdrawalAddressesBalanceNeedsUpdate: boolean;
-  setWithdrawalAddressesBalanceNeedsUpdate: Function;
 };
 
 export type WithdrawalsParams = {

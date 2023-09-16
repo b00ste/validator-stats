@@ -1,12 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { HeaderParams } from "../typings/types";
 
 export const Header = ({
-  setPage,
   stakedLYX,
   currentEpoch,
   networkValidators,
   handleRefresh,
 }: HeaderParams) => {
+  const navigate = useNavigate();
+
   const tileClasses =
     "mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis";
 
@@ -36,13 +38,16 @@ export const Header = ({
         </div>
       </div>
       <div className="flex justify-center space-x-4">
-        <button className={buttonClasses} onClick={() => setPage("stats")}>
+        <button className={buttonClasses} onClick={() => navigate("/")}>
           stats
         </button>
-        <button className={buttonClasses} onClick={() => setPage("validators")}>
+        <button
+          className={buttonClasses}
+          onClick={() => navigate("/validators")}
+        >
           validators
         </button>
-        <button className={buttonClasses} onClick={() => setPage("user")}>
+        <button className={buttonClasses} onClick={() => navigate("/user")}>
           user
         </button>
         <button className={buttonClasses} onClick={() => handleRefresh()}>

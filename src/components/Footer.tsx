@@ -1,6 +1,8 @@
-import { FooterParams } from "../typings/types";
+import { useNavigate } from "react-router-dom";
 
-export const Footer = ({ setPage }: FooterParams) => {
+export const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <footer className="absolute bottom-0 left-4 right-4 rounded-t-3xl bg-pastel-white-pink p-2 text-center shadow">
       <div className="container mx-auto">
@@ -17,24 +19,24 @@ export const Footer = ({ setPage }: FooterParams) => {
           </li>
           <li>
             <button
+              onClick={() => navigate("/terms")}
               className="text-gray-600 hover:text-pastel-blue"
-              onClick={() => setPage("terms")}
             >
               Terms and Conditions
             </button>
           </li>
           <li>
             <button
+              onClick={() => navigate("/privacy")}
               className="text-gray-600 hover:text-pastel-blue"
-              onClick={() => setPage("privacy")}
             >
               Privacy Policy
             </button>
           </li>
           <li>
             <button
+              onClick={() => navigate("/license")}
               className="text-gray-600 hover:text-pastel-blue"
-              onClick={() => setPage("license")}
             >
               License
             </button>

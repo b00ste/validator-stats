@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
 import { StatsPage } from "./components/StatsPage";
@@ -17,7 +18,7 @@ import {
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
 } from "./helpers/validators";
-import { getLastEpoch } from "./helpers/network";
+import { getLastEpoch, getWithdrawalAddressBalance } from "./helpers/network";
 
 // ts types
 import {
@@ -28,13 +29,14 @@ import {
 } from "./typings/types";
 
 function App() {
-  const [page, setPage] = useState("stats");
-
-  // Addresses used to get the validators. (deposior/withdrawal address)
+  // ------ Deposior/Withdrawal Addresses ------
   const storedPublicKeys = localStorage.getItem("publicKeys");
   const [publicKeys, setPublicKeys] = useState(
     (storedPublicKeys ? JSON.parse(storedPublicKeys) : []) as PublicKey[]
   );
+  const [withdrawalAddressesBalance, setWithdrawalAddressesBalance] =
+    useState(0);
+  // -------------------------------------------
 
   // ------ Validators Pubkeys ------
   const storedValidatorArray = localStorage.getItem("validatorArray");
@@ -88,6 +90,16 @@ function App() {
     localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
   }, [validatorArray]);
 
+  // Fetch total balance of the withdrawal addrsses
+  useEffect(() => {
+    if (withdrawalAddressesBalanceNeedsUpdate) {
+      const fetchedData = getWithdrawalAddressBalance(publicKeys);
+
+      fetchedData.then((data) => setWithdrawalAddressesBalance(data));
+      setWithdrawalAddressesBalanceNeedsUpdate(false);
+    }
+  }, [publicKeys, withdrawalAddressesBalanceNeedsUpdate]);
+
   // Fetch validators and filter them based on withdrawal address
   useEffect(() => {
     if (validatorArray.length === 0) {
@@ -95,7 +107,7 @@ function App() {
 
       fetchedData.then((data) => setValidatorArray(data));
     }
-  }, [validatorArray.length, publicKeys]);
+  }, [publicKeys, validatorArray.length]);
 
   useEffect(() => {
     if (validatorArrayNeedsUpdate) {
@@ -103,7 +115,7 @@ function App() {
 
       fetchedData.then((data) => setValidatorArray(data));
     }
-  }, [validatorArrayNeedsUpdate, publicKeys]);
+  }, [publicKeys, validatorArrayNeedsUpdate]);
 
   // Update validators data (active/pending/slashed/other)
   useEffect(() => {
@@ -218,136 +230,69 @@ function App() {
   };
 
   const bodyClasses =
-    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-36 pb-16 sm:pb-8";
+    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-36 pb-16";
 
-  switch (page) {
-    case "stats": {
-      return (
-        <div className={bodyClasses}>
-          <Header
-            setPage={setPage}
-            stakedLYX={stakedLYX}
-            currentEpoch={currentEpoch}
-            networkValidators={networkValidators}
-            handleRefresh={handleRefresh}
-          />
-          <StatsPage
-            publicKeys={publicKeys}
-            stakedLYX={stakedLYX}
-            eurPrice={eurPrice ? eurPrice : ""}
-            usdPrice={usdPrice ? usdPrice : ""}
-            activeValidators={activeValidators}
-            pendingValidators={pendingValidators}
-            slashedValidators={slashedValidators}
-            otherValidators={otherValidators}
-            validatorsLuck={validatorsLuck}
-            validatorsPerformance={validatorsPerformance}
-            validatorMapsNeedUpdate={validatorMapsNeedUpdate}
-            networkDataNeedsUpdate={networkDataNeedsUpdate}
-            luckNeedsUpdate={luckNeedsUpdate}
-            performanceNeedsUpdate={performanceNeedsUpdate}
-            LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
-            withdrawalAddressesBalanceNeedsUpdate={
-              withdrawalAddressesBalanceNeedsUpdate
+  return (
+    <div className={bodyClasses}>
+      <Router>
+        <Header
+          stakedLYX={stakedLYX}
+          currentEpoch={currentEpoch}
+          networkValidators={networkValidators}
+          handleRefresh={handleRefresh}
+        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <StatsPage
+                stakedLYX={stakedLYX}
+                eurPrice={eurPrice ? eurPrice : ""}
+                usdPrice={usdPrice ? usdPrice : ""}
+                activeValidators={activeValidators}
+                pendingValidators={pendingValidators}
+                slashedValidators={slashedValidators}
+                otherValidators={otherValidators}
+                validatorsLuck={validatorsLuck}
+                validatorsPerformance={validatorsPerformance}
+                withdrawalAddressesBalance={withdrawalAddressesBalance}
+                validatorMapsNeedUpdate={validatorMapsNeedUpdate}
+                networkDataNeedsUpdate={networkDataNeedsUpdate}
+                luckNeedsUpdate={luckNeedsUpdate}
+                performanceNeedsUpdate={performanceNeedsUpdate}
+                LYXPriceNeedsUpdate={LYXPriceNeedsUpdate}
+                withdrawalAddressesBalanceNeedsUpdate={
+                  withdrawalAddressesBalanceNeedsUpdate
+                }
+              />
             }
-            setWithdrawalAddressesBalanceNeedsUpdate={
-              setWithdrawalAddressesBalanceNeedsUpdate
+          ></Route>
+          <Route
+            path="/user"
+            element={
+              <UserPage publicKeys={publicKeys} setPublicKeys={setPublicKeys} />
             }
-          />
-          <Footer setPage={setPage} />
-        </div>
-      );
-    }
-    case "user": {
-      return (
-        <div className={bodyClasses}>
-          <Header
-            setPage={setPage}
-            stakedLYX={stakedLYX}
-            currentEpoch={currentEpoch}
-            networkValidators={networkValidators}
-            handleRefresh={handleRefresh}
-          />
-          <UserPage publicKeys={publicKeys} setPublicKeys={setPublicKeys} />
-          <Footer setPage={setPage} />
-        </div>
-      );
-    }
-    case "validators": {
-      return (
-        <div className={bodyClasses}>
-          <Header
-            setPage={setPage}
-            stakedLYX={stakedLYX}
-            currentEpoch={currentEpoch}
-            networkValidators={networkValidators}
-            handleRefresh={handleRefresh}
-          />
-          <ValidatorsPage
-            validatorArray={validatorArray}
-            activeValidators={activeValidators}
-            pendingValidators={pendingValidators}
-            slashedValidators={slashedValidators}
-            otherValidators={otherValidators}
-          />
-          <Footer setPage={setPage} />
-        </div>
-      );
-    }
-    case "terms": {
-      return (
-        <div className={bodyClasses}>
-          <Header
-            setPage={setPage}
-            stakedLYX={stakedLYX}
-            currentEpoch={currentEpoch}
-            networkValidators={networkValidators}
-            handleRefresh={handleRefresh}
-          />
-          <TermsAndConditions />
-          <Footer setPage={setPage} />
-        </div>
-      );
-    }
-    case "privacy": {
-      return (
-        <div className={bodyClasses}>
-          <Header
-            setPage={setPage}
-            stakedLYX={stakedLYX}
-            currentEpoch={currentEpoch}
-            networkValidators={networkValidators}
-            handleRefresh={handleRefresh}
-          />
-          <PrivacyPolicy />
-          <Footer setPage={setPage} />
-        </div>
-      );
-    }
-    case "license": {
-      return (
-        <div className={bodyClasses}>
-          <Header
-            setPage={setPage}
-            stakedLYX={stakedLYX}
-            currentEpoch={currentEpoch}
-            networkValidators={networkValidators}
-            handleRefresh={handleRefresh}
-          />
-          <License />
-          <Footer setPage={setPage} />
-        </div>
-      );
-    }
-    default:
-      return (
-        <div className={bodyClasses}>
-          <p className="font-extrabold text-3xl">
-            Error! Something unexpected happened.
-          </p>
-        </div>
-      );
-  }
+          ></Route>
+          <Route
+            path="/validators"
+            element={
+              <ValidatorsPage
+                validatorArray={validatorArray}
+                activeValidators={activeValidators}
+                pendingValidators={pendingValidators}
+                slashedValidators={slashedValidators}
+                otherValidators={otherValidators}
+              />
+            }
+          ></Route>
+          <Route path="/terms" element={<TermsAndConditions />}></Route>
+          <Route path="/privacy" element={<PrivacyPolicy />}></Route>
+          <Route path="/license" element={<License />}></Route>
+        </Routes>
+        <Footer />
+      </Router>
+    </div>
+  );
 }
 
 export default App;
