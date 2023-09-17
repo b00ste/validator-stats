@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
@@ -18,7 +18,11 @@ import {
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
 } from "./helpers/validators";
-import { getLastEpoch, getWithdrawalAddressesBalance } from "./helpers/network";
+import {
+  getLYXPrice,
+  getLastEpoch,
+  getWithdrawalAddressesBalance,
+} from "./helpers/network";
 
 // ts types
 import {
@@ -84,6 +88,67 @@ function App() {
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
   // --------------------------
 
+  // ------ Handlers for Data Update ------
+  const updateValidatorHandler = useCallback(() => {
+    const validators = fetchValidators(publicKeys);
+
+    validators.then((data) => setValidatorArray(data));
+  }, [publicKeys]);
+
+  const updateWithdrawalAddressesBalanceHandler = useCallback(() => {
+    const newWithdrawalAddressesBalance =
+      getWithdrawalAddressesBalance(publicKeys);
+
+    newWithdrawalAddressesBalance.then((data) =>
+      setWithdrawalAddressesBalance(data)
+    );
+  }, [publicKeys]);
+
+  const updateValidatorsMaps = useCallback(() => {
+    const fetchedData = fetchValidatorsData(validatorArray);
+
+    fetchedData.then((data) => {
+      setActiveValidators(data.activeValidators);
+      setPendingValidators(data.pendingValidators);
+      setSlashedValidators(data.slashedValidators);
+      setOtherValidators(data.otherValidators);
+    });
+  }, [validatorArray]);
+
+  const updateVaildatorsLuck = useCallback(() => {
+    if (activeValidators) {
+      let newValidatorsLuck = fetchValidatorsLuck(activeValidators);
+
+      newValidatorsLuck.then((data) => setValidatorsLuck(data));
+    }
+  }, [activeValidators]);
+  const updateVaildatorsPerformance = useCallback(() => {
+    if (activeValidators) {
+      let newValidatorsPerformance =
+        fetchValidatorsPerformance(activeValidators);
+
+      newValidatorsPerformance.then((data) => setValidatorsPerformance(data));
+    }
+  }, [activeValidators]);
+  const updateNetworkData = useCallback(() => {
+    const fetchedData = getLastEpoch();
+
+    fetchedData.then((epochData) => {
+      setStakedLYX(epochData.totalvalidatorbalance);
+      setCurrentEpoch(epochData.epoch);
+      setNetworkValidators(epochData.validatorscount);
+    });
+  }, []);
+  const updateLYXPrice = useCallback(() => {
+    const fetchedPrices = getLYXPrice();
+
+    fetchedPrices.then((data) => {
+      setEurPrce(data.eurPrice);
+      setUsdPrce(data.usdPrice);
+    });
+  }, []);
+  // --------------------------------------
+
   // Save validators to local storage
   useEffect(() => {
     localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
@@ -92,32 +157,21 @@ function App() {
   // Update validators and withdrawal addresses balance if `publicKeys` changes
   useEffect(() => {
     if (publicKeys.length > 0) {
-      const validators = fetchValidators(publicKeys);
-
-      validators.then((data) => setValidatorArray(data));
-
-      const newWithdrawalAddressesBalance =
-        getWithdrawalAddressesBalance(publicKeys);
-
-      newWithdrawalAddressesBalance.then((data) =>
-        setWithdrawalAddressesBalance(data)
-      );
+      updateValidatorHandler();
+      updateWithdrawalAddressesBalanceHandler();
     }
-  }, [publicKeys]);
+  }, [
+    publicKeys,
+    updateValidatorHandler,
+    updateWithdrawalAddressesBalanceHandler,
+  ]);
 
   // Update validators data (active/pending/slashed/other) if `validatorArray` changes
   useEffect(() => {
     if (validatorArray.length > 0) {
-      const fetchedData = fetchValidatorsData(validatorArray);
-
-      fetchedData.then((data) => {
-        setActiveValidators(data.activeValidators);
-        setPendingValidators(data.pendingValidators);
-        setSlashedValidators(data.slashedValidators);
-        setOtherValidators(data.otherValidators);
-      });
+      updateValidatorsMaps();
     }
-  }, [validatorArray]);
+  }, [validatorArray, updateValidatorsMaps]);
 
   // Update validators luck & performance if `activeValidators` changes
   useEffect(() => {
@@ -125,43 +179,48 @@ function App() {
       activeValidators &&
       Object.getOwnPropertyNames(activeValidators).length > 0
     ) {
-      let newValidatorsLuck = fetchValidatorsLuck(activeValidators);
-
-      newValidatorsLuck.then((data) => setValidatorsLuck(data));
-
-      let newValidatorsPerformance =
-        fetchValidatorsPerformance(activeValidators);
-
-      newValidatorsPerformance.then((data) => setValidatorsPerformance(data));
+      updateVaildatorsLuck();
+      updateVaildatorsPerformance();
     }
-  }, [activeValidators]);
+  }, [activeValidators, updateVaildatorsLuck, updateVaildatorsPerformance]);
 
   // Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
     if (!stakedLYX && !currentEpoch && !networkValidators) {
-      const fetchedData = getLastEpoch();
-
-      fetchedData.then((epochData) => {
-        setStakedLYX(epochData.totalvalidatorbalance);
-        setCurrentEpoch(epochData.epoch);
-        setNetworkValidators(epochData.validatorscount);
-      });
+      updateNetworkData();
     }
-  }, [stakedLYX, currentEpoch, networkValidators]);
+  }, [stakedLYX, currentEpoch, networkValidators, updateNetworkData]);
 
   // Fetch LYX price in both EUR & USD
   useEffect(() => {
     if (!eurPrice && !usdPrice) {
-      fetch(
-        "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setEurPrce(data["lukso-token-2"].eur);
-          setUsdPrce(data["lukso-token-2"].usd);
-        });
+      updateLYXPrice();
     }
-  }, [eurPrice, usdPrice]);
+  }, [eurPrice, usdPrice, updateLYXPrice]);
+
+  // ------ Refresh Data ------
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateValidatorHandler();
+      updateWithdrawalAddressesBalanceHandler();
+      updateValidatorsMaps();
+      updateVaildatorsLuck();
+      updateVaildatorsPerformance();
+      updateNetworkData();
+      updateLYXPrice();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [
+    updateValidatorHandler,
+    updateWithdrawalAddressesBalanceHandler,
+    updateValidatorsMaps,
+    updateVaildatorsLuck,
+    updateVaildatorsPerformance,
+    updateNetworkData,
+    updateLYXPrice,
+  ]);
+  // --------------------------
 
   // ------ Styling ------
   const bodyClasses =

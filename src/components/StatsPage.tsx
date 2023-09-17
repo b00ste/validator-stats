@@ -60,7 +60,7 @@ export const StatsPage = ({
   }, [activeValidators, pendingValidators, slashedValidators, otherValidators]);
 
   const tileClasses =
-    "bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
+    "relative bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
 
   return (
     <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">

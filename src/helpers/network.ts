@@ -43,3 +43,22 @@ export const getWithdrawalAddressesBalance = async (
 
   return balance;
 };
+
+export const getLYXPrice = async () => {
+  let eurPrice = "";
+  let usdPrice = "";
+
+  await fetch(
+    "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      eurPrice = data["lukso-token-2"].eur;
+      usdPrice = data["lukso-token-2"].usd;
+    });
+
+  return {
+    eurPrice,
+    usdPrice,
+  };
+};
