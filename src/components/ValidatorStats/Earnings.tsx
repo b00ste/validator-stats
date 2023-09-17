@@ -1,3 +1,10 @@
+// helpers
+import {
+  getTimeframePercentageYield,
+  getTimeframePercentageYieldUnformated,
+} from "../../helpers/calculateStakingRewards";
+
+// ts types
 import { EarningsParams } from "../../typings/types";
 
 export const Earnings = ({
@@ -5,6 +12,8 @@ export const Earnings = ({
   tileClasses,
   eurPrice,
   usdPrice,
+  stakedLYX,
+  activeBalance,
   validatorsPerformance,
 }: EarningsParams) => {
   const getTimeframeParamNames = (): {
@@ -55,7 +64,7 @@ export const Earnings = ({
     }
   };
 
-  let getTitle = () => {
+  const getTimeframeTitle = () => {
     switch (timeframe) {
       case "daily": {
         return "Daily Earnings";
@@ -75,32 +84,54 @@ export const Earnings = ({
     }
   };
 
-  const generateEarnings = () => {
-    const calculateEarnings = () => {
-      let weeklyTotalEarnings = 0;
-      const { consensusTimeframeParam, executionTimeframeParam } =
-        getTimeframeParamNames();
-      for (const index in validatorsPerformance) {
-        weeklyTotalEarnings +=
-          validatorsPerformance[index].consensusPerformance[
-            consensusTimeframeParam
-          ] / 1e9;
-        weeklyTotalEarnings +=
-          validatorsPerformance[index].executionPerformance[
-            executionTimeframeParam
-          ] / 1e18;
+  const calculateEarnings = () => {
+    let totalEarnings = 0;
+    const { consensusTimeframeParam, executionTimeframeParam } =
+      getTimeframeParamNames();
+    for (const index in validatorsPerformance) {
+      totalEarnings +=
+        validatorsPerformance[index].consensusPerformance[
+          consensusTimeframeParam
+        ] / 1e9;
+      totalEarnings +=
+        validatorsPerformance[index].executionPerformance[
+          executionTimeframeParam
+        ] / 1e18;
+    }
+
+    return totalEarnings;
+  };
+
+  const getErningsComparedToAPR = (earnings: number) => {
+    if (timeframe !== "total") {
+      const stakingAPR = getTimeframePercentageYieldUnformated({
+        totalAtStake: stakedLYX / 1e9,
+        timeframe,
+      });
+      const earningsAPR = (earnings / (activeBalance / 1e9)) * 100;
+
+      if (earningsAPR > stakingAPR) {
+        return (
+          <span className="text-pastel-green">{`${earnings.toLocaleString()} LYX`}</span>
+        );
       }
+      return (
+        <span className="text-pastel-red">{`${earnings.toLocaleString()} LYX`}</span>
+      );
+    }
+    return earnings.toLocaleString();
+  };
 
-      return weeklyTotalEarnings;
-    };
-
+  const generateEarnings = () => {
     const earnings = calculateEarnings();
 
     return (
       <div className={tileClasses}>
-        <div className="text-pastel-blue text-xl mb-2">{getTitle()}</div>
+        <div className="text-pastel-blue text-xl mb-2">
+          {getTimeframeTitle()}
+        </div>
         <p className="text-gray-600 font-bold">
-          {`${earnings.toFixed(2)} LYX`}
+          {getErningsComparedToAPR(earnings)}
         </p>
         <div className="container mx-auto grid grid-cols-2">
           <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />

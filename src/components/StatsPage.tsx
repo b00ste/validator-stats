@@ -1,6 +1,6 @@
 // Stats Tiles
 import { Earnings } from "./ValidatorStats/Earnings";
-import { APYRate } from "./ValidatorStats/APYRate";
+import { APR } from "./ValidatorStats/APR";
 import { Performance } from "./ValidatorStats/Performance";
 import { Luck } from "./ValidatorStats/Luck";
 import { Validators } from "./ValidatorStats/Validators";
@@ -120,6 +120,8 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
+        stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
       <Earnings
@@ -127,6 +129,8 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
+        stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
       <Earnings
@@ -134,6 +138,8 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
+        stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
       <Earnings
@@ -141,6 +147,8 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
+        stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
       <Earnings
@@ -148,28 +156,18 @@ export const StatsPage = ({
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
+        stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
-      <APYRate
-        tileClasses={tileClasses}
-        timeframe="daily"
-        stakedLYX={stakedLYX}
-      />
-      <APYRate
-        tileClasses={tileClasses}
-        timeframe="weekly"
-        stakedLYX={stakedLYX}
-      />
-      <APYRate
+      <APR tileClasses={tileClasses} timeframe="daily" stakedLYX={stakedLYX} />
+      <APR tileClasses={tileClasses} timeframe="weekly" stakedLYX={stakedLYX} />
+      <APR
         tileClasses={tileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
       />
-      <APYRate
-        tileClasses={tileClasses}
-        timeframe="annual"
-        stakedLYX={stakedLYX}
-      />
+      <APR tileClasses={tileClasses} timeframe="annual" stakedLYX={stakedLYX} />
       <Performance
         tileClasses={tileClasses}
         validatorsPerformance={validatorsPerformance}

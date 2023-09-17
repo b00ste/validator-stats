@@ -178,6 +178,8 @@ export type EarningsParams = {
   tileClasses: string;
   eurPrice: string;
   usdPrice: string;
+  stakedLYX: number;
+  activeBalance: number;
   validatorsPerformance: ValidatorsPerformance;
 };
 
