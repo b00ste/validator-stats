@@ -36,7 +36,7 @@ function App() {
   /// ------ Deposior/Withdrawal Addresses ------
   const storedPublicKeys = localStorage.getItem("publicKeys");
   const [publicKeys, setPublicKeys] = useState(
-    (storedPublicKeys ? JSON.parse(storedPublicKeys) : undefined) as PublicKey[]
+    (storedPublicKeys ? JSON.parse(storedPublicKeys) : []) as PublicKey[]
   );
   const [withdrawalAddressesBalance, setWithdrawalAddressesBalance] = useState(
     undefined as number | undefined
@@ -46,9 +46,7 @@ function App() {
   /// ------ Validators Pubkeys ------
   const storedValidatorArray = localStorage.getItem("validatorArray");
   const [validatorArray, setValidatorArray] = useState(
-    (storedValidatorArray
-      ? JSON.parse(storedValidatorArray)
-      : undefined) as string[]
+    (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
   );
   /// --------------------------------
 

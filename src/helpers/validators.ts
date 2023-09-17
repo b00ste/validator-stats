@@ -91,7 +91,7 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
       }
     }
   }
-  return validatorArray;
+  return validatorArray ? validatorArray : [];
 };
 
 export const fetchValidatorsData = async (validatorArray: string[]) => {
