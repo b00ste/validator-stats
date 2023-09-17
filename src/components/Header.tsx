@@ -45,7 +45,7 @@ export const Header = ({
             </p>
           </div>
         </div>
-        <div className="col-span-5 border-b border-dark-pink mb-2 mx-4"></div>
+        <div className="border-b border-dark-pink mb-2 mx-4"></div>
         <div className="container mx-auto grid grid-cols-3">
           <div className={`${tileClasses}`}>
             <p className="text-dark-pink font-bold text-sm">LYX Price</p>

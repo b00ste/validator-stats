@@ -12,16 +12,19 @@ export const WithdrawalBalance = ({
       <p className="text-gray-600 font-bold">
         {`${withdrawalAddressesBalance.toFixed(2)} LYX`}
       </p>
-      <p className="text-gray-600 font-bold">
-        {`${(withdrawalAddressesBalance * Number.parseFloat(eurPrice)).toFixed(
-          2
-        )} €`}
-      </p>
-      <p className="text-gray-600 font-bold">
-        {`${(withdrawalAddressesBalance * Number.parseFloat(usdPrice)).toFixed(
-          2
-        )} $`}
-      </p>
+      <div className="container mx-auto grid grid-cols-2">
+        <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
+        <p className="text-dark-pink font-bold text-sm">
+          {`${(
+            withdrawalAddressesBalance * Number.parseFloat(eurPrice)
+          ).toFixed(2)} €`}
+        </p>
+        <p className="text-dark-pink font-bold text-sm">
+          {`${(
+            withdrawalAddressesBalance * Number.parseFloat(usdPrice)
+          ).toFixed(2)} $`}
+        </p>
+      </div>
     </div>
   );
 };

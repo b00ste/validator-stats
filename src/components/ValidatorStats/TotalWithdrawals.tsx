@@ -35,16 +35,19 @@ export const TotalWithdrawals = ({
       <p className="text-gray-600 font-bold">{`${(
         totalWithdrawals / 1e9
       ).toFixed(2)} LYX`}</p>
-      <p className="text-gray-600 font-bold">
-        {`${((totalWithdrawals / 1e9) * Number.parseFloat(eurPrice)).toFixed(
-          2
-        )} €`}
-      </p>
-      <p className="text-gray-600 font-bold">
-        {`${((totalWithdrawals / 1e9) * Number.parseFloat(usdPrice)).toFixed(
-          2
-        )} $`}
-      </p>
+      <div className="container mx-auto grid grid-cols-2">
+        <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
+        <p className="text-dark-pink font-bold text-sm">
+          {`${((totalWithdrawals / 1e9) * Number.parseFloat(eurPrice)).toFixed(
+            2
+          )} €`}
+        </p>
+        <p className="text-dark-pink font-bold text-sm">
+          {`${((totalWithdrawals / 1e9) * Number.parseFloat(usdPrice)).toFixed(
+            2
+          )} $`}
+        </p>
+      </div>
     </div>
   );
 };

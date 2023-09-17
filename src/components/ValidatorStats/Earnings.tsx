@@ -102,12 +102,15 @@ export const Earnings = ({
         <p className="text-gray-600 font-bold">
           {`${earnings.toFixed(2)} LYX`}
         </p>
-        <p className="text-gray-600 font-bold">
-          {`${(earnings * Number.parseFloat(eurPrice)).toFixed(2)} €`}
-        </p>
-        <p className="text-gray-600 font-bold">
-          {`${(earnings * Number.parseFloat(usdPrice)).toFixed(2)} €`}
-        </p>
+        <div className="container mx-auto grid grid-cols-2">
+          <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
+          <p className="text-dark-pink font-bold text-sm">
+            {`${(earnings * Number.parseFloat(eurPrice)).toFixed(2)} €`}
+          </p>
+          <p className="text-dark-pink font-bold text-sm">
+            {`${(earnings * Number.parseFloat(usdPrice)).toFixed(2)} $`}
+          </p>
+        </div>
       </div>
     );
   };
