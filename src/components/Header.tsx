@@ -6,6 +6,8 @@ export const Header = ({
   currentEpoch,
   networkValidators,
   tokenPrice: { eurPrice, usdPrice },
+  isDropdownOpen,
+  toggleDropdown,
 }: HeaderParams) => {
   const navigate = useNavigate();
 
@@ -13,11 +15,11 @@ export const Header = ({
     "mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis";
 
   const buttonClasses =
-    "bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink ";
+    "bg-strong-pink text-white px-3 py-1.5 m-1 rounded-lg hover:bg-dark-pink";
 
   return (
     <nav className="absolute top-0 left-4 right-4">
-      <div className="bg-pastel-white-pink p-4 rounded-b-3xl shadow">
+      <div className="bg-pastel-white-pink p-4 rounded-b-3xl shadow z-10">
         <div className="container mx-auto grid grid-cols-3">
           <div className={`${tileClasses}`}>
             <div className="text-pastel-blue text-xl mb-2">Validators</div>
@@ -50,19 +52,31 @@ export const Header = ({
             <p className="text-dark-pink font-bold text-sm">{`${usdPrice} $`}</p>
           </div>
         </div>
+        {isDropdownOpen ? (
+          <div className="container mx-auto grid grid-cols-3">
+            <button className={buttonClasses} onClick={() => navigate("/")}>
+              stats
+            </button>
+            <button
+              className={buttonClasses}
+              onClick={() => navigate("/validators")}
+            >
+              validators
+            </button>
+            <button className={buttonClasses} onClick={() => navigate("/user")}>
+              user
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
-      <div className="flex justify-center space-x-4">
-        <button className={buttonClasses} onClick={() => navigate("/")}>
-          stats
-        </button>
+      <div className="flex justify-end pr-16 space-x-4">
         <button
-          className={buttonClasses}
-          onClick={() => navigate("/validators")}
+          className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
+          onClick={() => toggleDropdown()}
         >
-          validators
-        </button>
-        <button className={buttonClasses} onClick={() => navigate("/user")}>
-          user
+          Menu
         </button>
       </div>
     </nav>

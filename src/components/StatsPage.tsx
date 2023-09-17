@@ -1,16 +1,16 @@
 // Stats Tiles
-import { Earnings } from "./stats/Earnings";
-import { APYRate } from "./stats/APYRate";
-import { Performance } from "./stats/Performance";
-import { Luck } from "./stats/Luck";
-import { Validators } from "./stats/Validators";
-import { Balance } from "./stats/Balance";
-import { TotalWithdrawals } from "./stats/TotalWithdrawals";
-import { WithdrawalBalance } from "./stats/WithdrawalBalance";
+import { Earnings } from "./ValidatorStats/Earnings";
+import { APYRate } from "./ValidatorStats/APYRate";
+import { Performance } from "./ValidatorStats/Performance";
+import { Luck } from "./ValidatorStats/Luck";
+import { Validators } from "./ValidatorStats/Validators";
+import { Balance } from "./ValidatorStats/Balance";
+import { TotalWithdrawals } from "./ValidatorStats/TotalWithdrawals";
+import { WithdrawalBalance } from "./ValidatorStats/WithdrawalBalance";
 
 // ts types
 import { StatsPageParams } from "../typings/types";
-import { WithdrawableAmount } from "./stats/WithdrawableAmount";
+import { WithdrawableAmount } from "./ValidatorStats/WithdrawableAmount";
 import { useEffect, useState } from "react";
 
 export const StatsPage = ({
@@ -98,6 +98,13 @@ export const StatsPage = ({
         withdrawalAddressesBalance={withdrawalAddressesBalance}
       />
       <Earnings
+        timeframe="daily"
+        tileClasses={tileClasses}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
+        validatorsPerformance={validatorsPerformance}
+      />
+      <Earnings
         timeframe="weekly"
         tileClasses={tileClasses}
         eurPrice={eurPrice}
@@ -106,6 +113,13 @@ export const StatsPage = ({
       />
       <Earnings
         timeframe="monthly"
+        tileClasses={tileClasses}
+        eurPrice={eurPrice}
+        usdPrice={usdPrice}
+        validatorsPerformance={validatorsPerformance}
+      />
+      <Earnings
+        timeframe="yearly"
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}

@@ -81,14 +81,21 @@ function App() {
   const [networkValidators, setNetworkValidators] = useState(
     undefined as number | undefined
   );
-  // --------------------------
+  /// --------------------------
 
-  // ------ Price Data ------
+  /// ------ Price Data ------
   const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
   const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
-  // --------------------------
+  /// --------------------------
 
-  // ------ Handlers for Data Update ------
+  /// ------ Header Menu Toggle ------
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+  /// --------------------------------
+
+  /// ------ Handlers for Data Update ------
   const updateValidatorHandler = useCallback(() => {
     const validators = fetchValidators(publicKeys);
 
@@ -224,7 +231,7 @@ function App() {
 
   // ------ Styling ------
   const bodyClasses =
-    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pt-44 pb-16";
+    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-16";
   // ---------------------
 
   const validatorsMaps = {
@@ -253,14 +260,8 @@ function App() {
   };
 
   return (
-    <div className={bodyClasses}>
+    <div className={`${bodyClasses} ${isDropdownOpen ? "pt-52" : "pt-44"}`}>
       <Router>
-        <Header
-          stakedLYX={stakedLYX ? stakedLYX : 0}
-          currentEpoch={currentEpoch ? currentEpoch : 0}
-          networkValidators={networkValidators ? networkValidators : 0}
-          tokenPrice={tokenPrice}
-        />
         <Routes>
           <Route
             path="/"
@@ -299,6 +300,14 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicy />}></Route>
           <Route path="/license" element={<License />}></Route>
         </Routes>
+        <Header
+          stakedLYX={stakedLYX ? stakedLYX : 0}
+          currentEpoch={currentEpoch ? currentEpoch : 0}
+          networkValidators={networkValidators ? networkValidators : 0}
+          tokenPrice={tokenPrice}
+          isDropdownOpen={isDropdownOpen}
+          toggleDropdown={toggleDropdown}
+        />
         <Footer />
       </Router>
     </div>

@@ -144,6 +144,8 @@ export type HeaderParams = {
     eurPrice: string;
     usdPrice: string;
   };
+  isDropdownOpen: boolean;
+  toggleDropdown: Function;
 };
 
 export type FooterParams = {};
@@ -165,7 +167,7 @@ export type BalanceParams = {
 };
 
 export type EarningsParams = {
-  timeframe: "weekly" | "monthly" | "total";
+  timeframe: "daily" | "weekly" | "monthly" | "yearly" | "total";
   tileClasses: string;
   eurPrice: string;
   usdPrice: string;
