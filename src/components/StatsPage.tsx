@@ -119,7 +119,7 @@ export const StatsPage = ({
         validatorsPerformance={validatorsPerformance}
       />
       <Earnings
-        timeframe="yearly"
+        timeframe="annual"
         tileClasses={tileClasses}
         eurPrice={eurPrice}
         usdPrice={usdPrice}
@@ -134,12 +134,22 @@ export const StatsPage = ({
       />
       <APYRate
         tileClasses={tileClasses}
-        timeframe="annual"
+        timeframe="daily"
+        stakedLYX={stakedLYX}
+      />
+      <APYRate
+        tileClasses={tileClasses}
+        timeframe="weekly"
         stakedLYX={stakedLYX}
       />
       <APYRate
         tileClasses={tileClasses}
         timeframe="monthly"
+        stakedLYX={stakedLYX}
+      />
+      <APYRate
+        tileClasses={tileClasses}
+        timeframe="annual"
         stakedLYX={stakedLYX}
       />
       <Performance

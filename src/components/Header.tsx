@@ -19,7 +19,11 @@ export const Header = ({
 
   return (
     <nav className="absolute top-0 left-4 right-4">
-      <div className="bg-pastel-white-pink p-4 rounded-b-3xl shadow z-10">
+      <div
+        className={`bg-pastel-white-pink p-4 rounded-b-3xl shadow transition-all ${
+          isDropdownOpen ? "h-44 duration-75" : "h-32 duration-150"
+        }`}
+      >
         <div className="container mx-auto grid grid-cols-3">
           <div className={`${tileClasses}`}>
             <div className="text-pastel-blue text-xl mb-2">Validators</div>
@@ -52,24 +56,26 @@ export const Header = ({
             <p className="text-dark-pink font-bold text-sm">{`${usdPrice} $`}</p>
           </div>
         </div>
-        {isDropdownOpen ? (
-          <div className="container mx-auto grid grid-cols-3">
-            <button className={buttonClasses} onClick={() => navigate("/")}>
-              stats
-            </button>
-            <button
-              className={buttonClasses}
-              onClick={() => navigate("/validators")}
-            >
-              validators
-            </button>
-            <button className={buttonClasses} onClick={() => navigate("/user")}>
-              user
-            </button>
-          </div>
-        ) : (
-          <></>
-        )}
+        <div
+          className={`container mx-auto grid grid-cols-3 transition-all ${
+            isDropdownOpen
+              ? " opacity-100 delay-75"
+              : "opacity-0 pointer-events-none delay-0"
+          }`}
+        >
+          <button className={buttonClasses} onClick={() => navigate("/")}>
+            stats
+          </button>
+          <button
+            className={buttonClasses}
+            onClick={() => navigate("/validators")}
+          >
+            validators
+          </button>
+          <button className={buttonClasses} onClick={() => navigate("/user")}>
+            user
+          </button>
+        </div>
       </div>
       <div className="flex justify-end pr-16 space-x-4">
         <button

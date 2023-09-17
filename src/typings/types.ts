@@ -153,7 +153,7 @@ export type FooterParams = {};
 // ------------ STATS COMPONENTS PARAM TYPES ------------
 
 export type APYRateParams = {
-  timeframe: "monthly" | "annual";
+  timeframe: "daily" | "weekly" | "monthly" | "annual";
   tileClasses: string;
   stakedLYX: number;
 };
@@ -167,7 +167,7 @@ export type BalanceParams = {
 };
 
 export type EarningsParams = {
-  timeframe: "daily" | "weekly" | "monthly" | "yearly" | "total";
+  timeframe: "daily" | "weekly" | "monthly" | "annual" | "total";
   tileClasses: string;
   eurPrice: string;
   usdPrice: string;

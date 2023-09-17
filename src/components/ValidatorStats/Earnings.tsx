@@ -40,7 +40,7 @@ export const Earnings = ({
           executionTimeframeParam: "performance31d",
         };
       }
-      case "yearly": {
+      case "annual": {
         return {
           consensusTimeframeParam: "performance365d",
           executionTimeframeParam: "performance365d",
@@ -66,8 +66,8 @@ export const Earnings = ({
       case "monthly": {
         return "Monthly Earnings";
       }
-      case "yearly": {
-        return "Yearly Earnings";
+      case "annual": {
+        return "Annual Earnings";
       }
       case "total": {
         return "Total Earnings";
