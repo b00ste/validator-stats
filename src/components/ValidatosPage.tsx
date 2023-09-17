@@ -91,10 +91,13 @@ export const ValidatorsPage = ({
 
   /// ------ Styling Handling ------
   const [opacity, setOpacity] = useState("opacity-0");
+  // Run on mount
   useEffect(() => {
-    if (mountValidatorsPage) {
-      setOpacity("opacity-100");
-    } else {
+    setOpacity("opacity-100");
+  }, []);
+  // Run on un-mount
+  useEffect(() => {
+    if (!mountValidatorsPage) {
       setOpacity("opacity-0");
     }
   }, [mountValidatorsPage]);
