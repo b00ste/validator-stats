@@ -14,6 +14,8 @@ import { WithdrawableAmount } from "./ValidatorStats/WithdrawableAmount";
 import { useEffect, useState } from "react";
 
 export const StatsPage = ({
+  mountStatsPage,
+  bodyClasses,
   stakedLYX,
   tokenPrice: { eurPrice, usdPrice },
   validatorsData: {
@@ -59,11 +61,24 @@ export const StatsPage = ({
     setOtherBalance(newOtherBalance);
   }, [activeValidators, pendingValidators, slashedValidators, otherValidators]);
 
+  /// ------ Styling Handling ------
+  const [opacity, setOpacity] = useState("opacity-0");
+  useEffect(() => {
+    if (mountStatsPage) {
+      setOpacity("opacity-100");
+    } else {
+      setOpacity("opacity-0");
+    }
+  }, [mountStatsPage]);
+
   const tileClasses =
-    "relative bg-pastel-light-pink p-2 m-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
+    "bg-pastel-light-pink p-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
+  /// ------------------------------
 
   return (
-    <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div
+      className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${opacity}`}
+    >
       <Validators
         tileClasses={tileClasses}
         activeValidators={activeValidators}

@@ -33,7 +33,7 @@ import {
 } from "./typings/types";
 
 function App() {
-  // ------ Deposior/Withdrawal Addresses ------
+  /// ------ Deposior/Withdrawal Addresses ------
   const storedPublicKeys = localStorage.getItem("publicKeys");
   const [publicKeys, setPublicKeys] = useState(
     (storedPublicKeys ? JSON.parse(storedPublicKeys) : undefined) as PublicKey[]
@@ -41,18 +41,18 @@ function App() {
   const [withdrawalAddressesBalance, setWithdrawalAddressesBalance] = useState(
     undefined as number | undefined
   );
-  // -------------------------------------------
+  /// -------------------------------------------
 
-  // ------ Validators Pubkeys ------
+  /// ------ Validators Pubkeys ------
   const storedValidatorArray = localStorage.getItem("validatorArray");
   const [validatorArray, setValidatorArray] = useState(
     (storedValidatorArray
       ? JSON.parse(storedValidatorArray)
       : undefined) as string[]
   );
-  // --------------------------------
+  /// --------------------------------
 
-  // ------ Validator Data ------
+  /// ------ Validator Data ------
   const [activeValidators, setActiveValidators] = useState(
     undefined as ValidatorMap | undefined
   );
@@ -71,9 +71,9 @@ function App() {
   const [validatorsPerformance, setValidatorsPerformance] = useState(
     undefined as ValidatorsPerformance | undefined
   );
-  // ----------------------------
+  /// ----------------------------
 
-  // ------ Network Data ------
+  /// ------ Network Data ------
   const [stakedLYX, setStakedLYX] = useState(undefined as number | undefined);
   const [currentEpoch, setCurrentEpoch] = useState(
     undefined as number | undefined
@@ -154,14 +154,14 @@ function App() {
       setUsdPrce(data.usdPrice);
     });
   }, []);
-  // --------------------------------------
+  /// --------------------------------------
 
-  // Save validators to local storage
+  /// Save validators to local storage
   useEffect(() => {
     localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
   }, [validatorArray]);
 
-  // Update validators and withdrawal addresses balance if `publicKeys` changes
+  /// Update validators and withdrawal addresses balance if `publicKeys` changes
   useEffect(() => {
     if (publicKeys.length > 0) {
       updateValidatorHandler();
@@ -173,14 +173,14 @@ function App() {
     updateWithdrawalAddressesBalanceHandler,
   ]);
 
-  // Update validators data (active/pending/slashed/other) if `validatorArray` changes
+  /// Update validators data (active/pending/slashed/other) if `validatorArray` changes
   useEffect(() => {
     if (validatorArray.length > 0) {
       updateValidatorsMaps();
     }
   }, [validatorArray, updateValidatorsMaps]);
 
-  // Update validators luck & performance if `activeValidators` changes
+  /// Update validators luck & performance if `activeValidators` changes
   useEffect(() => {
     if (
       activeValidators &&
@@ -191,21 +191,21 @@ function App() {
     }
   }, [activeValidators, updateVaildatorsLuck, updateVaildatorsPerformance]);
 
-  // Fetch network data (validators count, staked LYX count and current epoch)
+  /// Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
     if (!stakedLYX && !currentEpoch && !networkValidators) {
       updateNetworkData();
     }
   }, [stakedLYX, currentEpoch, networkValidators, updateNetworkData]);
 
-  // Fetch LYX price in both EUR & USD
+  /// Fetch LYX price in both EUR & USD
   useEffect(() => {
     if (!eurPrice && !usdPrice) {
       updateLYXPrice();
     }
   }, [eurPrice, usdPrice, updateLYXPrice]);
 
-  // ------ Refresh Data ------
+  /// ------ Refresh Data ------
   useEffect(() => {
     const interval = setInterval(() => {
       updateValidatorHandler();
@@ -227,12 +227,44 @@ function App() {
     updateNetworkData,
     updateLYXPrice,
   ]);
-  // --------------------------
+  /// --------------------------
 
-  // ------ Styling ------
+  /// ------ Page Change Handler ------
+  const [mountStatsPage, setMountStatsPage] = useState(
+    window.location.pathname === "/"
+  );
+  const [mountUserPage, setMountUserPage] = useState(
+    window.location.pathname === "/user"
+  );
+  const [mountValidatorsPage, setMountValidatorsPage] = useState(
+    window.location.pathname === "/validators"
+  );
+  const [mountTermsPage, setMountTermsPage] = useState(
+    window.location.pathname === "/terms"
+  );
+  const [mountPrivacyPage, setMountPrivacyPage] = useState(
+    window.location.pathname === "/privacy"
+  );
+  const [mountLicensePage, setMountLicensePage] = useState(
+    window.location.pathname === "license"
+  );
+  const pageChangeHandler = (navigate: Function, navigateParam: string) => {
+    setMountStatsPage(navigateParam === "/");
+    setMountUserPage(navigateParam === "/user");
+    setMountValidatorsPage(navigateParam === "/validators");
+    setMountTermsPage(navigateParam === "/terms");
+    setMountPrivacyPage(navigateParam === "/privacy");
+    setMountLicensePage(navigateParam === "/license");
+    setTimeout(() => {
+      navigate(navigateParam);
+    }, 80);
+  };
+  /// ---------------------------------
+
+  /// ------ Styling ------
   const bodyClasses =
-    "min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-16";
-  // ---------------------
+    "container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1";
+  /// ---------------------
 
   const validatorsMaps = {
     activeValidators: activeValidators ? activeValidators : {},
@@ -260,13 +292,19 @@ function App() {
   };
 
   return (
-    <div className={`${bodyClasses} ${isDropdownOpen ? "pt-52" : "pt-44"}`}>
+    <div
+      className={`min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-12 transition-all ${
+        isDropdownOpen ? "pt-52" : "pt-44 delay-75 duration-200"
+      }`}
+    >
       <Router>
         <Routes>
           <Route
             path="/"
             element={
               <StatsPage
+                mountStatsPage={mountStatsPage}
+                bodyClasses={bodyClasses}
                 stakedLYX={stakedLYX ? stakedLYX : 0}
                 tokenPrice={tokenPrice}
                 validatorsData={validatorsData}
@@ -280,6 +318,8 @@ function App() {
             path="/user"
             element={
               <UserPage
+                mountUserPage={mountUserPage}
+                bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
                 setPublicKeys={setPublicKeys}
                 setValidatorArray={setValidatorArray}
@@ -290,15 +330,26 @@ function App() {
             path="/validators"
             element={
               <ValidatorsPage
+                mountValidatorsPage={mountValidatorsPage}
+                bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
                 validatorArray={validatorArray}
                 validatorsMaps={validatorsMaps}
               />
             }
           ></Route>
-          <Route path="/terms" element={<TermsAndConditions />}></Route>
-          <Route path="/privacy" element={<PrivacyPolicy />}></Route>
-          <Route path="/license" element={<License />}></Route>
+          <Route
+            path="/terms"
+            element={<TermsAndConditions mountTermsPage={mountTermsPage} />}
+          ></Route>
+          <Route
+            path="/privacy"
+            element={<PrivacyPolicy mountPrivacyPage={mountPrivacyPage} />}
+          ></Route>
+          <Route
+            path="/license"
+            element={<License mountLicensePage={mountLicensePage} />}
+          ></Route>
         </Routes>
         <Header
           stakedLYX={stakedLYX ? stakedLYX : 0}
@@ -307,8 +358,9 @@ function App() {
           tokenPrice={tokenPrice}
           isDropdownOpen={isDropdownOpen}
           toggleDropdown={toggleDropdown}
+          pageChangeHandler={pageChangeHandler}
         />
-        <Footer />
+        <Footer pageChangeHandler={pageChangeHandler} />
       </Router>
     </div>
   );

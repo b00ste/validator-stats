@@ -1,6 +1,23 @@
-export const License = () => {
+import { useEffect, useState } from "react";
+
+export const License = ({
+  mountLicensePage,
+}: {
+  mountLicensePage: boolean;
+}) => {
+  const [opacity, setOpacity] = useState("opacity-0");
+  useEffect(() => {
+    if (mountLicensePage) {
+      setOpacity("opacity-100");
+    } else {
+      setOpacity("opacity-0");
+    }
+  }, [mountLicensePage]);
+
   return (
-    <div className="bg-pastel-light-pink p-4 m-8 rounded-lg shadow">
+    <div
+      className={`bg-pastel-light-pink p-4 m-8 rounded-lg shadow ${opacity}`}
+    >
       <h2 className="text-pastel-blue text-2xl mb-4 font-bold">MIT License</h2>
       <p className="block m-2 text-gray-700">
         B00ste ("the Company") hereby grants permission to any person or entity

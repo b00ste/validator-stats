@@ -8,6 +8,7 @@ export const Header = ({
   tokenPrice: { eurPrice, usdPrice },
   isDropdownOpen,
   toggleDropdown,
+  pageChangeHandler,
 }: HeaderParams) => {
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ export const Header = ({
     <nav className="absolute top-0 left-4 right-4">
       <div
         className={`bg-pastel-white-pink p-4 rounded-b-3xl shadow transition-all ${
-          isDropdownOpen ? "h-44 duration-75" : "h-32 duration-150"
+          isDropdownOpen ? "h-44 duration-150" : "h-32 delay-75 duration-150"
         }`}
       >
         <div className="container mx-auto grid grid-cols-3">
@@ -59,20 +60,26 @@ export const Header = ({
         <div
           className={`container mx-auto grid grid-cols-3 transition-all ${
             isDropdownOpen
-              ? " opacity-100 delay-75"
-              : "opacity-0 pointer-events-none delay-0"
+              ? " opacity-100 delay-75 duration-150"
+              : "opacity-0 pointer-events-none duration-200"
           }`}
         >
-          <button className={buttonClasses} onClick={() => navigate("/")}>
+          <button
+            className={buttonClasses}
+            onClick={() => pageChangeHandler(navigate, "/")}
+          >
             stats
           </button>
           <button
             className={buttonClasses}
-            onClick={() => navigate("/validators")}
+            onClick={() => pageChangeHandler(navigate, "/validators")}
           >
             validators
           </button>
-          <button className={buttonClasses} onClick={() => navigate("/user")}>
+          <button
+            className={buttonClasses}
+            onClick={() => pageChangeHandler(navigate, "/user")}
+          >
             user
           </button>
         </div>

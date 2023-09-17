@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { consensys_explorer } from "../helpers/constants";
 import { ValidatorMap, ValidatorsPageParams } from "../typings/types";
 
 export const ValidatorsPage = ({
+  mountValidatorsPage,
+  bodyClasses,
   publicKeys,
   validatorArray,
   validatorsMaps: {
@@ -87,10 +89,21 @@ export const ValidatorsPage = ({
     );
   };
 
+  /// ------ Styling Handling ------
+  const [opacity, setOpacity] = useState("opacity-0");
+  useEffect(() => {
+    if (mountValidatorsPage) {
+      setOpacity("opacity-100");
+    } else {
+      setOpacity("opacity-0");
+    }
+  }, [mountValidatorsPage]);
+  /// ------------------------------
+
   return (
-    <div className="container mx-auto grid grid-cols-1 gap-4 p-4">
+    <div className={`${bodyClasses} ${opacity}`}>
       {/* <!-- Tile 1: Validator Buttons --> */}
-      <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Select Validators</h2>
         <div>
           <button
@@ -121,7 +134,7 @@ export const ValidatorsPage = ({
       </div>
 
       {/* <!-- Tile 2: List of Ethereum Validators --> */}
-      <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow">
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow">
         <h2 className="text-pastel-blue text-2xl mb-4">Ethereum Validators</h2>
         <div className="grid grid-cols-5 gap-4 text-gray-700 text-sm font-bold text-center mb-2 m-x-4">
           <div className="col-span-1">Address</div>

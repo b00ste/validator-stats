@@ -115,6 +115,8 @@ export type ValidatorsData = {
 // ------------ COMPONENTS PARAM TYPES ------------
 
 export type StatsPageParams = {
+  mountStatsPage: boolean;
+  bodyClasses: string;
   stakedLYX: number;
   tokenPrice: {
     eurPrice: string;
@@ -124,16 +126,20 @@ export type StatsPageParams = {
   withdrawalAddressesBalance: number;
 };
 
-export type ValidatorsPageParams = {
-  publicKeys: PublicKey[];
-  validatorArray: string[];
-  validatorsMaps: ValidatorsMaps;
-};
-
 export type UserPageParams = {
+  mountUserPage: boolean;
+  bodyClasses: string;
   publicKeys: PublicKey[];
   setPublicKeys: React.Dispatch<React.SetStateAction<PublicKey[]>>;
   setValidatorArray: React.Dispatch<React.SetStateAction<string[]>>;
+};
+
+export type ValidatorsPageParams = {
+  mountValidatorsPage: boolean;
+  bodyClasses: string;
+  publicKeys: PublicKey[];
+  validatorArray: string[];
+  validatorsMaps: ValidatorsMaps;
 };
 
 export type HeaderParams = {
@@ -146,6 +152,7 @@ export type HeaderParams = {
   };
   isDropdownOpen: boolean;
   toggleDropdown: Function;
+  pageChangeHandler: Function;
 };
 
 export type FooterParams = {};

@@ -3,6 +3,8 @@ import { consensys_explorer } from "../helpers/constants";
 import { UserPageParams } from "../typings/types";
 
 export const UserPage = ({
+  mountUserPage,
+  bodyClasses,
   publicKeys,
   setPublicKeys,
   setValidatorArray,
@@ -83,10 +85,21 @@ export const UserPage = ({
     setValidatorArray([]);
   };
 
+  /// ------ Styling Handling ------
+  const [opacity, setOpacity] = useState("opacity-0");
+  useEffect(() => {
+    if (mountUserPage) {
+      setOpacity("opacity-100");
+    } else {
+      setOpacity("opacity-0");
+    }
+  }, [mountUserPage]);
+  /// ------------------------------
+
   return (
-    <div className="container mx-auto grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+    <div className={`${bodyClasses} sm:grid-cols-3 lg:grid-cols-4 ${opacity}`}>
       {/* <!-- Tile 1: Add Address Form --> */}
-      <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
@@ -151,7 +164,7 @@ export const UserPage = ({
       </div>
 
       {/* <!-- Tile 2: List of Saved Addresses --> */}
-      <div className="bg-pastel-light-pink p-4 m-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <ul className="space-y-4">
           {publicKeys.map((publicKey) => (
