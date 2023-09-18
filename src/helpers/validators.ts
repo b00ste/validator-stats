@@ -1,5 +1,5 @@
 import {
-  AttestationEfficiency,
+  Attestation,
   ConsensusPerformance,
   ExecutionPerformance,
   PublicKey,
@@ -201,11 +201,10 @@ export const fetchValidatorsPerformance = async (
   const performanceData: ValidatorsPerformance = {};
 
   if (pubkeys.length > 100) {
-    const attestationEfficiency: AttestationEfficiency[][] =
-      await fetchValidatorDataByLink(
-        `${consensys_explorer}/api/v1/validator/{validators}/attestationefficiency`,
-        pubkeys
-      );
+    const attestations: Attestation[][] = await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validator/{validators}/attestations`,
+      pubkeys
+    );
     const consensusPerformance: ConsensusPerformance[][] =
       await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validator/{validators}/performance`,
@@ -217,13 +216,40 @@ export const fetchValidatorsPerformance = async (
         pubkeys
       );
 
-    for (let i = 0; i < attestationEfficiency.length; i++) {
-      for (let j = 0; j < attestationEfficiency[i].length; j++) {
-        const { validatorindex } = attestationEfficiency[i][j];
-        performanceData[validatorindex] = {
-          ...performanceData[validatorindex],
-          attestationEfficiency: attestationEfficiency[i][j],
-        };
+    for (let i = 0; i < attestations.length; i++) {
+      for (let j = 0; j < attestations[i].length; j++) {
+        const { validatorindex, status } = attestations[i][j];
+
+        if (!performanceData[validatorindex]) {
+          performanceData[validatorindex] = {
+            ...performanceData[validatorindex],
+            attestationPerformance: {
+              executedAttestations: 0,
+              missedAttestations: 0,
+              attestationCount: 0,
+            },
+          };
+        }
+
+        const { executedAttestations, missedAttestations, attestationCount } =
+          performanceData[validatorindex].attestationPerformance;
+        if (status === 1) {
+          const newAttestationPerformance = {
+            executedAttestations: executedAttestations + 1,
+            missedAttestations,
+            attestationCount: attestationCount + 1,
+          };
+          performanceData[validatorindex].attestationPerformance =
+            newAttestationPerformance;
+        } else {
+          const newAttestationPerformance = {
+            executedAttestations,
+            missedAttestations: missedAttestations + 1,
+            attestationCount: attestationCount + 1,
+          };
+          performanceData[validatorindex].attestationPerformance =
+            newAttestationPerformance;
+        }
       }
     }
     for (let i = 0; i < consensusPerformance.length; i++) {
@@ -245,11 +271,10 @@ export const fetchValidatorsPerformance = async (
       }
     }
   } else {
-    const attestationEfficiency: AttestationEfficiency[] =
-      await fetchValidatorDataByLink(
-        `${consensys_explorer}/api/v1/validator/{validators}/attestationefficiency`,
-        pubkeys
-      );
+    const attestations: Attestation[] = await fetchValidatorDataByLink(
+      `${consensys_explorer}/api/v1/validator/{validators}/attestations`,
+      pubkeys
+    );
     const consensusPerformance: ConsensusPerformance[] =
       await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validator/{validators}/performance`,
@@ -261,12 +286,39 @@ export const fetchValidatorsPerformance = async (
         pubkeys
       );
 
-    for (let i = 0; i < attestationEfficiency.length; i++) {
-      const { validatorindex } = attestationEfficiency[i];
-      performanceData[validatorindex] = {
-        ...performanceData[validatorindex],
-        attestationEfficiency: attestationEfficiency[i],
-      };
+    for (let i = 0; i < attestations.length; i++) {
+      const { validatorindex, status } = attestations[i];
+
+      if (!performanceData[validatorindex]) {
+        performanceData[validatorindex] = {
+          ...performanceData[validatorindex],
+          attestationPerformance: {
+            executedAttestations: 0,
+            missedAttestations: 0,
+            attestationCount: 0,
+          },
+        };
+      }
+
+      const { executedAttestations, missedAttestations, attestationCount } =
+        performanceData[validatorindex].attestationPerformance;
+      if (status === 1) {
+        const newAttestationPerformance = {
+          executedAttestations: executedAttestations + 1,
+          missedAttestations,
+          attestationCount: attestationCount + 1,
+        };
+        performanceData[validatorindex].attestationPerformance =
+          newAttestationPerformance;
+      } else {
+        const newAttestationPerformance = {
+          executedAttestations,
+          missedAttestations: missedAttestations + 1,
+          attestationCount: attestationCount + 1,
+        };
+        performanceData[validatorindex].attestationPerformance =
+          newAttestationPerformance;
+      }
     }
     for (let i = 0; i < consensusPerformance.length; i++) {
       const { validatorindex } = consensusPerformance[i];

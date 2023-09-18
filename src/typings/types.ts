@@ -30,9 +30,22 @@ export type ValidatorsLuck = {
   time_frame_name: string;
 };
 
-export type AttestationEfficiency = {
-  attestation_efficiency: number;
+export type Attestation = {
+  attesterslot: number;
+  committeeindex: number;
+  epoch: number;
+  inclusionslot: number;
+  status: number;
   validatorindex: number;
+  week: number;
+  week_end: string;
+  week_start: string;
+};
+
+export type AttestationPerformance = {
+  executedAttestations: number;
+  missedAttestations: number;
+  attestationCount: number;
 };
 
 export type ConsensusPerformance = {
@@ -59,7 +72,7 @@ export type ExecutionPerformance = {
 export type ValidatorsPerformance = Record<
   number,
   {
-    attestationEfficiency: AttestationEfficiency;
+    attestationPerformance: AttestationPerformance;
     consensusPerformance: ConsensusPerformance;
     executionPerformance: ExecutionPerformance;
   }

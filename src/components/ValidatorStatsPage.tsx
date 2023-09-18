@@ -1,7 +1,7 @@
 // Stats Tiles
 import { Earnings } from "./ValidatorStats/Earnings";
 import { TimeframePercentageRate } from "./ValidatorStats/TimeframePercentageRate";
-import { Performance } from "./ValidatorStats/Performance";
+import { Attestations } from "./ValidatorStats/Attestations";
 import { Luck } from "./ValidatorStats/Luck";
 import { Validators } from "./ValidatorStats/Validators";
 import { Balance } from "./ValidatorStats/Balance";
@@ -180,7 +180,7 @@ export const StatsPage = ({
         timeframe="annual"
         stakedLYX={stakedLYX}
       />
-      <Performance
+      <Attestations
         tileClasses={tileClasses}
         validatorsPerformance={validatorsPerformance}
       />
