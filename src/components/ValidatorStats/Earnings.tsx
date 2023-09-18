@@ -1,8 +1,5 @@
 // helpers
-import {
-  getTimeframePercentageYield,
-  getTimeframePercentageYieldUnformated,
-} from "../../helpers/calculateStakingRewards";
+import { getTimeframePercentageYieldUnformated } from "../../helpers/calculateStakingRewards";
 
 // ts types
 import { EarningsParams } from "../../typings/types";
@@ -135,10 +132,14 @@ export const Earnings = ({
         <p className="text-gray-600 font-bold">
           {getErningsComparedToAPR(earnings)}
         </p>
-        <p className="text-xs">{`(Aproximate APR ${(
-          (earnings / (activeBalance / 1e9)) *
-          100
-        ).toLocaleString()} %)`}</p>
+        {timeframe !== "total" ? (
+          <p className="text-xs">{`(Aproximate APR ${(
+            (earnings / (activeBalance / 1e9)) *
+            100
+          ).toLocaleString()} %)`}</p>
+        ) : (
+          <></>
+        )}
         <div className="container mx-auto grid grid-cols-2">
           <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
           <p className="text-dark-pink font-bold text-sm">

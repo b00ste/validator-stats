@@ -13,6 +13,7 @@ export const ValidatorsPage = ({
     slashedValidators,
     otherValidators,
   },
+  validatorsPerformance,
 }: ValidatorsPageParams) => {
   const [selectedValidators, setSelectedValidators] = useState("active");
 
@@ -21,71 +22,95 @@ export const ValidatorsPage = ({
       const address = `0x${bytes.substring(bytes.length - 40)}`;
 
       return (
-        <a
-          href={`${consensys_explorer}/address/${address}`}
-          target="_blank"
-          rel="noreferrer"
-          className="text-pastel-blue hover:underline overflow-hidden"
-        >
-          {
-            publicKeys.filter(
-              (elem) => elem.address.toLowerCase() === address.toLowerCase()
-            )[0].name
-          }
-        </a>
+        <td className={tableHeadStyle}>
+          <a
+            href={`${consensys_explorer}/address/${address}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-pastel-blue hover:underline overflow-hidden"
+          >
+            {
+              publicKeys.filter(
+                (elem) => elem.address.toLowerCase() === address.toLowerCase()
+              )[0].name
+            }
+          </a>
+        </td>
       );
     } else if (bytes.length === 42) {
       const address = bytes;
 
       return (
-        <a
-          href={`${consensys_explorer}/address/${address}`}
-          target="_blank"
-          rel="noreferrer"
-          className="text-pastel-blue hover:underline overflow-hidden"
-        >
-          {
-            publicKeys.filter(
-              (elem) => elem.address.toLowerCase() === address.toLowerCase()
-            )[0].name
-          }
-        </a>
+        <td className={tableHeadStyle}>
+          <a
+            href={`${consensys_explorer}/address/${address}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-pastel-blue hover:underline overflow-hidden"
+          >
+            {
+              publicKeys.filter(
+                (elem) => elem.address.toLowerCase() === address.toLowerCase()
+              )[0].name
+            }
+          </a>
+        </td>
       );
     }
 
-    return <span className="text-gray-700">Name Unknown</span>;
+    return <td className={tableHeadStyle}>Name Unknown</td>;
   };
 
   const getValidatorRow = (validatorMap: ValidatorMap, validator: string) => {
     return (
-      <li
-        className="grid grid-cols-5 items-center justify-between text-center"
-        key={validator}
-      >
-        <a
-          href={`${consensys_explorer}/validator/${validator.substring(2)}`}
-          target="_blank"
-          rel="noreferrer"
-          className="text-pastel-blue hover:underline overflow-hidden"
-        >
-          {`${validator.substring(0, 4)}...${validator.substring(
-            validator.length - 2,
-            validator.length
-          )}`}
-        </a>
-        <span className="text-gray-700">
+      <tr key={validator}>
+        <td>
+          <a
+            href={`${consensys_explorer}/validator/${validator.substring(2)}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-pastel-blue hover:underline overflow-hidden"
+          >
+            {`${validator.substring(0, 4)}...${validator.substring(
+              validator.length - 2,
+              validator.length
+            )}`}
+          </a>
+        </td>
+        <td className={tableHeadStyle}>
           {validatorMap[validator].validatorindex}
-        </span>
-        <span className="text-gray-700">
-          {`${(validatorMap[validator].balance / 1e9).toLocaleString()} LYX`}
-        </span>
-        <span className="text-gray-700">
-          {`${(
-            validatorMap[validator].total_withdrawals / 1e9
-          ).toLocaleString()} LYX`}
-        </span>
+        </td>
+        <td className={tableHeadStyle}>
+          {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
+        </td>
+        <td className={tableHeadStyle}>
+          {validatorsPerformance[validatorMap[validator].validatorindex]
+            ? validatorsPerformance[validatorMap[validator].validatorindex]
+                .attestationPerformance.executedAttestations
+            : 0}
+        </td>
+        <td className={tableHeadStyle}>
+          {validatorsPerformance[validatorMap[validator].validatorindex]
+            ? validatorsPerformance[validatorMap[validator].validatorindex]
+                .attestationPerformance.missedAttestations
+            : 0}
+        </td>
+        <td className={tableHeadStyle}>
+          {`${
+            validatorsPerformance[validatorMap[validator].validatorindex]
+              ? (
+                  (validatorsPerformance[validatorMap[validator].validatorindex]
+                    .attestationPerformance.executedAttestations /
+                    validatorsPerformance[
+                      validatorMap[validator].validatorindex
+                    ].attestationPerformance.attestationCount) *
+                  100
+                ).toLocaleString()
+              : 0
+          } %`}
+        </td>
         {findAddressName(validatorMap[validator].withdrawalcredentials)}
-      </li>
+      </tr>
     );
   };
 
@@ -101,6 +126,8 @@ export const ValidatorsPage = ({
       setOpacity("opacity-0");
     }
   }, [mountValidatorsPage]);
+
+  const tableHeadStyle = "text-gray-700 px-4 py-1";
   /// ------------------------------
 
   return (
@@ -137,17 +164,18 @@ export const ValidatorsPage = ({
       </div>
 
       {/* <!-- Tile 2: List of Ethereum Validators --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow">
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow overflow-x-scroll">
         <h2 className="text-pastel-blue text-2xl mb-4">Ethereum Validators</h2>
-        <div className="grid grid-cols-5 gap-4 text-gray-700 text-sm font-bold text-center mb-2 m-x-4">
-          <div className="col-span-1">Address</div>
-          <div className="col-span-1">Index</div>
-          <div className="col-span-1">Balance</div>
-          <div className="col-span-1">Withdrawal Balance</div>
-          <div className="col-span-1">Withdrawal Address</div>
-          <div className="col-span-5 border-b border-gray-300"></div>
-        </div>
-        <ul className="space-y-4 gap-4">
+        <table className="table-auto break-words w-full text-center">
+          <tr className="border-b-2 border-gray-300">
+            <th className={tableHeadStyle}>Address</th>
+            <th className={tableHeadStyle}>Index</th>
+            <th className={tableHeadStyle}>Balance (LYX)</th>
+            <th className={tableHeadStyle}>Executed Attestations</th>
+            <th className={tableHeadStyle}>Missed Attestations</th>
+            <th className={tableHeadStyle}>Performance</th>
+            <th className={tableHeadStyle}>Withdrawal Address</th>
+          </tr>
           {validatorArray.map((validator) => {
             switch (selectedValidators) {
               case "active": {
@@ -179,7 +207,7 @@ export const ValidatorsPage = ({
             }
             return <></>;
           })}
-        </ul>
+        </table>
       </div>
     </div>
   );

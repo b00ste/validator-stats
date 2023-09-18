@@ -344,6 +344,9 @@ function App() {
                 publicKeys={publicKeys}
                 validatorArray={validatorArray}
                 validatorsMaps={validatorsMaps}
+                validatorsPerformance={
+                  validatorsPerformance ? validatorsPerformance : {}
+                }
               />
             }
           />

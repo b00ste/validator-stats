@@ -157,6 +157,7 @@ export type ValidatorsPageParams = {
   publicKeys: PublicKey[];
   validatorArray: string[];
   validatorsMaps: ValidatorsMaps;
+  validatorsPerformance: ValidatorsPerformance;
 };
 
 export type HeaderParams = {
