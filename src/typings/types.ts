@@ -114,6 +114,10 @@ export type ValidatorsData = {
 
 // ------------ COMPONENTS PARAM TYPES ------------
 
+export type LandingPageParams = {
+  pageChangeHandler: Function;
+};
+
 export type StatsPageParams = {
   mountStatsPage: boolean;
   bodyClasses: string;
@@ -159,7 +163,7 @@ export type FooterParams = {};
 
 // ------------ STATS COMPONENTS PARAM TYPES ------------
 
-export type APYRateParams = {
+export type TimeframePercentageRateParams = {
   timeframe: "daily" | "weekly" | "monthly" | "annual";
   tileClasses: string;
   stakedLYX: number;

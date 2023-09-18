@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
-import { StatsPage } from "./components/StatsPage";
+import { StatsPage } from "./components/ValidatorStatsPage";
 import { UserPage } from "./components/UserPage";
 import { ValidatorsPage } from "./components/ValidatosPage";
 import { Header } from "./components/Header";
@@ -31,6 +31,7 @@ import {
   ValidatorsLuck,
   ValidatorsPerformance,
 } from "./typings/types";
+import { LandingPage } from "./components/LandingPage";
 
 function App() {
   /// ------ Deposior/Withdrawal Addresses ------
@@ -229,7 +230,7 @@ function App() {
 
   /// ------ Page Change Handler ------
   const [mountStatsPage, setMountStatsPage] = useState(
-    window.location.pathname === "/"
+    window.location.pathname === "/statistics"
   );
   const [mountUserPage, setMountUserPage] = useState(
     window.location.pathname === "/user"
@@ -247,15 +248,21 @@ function App() {
     window.location.pathname === "license"
   );
   const pageChangeHandler = (navigate: Function, navigateParam: string) => {
-    setMountStatsPage(navigateParam === "/");
+    // Update the page mount status
+    setMountStatsPage(navigateParam === "/statistics");
     setMountUserPage(navigateParam === "/user");
     setMountValidatorsPage(navigateParam === "/validators");
     setMountTermsPage(navigateParam === "/terms");
     setMountPrivacyPage(navigateParam === "/privacy");
     setMountLicensePage(navigateParam === "/license");
+
+    // Navigate to the new page after the animation ends
     setTimeout(() => {
       navigate(navigateParam);
-    }, 80);
+    }, 75);
+
+    // Close drop down menu
+    setDropdownOpen(false);
   };
   /// ---------------------------------
 
@@ -292,13 +299,17 @@ function App() {
   return (
     <div
       className={`min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-12 transition-all ${
-        isDropdownOpen ? "pt-52" : "pt-44 delay-75 duration-200"
+        isDropdownOpen ? "pt-64 sm:pt-52" : "pt-44 delay-75 duration-200"
       }`}
     >
       <Router>
         <Routes>
           <Route
             path="/"
+            element={<LandingPage pageChangeHandler={pageChangeHandler} />}
+          />
+          <Route
+            path="/statistics"
             element={
               <StatsPage
                 mountStatsPage={mountStatsPage}
@@ -311,7 +322,7 @@ function App() {
                 }
               />
             }
-          ></Route>
+          />
           <Route
             path="/user"
             element={
@@ -323,7 +334,7 @@ function App() {
                 setValidatorArray={setValidatorArray}
               />
             }
-          ></Route>
+          />
           <Route
             path="/validators"
             element={
@@ -335,19 +346,19 @@ function App() {
                 validatorsMaps={validatorsMaps}
               />
             }
-          ></Route>
+          />
           <Route
             path="/terms"
             element={<TermsAndConditions mountTermsPage={mountTermsPage} />}
-          ></Route>
+          />
           <Route
             path="/privacy"
             element={<PrivacyPolicy mountPrivacyPage={mountPrivacyPage} />}
-          ></Route>
+          />
           <Route
             path="/license"
             element={<License mountLicensePage={mountLicensePage} />}
-          ></Route>
+          />
         </Routes>
         <Header
           stakedLYX={stakedLYX ? stakedLYX : 0}

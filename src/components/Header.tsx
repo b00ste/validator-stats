@@ -22,7 +22,9 @@ export const Header = ({
     <nav className="absolute top-0 left-4 right-4">
       <div
         className={`bg-pastel-white-pink p-4 rounded-b-3xl shadow transition-all ${
-          isDropdownOpen ? "h-44 duration-150" : "h-32 delay-75 duration-150"
+          isDropdownOpen
+            ? "h-56 sm:h-44 duration-150"
+            : "h-32 delay-75 duration-150"
         }`}
       >
         <div className="container mx-auto grid grid-cols-3">
@@ -58,7 +60,7 @@ export const Header = ({
           </div>
         </div>
         <div
-          className={`container mx-auto grid grid-cols-3 transition-all ${
+          className={`container mx-auto grid grid-cols-2 sm:grid-cols-4 transition-all ${
             isDropdownOpen
               ? " opacity-100 delay-75 duration-150"
               : "opacity-0 pointer-events-none duration-200"
@@ -68,19 +70,25 @@ export const Header = ({
             className={buttonClasses}
             onClick={() => pageChangeHandler(navigate, "/")}
           >
-            stats
+            Home
+          </button>
+          <button
+            className={buttonClasses}
+            onClick={() => pageChangeHandler(navigate, "/statistics")}
+          >
+            Statistics
           </button>
           <button
             className={buttonClasses}
             onClick={() => pageChangeHandler(navigate, "/validators")}
           >
-            validators
+            Validators
           </button>
           <button
             className={buttonClasses}
             onClick={() => pageChangeHandler(navigate, "/user")}
           >
-            user
+            User
           </button>
         </div>
       </div>

@@ -1,7 +1,11 @@
 import { getTimeframePercentageYield } from "../../helpers/calculateStakingRewards";
-import { APYRateParams } from "../../typings/types";
+import { TimeframePercentageRateParams } from "../../typings/types";
 
-export const APR = ({ timeframe, tileClasses, stakedLYX }: APYRateParams) => {
+export const TimeframePercentageRate = ({
+  timeframe,
+  tileClasses,
+  stakedLYX,
+}: TimeframePercentageRateParams) => {
   let getTimeframeTitle = () => {
     switch (timeframe) {
       case "daily": {

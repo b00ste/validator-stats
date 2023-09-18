@@ -1,6 +1,6 @@
 // Stats Tiles
 import { Earnings } from "./ValidatorStats/Earnings";
-import { APR } from "./ValidatorStats/APR";
+import { TimeframePercentageRate } from "./ValidatorStats/TimeframePercentageRate";
 import { Performance } from "./ValidatorStats/Performance";
 import { Luck } from "./ValidatorStats/Luck";
 import { Validators } from "./ValidatorStats/Validators";
@@ -160,14 +160,26 @@ export const StatsPage = ({
         activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
-      <APR tileClasses={tileClasses} timeframe="daily" stakedLYX={stakedLYX} />
-      <APR tileClasses={tileClasses} timeframe="weekly" stakedLYX={stakedLYX} />
-      <APR
+      <TimeframePercentageRate
+        tileClasses={tileClasses}
+        timeframe="daily"
+        stakedLYX={stakedLYX}
+      />
+      <TimeframePercentageRate
+        tileClasses={tileClasses}
+        timeframe="weekly"
+        stakedLYX={stakedLYX}
+      />
+      <TimeframePercentageRate
         tileClasses={tileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
       />
-      <APR tileClasses={tileClasses} timeframe="annual" stakedLYX={stakedLYX} />
+      <TimeframePercentageRate
+        tileClasses={tileClasses}
+        timeframe="annual"
+        stakedLYX={stakedLYX}
+      />
       <Performance
         tileClasses={tileClasses}
         validatorsPerformance={validatorsPerformance}
