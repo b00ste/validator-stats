@@ -86,8 +86,10 @@ export const Earnings = ({
 
   const calculateEarnings = () => {
     let totalEarnings = 0;
-    const { consensusTimeframeParam, executionTimeframeParam } =
-      getTimeframeParamNames();
+    const {
+      consensusTimeframeParam,
+      executionTimeframeParam,
+    } = getTimeframeParamNames();
     for (const index in validatorsPerformance) {
       totalEarnings +=
         validatorsPerformance[index].consensusPerformance[
@@ -133,13 +135,17 @@ export const Earnings = ({
         <p className="text-gray-600 font-bold">
           {getErningsComparedToAPR(earnings)}
         </p>
+        <p className="text-xs">{`(Aproximate APR ${(
+          (earnings / (activeBalance / 1e9)) *
+          100
+        ).toLocaleString()} %)`}</p>
         <div className="container mx-auto grid grid-cols-2">
           <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
           <p className="text-dark-pink font-bold text-sm">
-            {`${(earnings * Number.parseFloat(eurPrice)).toFixed(2)} €`}
+            {`${(earnings * Number.parseFloat(eurPrice)).toLocaleString()} €`}
           </p>
           <p className="text-dark-pink font-bold text-sm">
-            {`${(earnings * Number.parseFloat(usdPrice)).toFixed(2)} $`}
+            {`${(earnings * Number.parseFloat(usdPrice)).toLocaleString()} $`}
           </p>
         </div>
       </div>

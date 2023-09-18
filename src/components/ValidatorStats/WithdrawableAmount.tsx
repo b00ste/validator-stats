@@ -14,7 +14,7 @@ export const WithdrawableAmount = ({
         {`${(
           activeBalance / 1e9 -
           Object.getOwnPropertyNames(activeValidators).length * 32
-        ).toFixed(2)} LYX`}
+        ).toLocaleString()} LYX`}
       </p>
       <div className="container mx-auto grid grid-cols-2">
         <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
@@ -23,14 +23,14 @@ export const WithdrawableAmount = ({
             (activeBalance / 1e9 -
               Object.getOwnPropertyNames(activeValidators).length * 32) *
             Number.parseFloat(eurPrice)
-          ).toFixed(2)} €`}
+          ).toLocaleString()} €`}
         </p>
         <p className="text-dark-pink font-bold text-sm">
           {`${(
             (activeBalance / 1e9 -
               Object.getOwnPropertyNames(activeValidators).length * 32) *
             Number.parseFloat(usdPrice)
-          ).toFixed(2)} $`}
+          ).toLocaleString()} $`}
         </p>
       </div>
     </div>

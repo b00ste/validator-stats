@@ -77,12 +77,12 @@ export const ValidatorsPage = ({
           {validatorMap[validator].validatorindex}
         </span>
         <span className="text-gray-700">
-          {`${(validatorMap[validator].balance / 1e9).toFixed(4)} LYX`}
+          {`${(validatorMap[validator].balance / 1e9).toLocaleString()} LYX`}
         </span>
         <span className="text-gray-700">
-          {`${(validatorMap[validator].total_withdrawals / 1e9).toFixed(
-            4
-          )} LYX`}
+          {`${(
+            validatorMap[validator].total_withdrawals / 1e9
+          ).toLocaleString()} LYX`}
         </span>
         {findAddressName(validatorMap[validator].withdrawalcredentials)}
       </li>

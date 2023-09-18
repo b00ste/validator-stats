@@ -7,7 +7,7 @@ export const Luck = ({ tileClasses, validatorsLuck }: LuckParams) => {
       <p className="text-gray-600 font-bold">
         {`${
           validatorsLuck.proposal_luck
-            ? validatorsLuck.proposal_luck.toFixed(4)
+            ? validatorsLuck.proposal_luck.toLocaleString()
             : 0
         } %`}
       </p>

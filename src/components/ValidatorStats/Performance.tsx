@@ -31,9 +31,9 @@ export const Performance = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Performance</div>
-      <p className="text-gray-600 font-bold">{`${(efficiency * 100).toFixed(
-        2
-      )} %`}</p>
+      <p className="text-gray-600 font-bold">{`${(
+        efficiency * 100
+      ).toLocaleString()} %`}</p>
     </div>
   );
 };
