@@ -1,5 +1,8 @@
+// utils
 import { getTimeframePercentageYield } from "../../helpers/calculateStakingRewards";
-import { TimeframePercentageRateParams } from "../../typings/types";
+
+// types
+import { TimeframePercentageRateParams } from "../../typings/ComponentParamsTypes";
 
 export const TimeframePercentageRate = ({
   timeframe,

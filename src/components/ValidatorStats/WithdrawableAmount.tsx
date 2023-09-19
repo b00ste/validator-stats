@@ -1,9 +1,9 @@
-import { WithdrawableAmountParams } from "../../typings/types";
+import { WithdrawableAmountParams } from "../../typings/ComponentParamsTypes";
+import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const WithdrawableAmount = ({
   tileClasses,
-  eurPrice,
-  usdPrice,
+  tokenPrice,
   activeValidators,
   activeBalance,
 }: WithdrawableAmountParams) => {
@@ -16,23 +16,13 @@ export const WithdrawableAmount = ({
           Object.getOwnPropertyNames(activeValidators).length * 32
         ).toLocaleString()} LYX`}
       </p>
-      <div className="container mx-auto grid grid-cols-2">
-        <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
-        <p className="text-dark-pink font-bold text-sm">
-          {`${(
-            (activeBalance / 1e9 -
-              Object.getOwnPropertyNames(activeValidators).length * 32) *
-            Number.parseFloat(eurPrice)
-          ).toLocaleString()} €`}
-        </p>
-        <p className="text-dark-pink font-bold text-sm">
-          {`${(
-            (activeBalance / 1e9 -
-              Object.getOwnPropertyNames(activeValidators).length * 32) *
-            Number.parseFloat(usdPrice)
-          ).toLocaleString()} $`}
-        </p>
-      </div>
+      <DisplayTokenPrice
+        tokenPrice={tokenPrice}
+        tokenAmount={
+          activeBalance / 1e9 -
+          Object.getOwnPropertyNames(activeValidators).length * 32
+        }
+      />
     </div>
   );
 };

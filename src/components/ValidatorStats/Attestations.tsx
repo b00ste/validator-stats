@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PerformanceParams } from "../../typings/types";
+import { PerformanceParams } from "../../typings/ComponentParamsTypes";
 
 export const Attestations = ({
   tileClasses,

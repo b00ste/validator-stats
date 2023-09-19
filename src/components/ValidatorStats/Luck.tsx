@@ -1,4 +1,4 @@
-import { LuckParams } from "../../typings/types";
+import { LuckParams } from "../../typings/ComponentParamsTypes";
 
 export const Luck = ({ tileClasses, validatorsLuck }: LuckParams) => {
   return (

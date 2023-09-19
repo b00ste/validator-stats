@@ -1,9 +1,9 @@
-import { WithdrawalBalanceParams } from "../../typings/types";
+import { WithdrawalBalanceParams } from "../../typings/ComponentParamsTypes";
+import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const WithdrawalBalance = ({
   tileClasses,
-  eurPrice,
-  usdPrice,
+  tokenPrice,
   withdrawalAddressesBalance,
 }: WithdrawalBalanceParams) => {
   return (
@@ -12,19 +12,10 @@ export const WithdrawalBalance = ({
       <p className="text-gray-600 font-bold">
         {`${withdrawalAddressesBalance.toLocaleString()} LYX`}
       </p>
-      <div className="container mx-auto grid grid-cols-2">
-        <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
-        <p className="text-dark-pink font-bold text-sm">
-          {`${(
-            withdrawalAddressesBalance * Number.parseFloat(eurPrice)
-          ).toLocaleString()} €`}
-        </p>
-        <p className="text-dark-pink font-bold text-sm">
-          {`${(
-            withdrawalAddressesBalance * Number.parseFloat(usdPrice)
-          ).toLocaleString()} $`}
-        </p>
-      </div>
+      <DisplayTokenPrice
+        tokenPrice={tokenPrice}
+        tokenAmount={withdrawalAddressesBalance}
+      />
     </div>
   );
 };

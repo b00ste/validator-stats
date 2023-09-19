@@ -1,35 +1,33 @@
-// Stats Tiles
-import { Earnings } from "./ValidatorStats/Earnings";
-import { TimeframePercentageRate } from "./ValidatorStats/TimeframePercentageRate";
-import { Attestations } from "./ValidatorStats/Attestations";
-import { Luck } from "./ValidatorStats/Luck";
-import { Validators } from "./ValidatorStats/Validators";
-import { Balance } from "./ValidatorStats/Balance";
-import { TotalWithdrawals } from "./ValidatorStats/TotalWithdrawals";
-import { WithdrawalBalance } from "./ValidatorStats/WithdrawalBalance";
-
-// ts types
-import { StatsPageParams } from "../typings/types";
-import { WithdrawableAmount } from "./ValidatorStats/WithdrawableAmount";
 import { useEffect, useState } from "react";
 
-export const StatsPage = ({
+// Stats Tiles
+import { Earnings } from "../ValidatorStats/Earnings";
+import { TimeframePercentageRate } from "../ValidatorStats/TimeframePercentageRate";
+import { Attestations } from "../ValidatorStats/Attestations";
+import { Luck } from "../ValidatorStats/Luck";
+import { Validators } from "../ValidatorStats/Validators";
+import { Balance } from "../ValidatorStats/Balance";
+import { TotalWithdrawals } from "../ValidatorStats/TotalWithdrawals";
+import { WithdrawalBalance } from "../ValidatorStats/WithdrawalBalance";
+import { WithdrawableAmount } from "../ValidatorStats/WithdrawableAmount";
+
+// ts types
+import { StatsPageParams } from "../../typings/ComponentParamsTypes";
+
+export const ValidatorStatsPage = ({
   mountStatsPage,
   bodyClasses,
   stakedLYX,
-  tokenPrice: { eurPrice, usdPrice },
-  validatorsData: {
-    validatorsMaps: {
-      activeValidators,
-      pendingValidators,
-      slashedValidators,
-      otherValidators,
-    },
-    validatorsLuck,
-    validatorsPerformance,
-  },
+  tokenPrice,
+  validatorsData: { validatorsMaps, validatorsLuck, validatorsPerformance },
   withdrawalAddressesBalance,
 }: StatsPageParams) => {
+  const {
+    activeValidators,
+    pendingValidators,
+    slashedValidators,
+    otherValidators,
+  } = validatorsMaps;
   const [activeBalance, setActiveBalance] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
   const [slashedBalance, setSlashedBalance] = useState(0);
@@ -82,44 +80,37 @@ export const StatsPage = ({
     <div
       className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${opacity}`}
     >
-      <Validators
-        tileClasses={tileClasses}
-        activeValidators={activeValidators}
-        pendingValidators={pendingValidators}
-        slashedValidators={slashedValidators}
-        otherValidators={otherValidators}
-      />
+      <Validators tileClasses={tileClasses} validatorsMaps={validatorsMaps} />
       <Balance
         tileClasses={tileClasses}
-        activeBalance={activeBalance}
-        pendingBalance={pendingBalance}
-        slashedBalance={slashedBalance}
-        otherBalance={otherBalance}
+        tokenPrice={tokenPrice}
+        validatorsBalances={{
+          activeBalance,
+          pendingBalance,
+          slashedBalance,
+          otherBalance,
+        }}
       />
       <WithdrawableAmount
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         activeValidators={activeValidators}
         activeBalance={activeBalance}
       />
       <TotalWithdrawals
         tileClasses={tileClasses}
         activeValidators={activeValidators}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
       />
       <WithdrawalBalance
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         withdrawalAddressesBalance={withdrawalAddressesBalance}
       />
       <Earnings
         timeframe="daily"
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
@@ -127,8 +118,7 @@ export const StatsPage = ({
       <Earnings
         timeframe="weekly"
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
@@ -136,8 +126,7 @@ export const StatsPage = ({
       <Earnings
         timeframe="monthly"
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
@@ -145,8 +134,7 @@ export const StatsPage = ({
       <Earnings
         timeframe="annual"
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
@@ -154,12 +142,16 @@ export const StatsPage = ({
       <Earnings
         timeframe="total"
         tileClasses={tileClasses}
-        eurPrice={eurPrice}
-        usdPrice={usdPrice}
+        tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
         validatorsPerformance={validatorsPerformance}
       />
+      <Attestations
+        tileClasses={tileClasses}
+        validatorsPerformance={validatorsPerformance}
+      />
+      <Luck tileClasses={tileClasses} validatorsLuck={validatorsLuck} />
       <TimeframePercentageRate
         tileClasses={tileClasses}
         timeframe="daily"
@@ -180,11 +172,6 @@ export const StatsPage = ({
         timeframe="annual"
         stakedLYX={stakedLYX}
       />
-      <Attestations
-        tileClasses={tileClasses}
-        validatorsPerformance={validatorsPerformance}
-      />
-      <Luck tileClasses={tileClasses} validatorsLuck={validatorsLuck} />
     </div>
   );
 };

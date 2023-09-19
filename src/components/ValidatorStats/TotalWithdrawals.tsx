@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { WithdrawalsParams } from "../../typings/types";
+
+// types
+import { WithdrawalsParams } from "../../typings/ComponentParamsTypes";
+import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const TotalWithdrawals = ({
   tileClasses,
   activeValidators,
-  eurPrice,
-  usdPrice,
+  tokenPrice,
 }: WithdrawalsParams) => {
   const [totalWithdrawals, setTotalWithdrawals] = useState(0);
   const [totalWithdrawalsNeedsUpdate, setTotalWithdrawalsNeedsUpdate] =
@@ -35,21 +37,10 @@ export const TotalWithdrawals = ({
       <p className="text-gray-600 font-bold">{`${(
         totalWithdrawals / 1e9
       ).toLocaleString()} LYX`}</p>
-      <div className="container mx-auto grid grid-cols-2">
-        <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
-        <p className="text-dark-pink font-bold text-sm">
-          {`${(
-            (totalWithdrawals / 1e9) *
-            Number.parseFloat(eurPrice)
-          ).toLocaleString()} €`}
-        </p>
-        <p className="text-dark-pink font-bold text-sm">
-          {`${(
-            (totalWithdrawals / 1e9) *
-            Number.parseFloat(usdPrice)
-          ).toLocaleString()} $`}
-        </p>
-      </div>
+      <DisplayTokenPrice
+        tokenPrice={tokenPrice}
+        tokenAmount={totalWithdrawals / 1e9}
+      />
     </div>
   );
 };

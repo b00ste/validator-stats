@@ -1,15 +1,20 @@
+// constants
+import { consensys_explorer } from "./constants";
+
+// types
 import {
+  Validator,
+  ValidatorsWithdrawals,
   Attestation,
   ConsensusPerformance,
   ExecutionPerformance,
+} from "../typings/FetchedDataTypes";
+import {
   PublicKey,
-  Validator,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
-  ValidatorsWithdrawals,
-} from "../typings/types";
-import { consensys_explorer } from "./constants";
+} from "../typings/UsedDataTypes";
 
 const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
   if (validators.length === 0) {

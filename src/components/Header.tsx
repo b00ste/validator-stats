@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { HeaderParams } from "../typings/types";
+
+// types
+import { HeaderParams } from "../typings/ComponentParamsTypes";
 
 export const Header = ({
-  stakedLYX,
-  currentEpoch,
-  networkValidators,
+  networkData: { stakedLYX, currentEpoch, networkValidators },
   tokenPrice: { eurPrice, usdPrice },
   isDropdownOpen,
   toggleDropdown,
   pageChangeHandler,
+  refreshHandler,
 }: HeaderParams) => {
   const navigate = useNavigate();
 
@@ -98,6 +99,12 @@ export const Header = ({
           onClick={() => toggleDropdown()}
         >
           Menu
+        </button>
+        <button
+          className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
+          onClick={() => refreshHandler()}
+        >
+          Refresh Data
         </button>
       </div>
     </nav>

@@ -1,12 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { LandingPageParams } from "../typings/types";
+import { LandingPageParams } from "../../typings/ComponentParamsTypes";
 
 export const LandingPage = ({ pageChangeHandler }: LandingPageParams) => {
   const navigate = useNavigate();
 
   const supportProjectAddress = "0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1";
-
-  const qrCode = "";
 
   return (
     <div className="container mx-auto p-4">

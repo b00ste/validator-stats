@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-import { consensys_explorer } from "../helpers/constants";
-import { ValidatorMap, ValidatorsPageParams } from "../typings/types";
+
+// utils
+import { consensys_explorer } from "../../helpers/constants";
+
+// types
+import { ValidatorsPageParams } from "../../typings/ComponentParamsTypes";
+import { ValidatorMap } from "../../typings/UsedDataTypes";
 
 export const ValidatorsPage = ({
   mountValidatorsPage,
@@ -164,50 +169,52 @@ export const ValidatorsPage = ({
       </div>
 
       {/* <!-- Tile 2: List of Ethereum Validators --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow overflow-x-scroll">
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow">
         <h2 className="text-pastel-blue text-2xl mb-4">Ethereum Validators</h2>
-        <table className="table-auto break-words w-full text-center">
-          <tr className="border-b-2 border-gray-300">
-            <th className={tableHeadStyle}>Address</th>
-            <th className={tableHeadStyle}>Index</th>
-            <th className={tableHeadStyle}>Balance (LYX)</th>
-            <th className={tableHeadStyle}>Executed Attestations</th>
-            <th className={tableHeadStyle}>Missed Attestations</th>
-            <th className={tableHeadStyle}>Performance</th>
-            <th className={tableHeadStyle}>Withdrawal Address</th>
-          </tr>
-          {validatorArray.map((validator) => {
-            switch (selectedValidators) {
-              case "active": {
-                if (activeValidators[validator]) {
-                  return getValidatorRow(activeValidators, validator);
+        <div className="overflow-x-scroll">
+          <table className="table-auto break-words w-full text-center">
+            <tr className="border-b-2 border-gray-300">
+              <th className={tableHeadStyle}>Address</th>
+              <th className={tableHeadStyle}>Index</th>
+              <th className={tableHeadStyle}>Balance (LYX)</th>
+              <th className={tableHeadStyle}>Executed Attestations</th>
+              <th className={tableHeadStyle}>Missed Attestations</th>
+              <th className={tableHeadStyle}>Performance</th>
+              <th className={tableHeadStyle}>Withdrawal Address</th>
+            </tr>
+            {validatorArray.map((validator) => {
+              switch (selectedValidators) {
+                case "active": {
+                  if (activeValidators[validator]) {
+                    return getValidatorRow(activeValidators, validator);
+                  }
+                  break;
                 }
-                break;
-              }
-              case "pending": {
-                if (pendingValidators[validator]) {
-                  return getValidatorRow(pendingValidators, validator);
+                case "pending": {
+                  if (pendingValidators[validator]) {
+                    return getValidatorRow(pendingValidators, validator);
+                  }
+                  break;
                 }
-                break;
-              }
-              case "slashed": {
-                if (slashedValidators[validator]) {
-                  return getValidatorRow(slashedValidators, validator);
+                case "slashed": {
+                  if (slashedValidators[validator]) {
+                    return getValidatorRow(slashedValidators, validator);
+                  }
+                  break;
                 }
-                break;
-              }
-              case "other": {
-                if (otherValidators[validator]) {
-                  return getValidatorRow(otherValidators, validator);
+                case "other": {
+                  if (otherValidators[validator]) {
+                    return getValidatorRow(otherValidators, validator);
+                  }
+                  break;
                 }
-                break;
+                default:
+                  return <></>;
               }
-              default:
-                return <></>;
-            }
-            return <></>;
-          })}
-        </table>
+              return <></>;
+            })}
+          </table>
+        </div>
       </div>
     </div>
   );

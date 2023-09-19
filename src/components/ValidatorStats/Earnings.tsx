@@ -2,13 +2,13 @@
 import { getTimeframePercentageYieldUnformated } from "../../helpers/calculateStakingRewards";
 
 // ts types
-import { EarningsParams } from "../../typings/types";
+import { EarningsParams } from "../../typings/ComponentParamsTypes";
+import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const Earnings = ({
   timeframe,
   tileClasses,
-  eurPrice,
-  usdPrice,
+  tokenPrice,
   stakedLYX,
   activeBalance,
   validatorsPerformance,
@@ -140,15 +140,7 @@ export const Earnings = ({
         ) : (
           <></>
         )}
-        <div className="container mx-auto grid grid-cols-2">
-          <div className="border-dark-pink col-span-2 border-b my-2 mx-4" />
-          <p className="text-dark-pink font-bold text-sm">
-            {`${(earnings * Number.parseFloat(eurPrice)).toLocaleString()} €`}
-          </p>
-          <p className="text-dark-pink font-bold text-sm">
-            {`${(earnings * Number.parseFloat(usdPrice)).toLocaleString()} $`}
-          </p>
-        </div>
+        <DisplayTokenPrice tokenPrice={tokenPrice} tokenAmount={earnings} />
       </div>
     );
   };

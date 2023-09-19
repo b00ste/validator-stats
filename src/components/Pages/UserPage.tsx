@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { consensys_explorer } from "../helpers/constants";
-import { UserPageParams } from "../typings/types";
+import { consensys_explorer } from "../../helpers/constants";
+import { UserPageParams } from "../../typings/ComponentParamsTypes";
 
 export const UserPage = ({
   mountUserPage,

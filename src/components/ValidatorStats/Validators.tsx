@@ -1,11 +1,13 @@
-import { ValidatorsParams } from "../../typings/types";
+import { ValidatorsParams } from "../../typings/ComponentParamsTypes";
 
 export const Validators = ({
   tileClasses,
-  activeValidators,
-  pendingValidators,
-  slashedValidators,
-  otherValidators,
+  validatorsMaps: {
+    activeValidators,
+    pendingValidators,
+    slashedValidators,
+    otherValidators,
+  },
 }: ValidatorsParams) => {
   return (
     <div className={tileClasses}>
@@ -16,24 +18,36 @@ export const Validators = ({
           {` ${Object.getOwnPropertyNames(activeValidators).length}`}
         </span>
       </p>
-      <p className="text-gray-600 font-bold">
-        Pending:
-        <span className="text-pastel-orange">{` ${
-          Object.getOwnPropertyNames(pendingValidators).length
-        }`}</span>
-      </p>
-      <p className="text-gray-600 font-bold">
-        Slashed:
-        <span className="text-pastel-red">{` ${
-          Object.getOwnPropertyNames(slashedValidators).length
-        }`}</span>
-      </p>
-      <p className="text-gray-600 font-bold">
-        Other:
-        <span className="text-pastel-red">{` ${
-          Object.getOwnPropertyNames(otherValidators).length
-        }`}</span>
-      </p>
+      {Object.getOwnPropertyNames(pendingValidators).length > 0 ? (
+        <p className="text-gray-600 font-bold">
+          Pending:
+          <span className="text-pastel-orange">{` ${
+            Object.getOwnPropertyNames(pendingValidators).length
+          }`}</span>
+        </p>
+      ) : (
+        <></>
+      )}
+      {Object.getOwnPropertyNames(slashedValidators).length > 0 ? (
+        <p className="text-gray-600 font-bold">
+          Slashed:
+          <span className="text-pastel-red">{` ${
+            Object.getOwnPropertyNames(slashedValidators).length
+          }`}</span>
+        </p>
+      ) : (
+        <></>
+      )}
+      {Object.getOwnPropertyNames(otherValidators).length > 0 ? (
+        <p className="text-gray-600 font-bold">
+          Other:
+          <span className="text-pastel-red">{` ${
+            Object.getOwnPropertyNames(otherValidators).length
+          }`}</span>
+        </p>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

@@ -2,14 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
-import { StatsPage } from "./components/ValidatorStatsPage";
-import { UserPage } from "./components/UserPage";
-import { ValidatorsPage } from "./components/ValidatosPage";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { TermsAndConditions } from "./components/TermsAndConditions";
-import { PrivacyPolicy } from "./components/PrivacyPolicy";
-import { License } from "./components/License";
+import { LandingPage } from "./components/Pages/LandingPage";
+import { ValidatorStatsPage } from "./components/Pages/ValidatorStatsPage";
+import { UserPage } from "./components/Pages/UserPage";
+import { ValidatorsPage } from "./components/Pages/ValidatosPage";
+import { TermsAndConditions } from "./components/Pages/TermsAndConditions";
+import { PrivacyPolicy } from "./components/Pages/PrivacyPolicy";
+import { License } from "./components/Pages/License";
 
 // helpers
 import {
@@ -30,8 +31,7 @@ import {
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
-} from "./typings/types";
-import { LandingPage } from "./components/LandingPage";
+} from "./typings/UsedDataTypes";
 
 function App() {
   /// ------ Deposior/Withdrawal Addresses ------
@@ -128,6 +128,7 @@ function App() {
       newValidatorsLuck.then((data) => setValidatorsLuck(data));
     }
   }, [activeValidators]);
+
   const updateVaildatorsPerformance = useCallback(() => {
     if (activeValidators) {
       let newValidatorsPerformance =
@@ -136,6 +137,7 @@ function App() {
       newValidatorsPerformance.then((data) => setValidatorsPerformance(data));
     }
   }, [activeValidators]);
+
   const updateNetworkData = useCallback(() => {
     const fetchedData = getLastEpoch();
 
@@ -145,6 +147,7 @@ function App() {
       setNetworkValidators(epochData.validatorscount);
     });
   }, []);
+
   const updateLYXPrice = useCallback(() => {
     const fetchedPrices = getLYXPrice();
 
@@ -153,6 +156,24 @@ function App() {
       setUsdPrce(data.usdPrice);
     });
   }, []);
+
+  const refreshHandler = useCallback(() => {
+    updateValidatorHandler();
+    updateWithdrawalAddressesBalanceHandler();
+    updateValidatorsMaps();
+    updateVaildatorsLuck();
+    updateVaildatorsPerformance();
+    updateNetworkData();
+    updateLYXPrice();
+  }, [
+    updateValidatorHandler,
+    updateWithdrawalAddressesBalanceHandler,
+    updateValidatorsMaps,
+    updateVaildatorsLuck,
+    updateVaildatorsPerformance,
+    updateNetworkData,
+    updateLYXPrice,
+  ]);
   /// --------------------------------------
 
   /// Save validators to local storage
@@ -207,25 +228,11 @@ function App() {
   /// ------ Refresh Data ------
   useEffect(() => {
     const interval = setInterval(() => {
-      updateValidatorHandler();
-      updateWithdrawalAddressesBalanceHandler();
-      updateValidatorsMaps();
-      updateVaildatorsLuck();
-      updateVaildatorsPerformance();
-      updateNetworkData();
-      updateLYXPrice();
+      refreshHandler();
     }, 60000);
 
     return () => clearInterval(interval);
-  }, [
-    updateValidatorHandler,
-    updateWithdrawalAddressesBalanceHandler,
-    updateValidatorsMaps,
-    updateVaildatorsLuck,
-    updateVaildatorsPerformance,
-    updateNetworkData,
-    updateLYXPrice,
-  ]);
+  }, [refreshHandler]);
   /// --------------------------
 
   /// ------ Page Change Handler ------
@@ -271,6 +278,7 @@ function App() {
     "container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1";
   /// ---------------------
 
+  /// ------ Compartimetised Data ------
   const validatorsMaps = {
     activeValidators: activeValidators ? activeValidators : {},
     pendingValidators: pendingValidators ? pendingValidators : {},
@@ -296,6 +304,13 @@ function App() {
     usdPrice: usdPrice ? usdPrice : "",
   };
 
+  const networkData = {
+    stakedLYX: stakedLYX ? stakedLYX : 0,
+    currentEpoch: currentEpoch ? currentEpoch : 0,
+    networkValidators: networkValidators ? networkValidators : 0,
+  };
+  /// ----------------------------------
+
   return (
     <div
       className={`min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-12 transition-all ${
@@ -311,7 +326,7 @@ function App() {
           <Route
             path="/statistics"
             element={
-              <StatsPage
+              <ValidatorStatsPage
                 mountStatsPage={mountStatsPage}
                 bodyClasses={bodyClasses}
                 stakedLYX={stakedLYX ? stakedLYX : 0}
@@ -364,13 +379,12 @@ function App() {
           />
         </Routes>
         <Header
-          stakedLYX={stakedLYX ? stakedLYX : 0}
-          currentEpoch={currentEpoch ? currentEpoch : 0}
-          networkValidators={networkValidators ? networkValidators : 0}
+          networkData={networkData}
           tokenPrice={tokenPrice}
           isDropdownOpen={isDropdownOpen}
           toggleDropdown={toggleDropdown}
           pageChangeHandler={pageChangeHandler}
+          refreshHandler={refreshHandler}
         />
         <Footer pageChangeHandler={pageChangeHandler} />
       </Router>
