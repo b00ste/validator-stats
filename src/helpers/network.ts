@@ -7,7 +7,13 @@ import { Epoch } from "../typings/FetchedDataTypes";
 
 export const getLastEpoch = async () => {
   let lastEpoch = {} as Epoch;
-  await fetch(`${consensys_explorer}/api/v1/epoch/latest`)
+  await fetch(`${consensys_explorer}/api/v1/epoch/latest`, {
+    headers: {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+    },
+  })
     .then((res) => res.json())
     .then(({ data }) => (lastEpoch = data));
 
@@ -25,7 +31,14 @@ export const getWithdrawalAddressesBalance = async (
     const tracker = {} as Record<string, boolean>;
     if (publicKey.type === "withdrawal") {
       await fetch(
-        `${consensys_explorer}/api/v1/execution/address/${publicKey.address}`
+        `${consensys_explorer}/api/v1/execution/address/${publicKey.address}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
       )
         .then((res) => res.json())
         .then(
@@ -53,7 +66,14 @@ export const getLYXPrice = async () => {
   let usdPrice = "";
 
   await fetch(
-    "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd"
+    "https://api.coingecko.com/api/v3/simple/price?ids=lukso-token-2&vs_currencies=eur%2Cusd",
+    {
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    }
   )
     .then((res) => res.json())
     .then((data) => {

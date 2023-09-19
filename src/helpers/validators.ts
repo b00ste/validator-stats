@@ -22,7 +22,17 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
   } else if (validators.length <= 100) {
     let dataCollection = [] as any[];
     await fetch(
-      link.replace("{validators}", validators.toString().replaceAll(",", "%2C"))
+      link.replace(
+        "{validators}",
+        validators.toString().replaceAll(",", "%2C")
+      ),
+      {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
     )
       .then((res) => res.json())
       .then(({ data }) => (dataCollection = data));
@@ -39,7 +49,14 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
             .slice(i, i + 100)
             .toString()
             .replaceAll(",", "%2C")
-        )
+        ),
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
       ).then((res) => res.json().then(({ data }) => dataCollection.push(data)));
     }
 
@@ -51,7 +68,14 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
             .slice(i - 100, validators.length)
             .toString()
             .replaceAll(",", "%2C")
-        )
+        ),
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
       ).then((res) => res.json().then(({ data }) => dataCollection.push(data)));
     }
 
@@ -68,7 +92,14 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
     while (!limitReached) {
       let elementsFound = 0;
       await fetch(
-        `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200&offset=${offset}`
+        `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200&offset=${offset}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
       )
         .then((res) => res.json())
         .then(
@@ -189,7 +220,14 @@ export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
     await fetch(
       `${consensys_explorer}/api/v1/validators/proposalLuck?validators=${pubkeys
         .toString()
-        .replaceAll(",", "%2C")}`
+        .replaceAll(",", "%2C")}`,
+      {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
     )
       .then((res) => res.json())
       .then(({ data }: { data: ValidatorsLuck }) => (validatorsLuck = data));
