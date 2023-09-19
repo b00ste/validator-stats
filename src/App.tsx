@@ -252,7 +252,7 @@ function App() {
     window.location.pathname === "/privacy"
   );
   const [mountLicensePage, setMountLicensePage] = useState(
-    window.location.pathname === "license"
+    window.location.pathname === "/license"
   );
   const pageChangeHandler = (navigate: Function, navigateParam: string) => {
     // Update the page mount status
