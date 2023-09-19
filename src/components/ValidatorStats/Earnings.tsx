@@ -83,10 +83,8 @@ export const Earnings = ({
 
   const calculateEarnings = () => {
     let totalEarnings = 0;
-    const {
-      consensusTimeframeParam,
-      executionTimeframeParam,
-    } = getTimeframeParamNames();
+    const { consensusTimeframeParam, executionTimeframeParam } =
+      getTimeframeParamNames();
     for (const index in validatorsPerformance) {
       totalEarnings +=
         validatorsPerformance[index].consensusPerformance[
@@ -134,8 +132,7 @@ export const Earnings = ({
         </p>
         {timeframe !== "total" ? (
           <p className="text-xs">{`(Aproximate APR ${(
-            (earnings / (activeBalance / 1e9)) *
-            100
+            (earnings / (activeBalance / 1e9)) * 100 || 0
           ).toLocaleString()} %)`}</p>
         ) : (
           <></>
