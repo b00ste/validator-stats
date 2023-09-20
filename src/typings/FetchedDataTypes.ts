@@ -37,6 +37,7 @@ export type Validator = {
   validatorindex: number;
   withdrawableepoch: number;
   withdrawalcredentials: string;
+  key: string;
 };
 
 export type ValidatorsWithdrawals = {

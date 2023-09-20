@@ -15,68 +15,85 @@ import {
   ValidatorsLuck,
   ValidatorsPerformance,
 } from "../typings/UsedDataTypes";
+import { generateUUID } from "./utils";
 
 const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
   if (validators.length === 0) {
     return [];
   } else if (validators.length <= 100) {
     let dataCollection = [] as any[];
-    await fetch(
-      link.replace(
-        "{validators}",
-        validators.toString().replaceAll(",", "%2C")
-      ),
-      {
-        headers: {
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then(({ data }) => (dataCollection = data));
+    try {
+      await fetch(
+        link.replace(
+          "{validators}",
+          validators.toString().replaceAll(",", "%2C")
+        ),
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then(({ data }) => (dataCollection = data));
+    } catch (error) {
+      console.log(error);
+    }
 
     return dataCollection;
   } else {
     let dataCollection = [] as any[];
     let i = 0;
     for (i; i < validators.length; i += 100) {
-      await fetch(
-        link.replace(
-          "{validators}",
-          validators
-            .slice(i, i + 100)
-            .toString()
-            .replaceAll(",", "%2C")
-        ),
-        {
-          headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            Pragma: "no-cache",
-            Expires: "0",
-          },
-        }
-      ).then((res) => res.json().then(({ data }) => dataCollection.push(data)));
+      try {
+        await fetch(
+          link.replace(
+            "{validators}",
+            validators
+              .slice(i, i + 100)
+              .toString()
+              .replaceAll(",", "%2C")
+          ),
+          {
+            headers: {
+              "Cache-Control": "no-cache, no-store, must-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          }
+        ).then((res) =>
+          res.json().then(({ data }) => dataCollection.push(data))
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (i - validators.length > 0) {
-      await fetch(
-        link.replace(
-          "{validators}",
-          validators
-            .slice(i - 100, validators.length)
-            .toString()
-            .replaceAll(",", "%2C")
-        ),
-        {
-          headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            Pragma: "no-cache",
-            Expires: "0",
-          },
-        }
-      ).then((res) => res.json().then(({ data }) => dataCollection.push(data)));
+      try {
+        await fetch(
+          link.replace(
+            "{validators}",
+            validators
+              .slice(i - 100, validators.length)
+              .toString()
+              .replaceAll(",", "%2C")
+          ),
+          {
+            headers: {
+              "Cache-Control": "no-cache, no-store, must-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          }
+        ).then((res) =>
+          res.json().then(({ data }) => dataCollection.push(data))
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     return dataCollection;
@@ -91,34 +108,38 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
     let offset = 0;
     while (!limitReached) {
       let elementsFound = 0;
-      await fetch(
-        `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200&offset=${offset}`,
-        {
-          headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            Pragma: "no-cache",
-            Expires: "0",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then(
-          ({
-            data,
-          }: {
-            data: { publickey: string; validatorindex: number }[];
-          }) => {
-            elementsFound = data.length;
-            for (let j = 0; j < data.length; j++) {
-              if (!validatorMap[data[j].publickey]) {
-                validatorMap[data[j].publickey] = true;
+      try {
+        await fetch(
+          `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${publicKeys[i].address}?limit=200&offset=${offset}`,
+          {
+            headers: {
+              "Cache-Control": "no-cache, no-store, must-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then(
+            ({
+              data,
+            }: {
+              data: { publickey: string; validatorindex: number }[];
+            }) => {
+              elementsFound = data.length;
+              for (let j = 0; j < data.length; j++) {
+                if (!validatorMap[data[j].publickey]) {
+                  validatorMap[data[j].publickey] = true;
 
-                // Add entry to array
-                validatorArray.push(data[j].publickey);
+                  // Add entry to array
+                  validatorArray.push(data[j].publickey);
+                }
               }
             }
-          }
-        );
+          );
+      } catch (error) {
+        console.log(error);
+      }
 
       if (elementsFound < 200) {
         limitReached = true;
@@ -145,13 +166,25 @@ export const fetchValidatorsData = async (validatorArray: string[]) => {
       for (let j = 0; j < dataCollection[i].length; j++) {
         const validatorData = dataCollection[i][j];
         if (validatorData.slashed) {
-          slashedValidators[validatorData.pubkey] = validatorData;
+          slashedValidators[validatorData.pubkey] = {
+            ...validatorData,
+            key: generateUUID(),
+          };
         } else if (validatorData.status === "active_online") {
-          activeValidators[validatorData.pubkey] = validatorData;
+          activeValidators[validatorData.pubkey] = {
+            ...validatorData,
+            key: generateUUID(),
+          };
         } else if (validatorData.status === "pending") {
-          pendingValidators[validatorData.pubkey] = validatorData;
+          pendingValidators[validatorData.pubkey] = {
+            ...validatorData,
+            key: generateUUID(),
+          };
         } else {
-          otherValidators[validatorData.pubkey] = validatorData;
+          otherValidators[validatorData.pubkey] = {
+            ...validatorData,
+            key: generateUUID(),
+          };
         }
       }
     }
@@ -217,20 +250,24 @@ export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
       }
     });
   } else {
-    await fetch(
-      `${consensys_explorer}/api/v1/validators/proposalLuck?validators=${pubkeys
-        .toString()
-        .replaceAll(",", "%2C")}`,
-      {
-        headers: {
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then(({ data }: { data: ValidatorsLuck }) => (validatorsLuck = data));
+    try {
+      await fetch(
+        `${consensys_explorer}/api/v1/validators/proposalLuck?validators=${pubkeys
+          .toString()
+          .replaceAll(",", "%2C")}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then(({ data }: { data: ValidatorsLuck }) => (validatorsLuck = data));
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return validatorsLuck;

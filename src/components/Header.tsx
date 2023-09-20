@@ -93,18 +93,18 @@ export const Header = ({
           </button>
         </div>
       </div>
-      <div className="flex justify-end pr-16 space-x-4">
-        <button
-          className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
-          onClick={() => toggleDropdown()}
-        >
-          Menu
-        </button>
+      <div className="flex justify-between pl-16 pr-16 space-x-4">
         <button
           className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
           onClick={() => refreshHandler()}
         >
           Refresh Data
+        </button>
+        <button
+          className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
+          onClick={() => toggleDropdown()}
+        >
+          Menu
         </button>
       </div>
     </nav>
