@@ -243,8 +243,19 @@ export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
       pubkeys
     )) as ValidatorsLuck[];
 
-    dataCollection.forEach((elem) => {
+    dataCollection.forEach((elem, index) => {
       if (elem.proposal_luck) {
+        if (index === 0) {
+          validatorsLuck.proposal_luck = elem.proposal_luck;
+        } else if (index === dataCollection.length - 1) {
+          validatorsLuck.proposal_luck =
+            (100 * index * validatorsLuck.proposal_luck +
+              (pubkeys.length % 100) * elem.proposal_luck) /
+            100;
+        } else {
+          validatorsLuck.proposal_luck =
+            index * validatorsLuck.proposal_luck + elem.proposal_luck;
+        }
         validatorsLuck.proposal_luck += elem.proposal_luck;
         validatorsLuck.proposal_luck = validatorsLuck.proposal_luck / 2;
       }
