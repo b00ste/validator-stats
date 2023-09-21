@@ -25,11 +25,13 @@ export const ValidatorStatsPage = ({
   const {
     activeValidators,
     pendingValidators,
+    offlineValidators,
     slashedValidators,
     otherValidators,
   } = validatorsMaps;
   const [activeBalance, setActiveBalance] = useState(0);
   const [pendingBalance, setPendingBalance] = useState(0);
+  const [offlineBalance, setOfflineBalance] = useState(0);
   const [slashedBalance, setSlashedBalance] = useState(0);
   const [otherBalance, setOtherBalance] = useState(0);
 
@@ -46,6 +48,12 @@ export const ValidatorStatsPage = ({
     }
     setPendingBalance(newPendingBalance);
 
+    let newOfflineBalance = 0;
+    for (const offlineValidator in offlineValidators) {
+      newOfflineBalance += offlineValidators[offlineValidator].balance;
+    }
+    setOfflineBalance(newOfflineBalance);
+
     let newSlashedBalance = 0;
     for (const slashedValidator in slashedValidators) {
       newSlashedBalance += slashedValidators[slashedValidator].balance;
@@ -57,7 +65,13 @@ export const ValidatorStatsPage = ({
       newOtherBalance += otherValidators[otherValidator].balance;
     }
     setOtherBalance(newOtherBalance);
-  }, [activeValidators, pendingValidators, slashedValidators, otherValidators]);
+  }, [
+    activeValidators,
+    pendingValidators,
+    offlineValidators,
+    slashedValidators,
+    otherValidators,
+  ]);
 
   /// ------ Styling Handling ------
   const [opacity, setOpacity] = useState("opacity-0");
@@ -87,6 +101,7 @@ export const ValidatorStatsPage = ({
         validatorsBalances={{
           activeBalance,
           pendingBalance,
+          offlineBalance,
           slashedBalance,
           otherBalance,
         }}

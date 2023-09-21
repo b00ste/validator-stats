@@ -7,6 +7,7 @@ export const Balance = ({
   validatorsBalances: {
     activeBalance,
     pendingBalance,
+    offlineBalance,
     slashedBalance,
     otherBalance,
   },
@@ -25,6 +26,16 @@ export const Balance = ({
           Pending:
           <span className="text-pastel-orange">{` ${(
             pendingBalance / 1e9
+          ).toLocaleString()} LYX`}</span>
+        </p>
+      ) : (
+        <></>
+      )}
+      {offlineBalance > 0 ? (
+        <p className="text-gray-600 font-bold">
+          Offline:
+          <span className="text-pastel-red">{` ${(
+            offlineBalance / 1e9
           ).toLocaleString()} LYX`}</span>
         </p>
       ) : (

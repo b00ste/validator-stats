@@ -16,6 +16,7 @@ export const ValidatorsPage = ({
   validatorsMaps: {
     activeValidators,
     pendingValidators,
+    offlineValidators,
     slashedValidators,
     otherValidators,
   },
@@ -158,6 +159,12 @@ export const ValidatorsPage = ({
           </button>
           <button
             className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink m-2"
+            onClick={() => setSelectedValidators("offline")}
+          >
+            Offline
+          </button>
+          <button
+            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink m-2"
             onClick={() => setSelectedValidators("slashed")}
           >
             Slashed
@@ -199,6 +206,12 @@ export const ValidatorsPage = ({
                   case "pending": {
                     if (pendingValidators[validator]) {
                       return getValidatorRow(pendingValidators, validator);
+                    }
+                    break;
+                  }
+                  case "offline": {
+                    if (offlineValidators[validator]) {
+                      return getValidatorRow(offlineValidators, validator);
                     }
                     break;
                   }

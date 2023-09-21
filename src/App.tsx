@@ -58,6 +58,9 @@ function App() {
   const [pendingValidators, setPendingValidators] = useState(
     undefined as ValidatorMap | undefined
   );
+  const [offlineValidators, setOfflineValidators] = useState(
+    undefined as ValidatorMap | undefined
+  );
   const [slashedValidators, setSlashedValidators] = useState(
     undefined as ValidatorMap | undefined
   );
@@ -116,6 +119,7 @@ function App() {
     fetchedData.then((data) => {
       setActiveValidators(data.activeValidators);
       setPendingValidators(data.pendingValidators);
+      setOfflineValidators(data.offlineValidators);
       setSlashedValidators(data.slashedValidators);
       setOtherValidators(data.otherValidators);
     });
@@ -282,6 +286,7 @@ function App() {
   const validatorsMaps = {
     activeValidators: activeValidators ? activeValidators : {},
     pendingValidators: pendingValidators ? pendingValidators : {},
+    offlineValidators: offlineValidators ? offlineValidators : {},
     slashedValidators: slashedValidators ? slashedValidators : {},
     otherValidators: otherValidators ? otherValidators : {},
   };

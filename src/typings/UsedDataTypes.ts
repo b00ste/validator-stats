@@ -28,6 +28,7 @@ export type AttestationPerformance = {
 export type ValidatorsMaps = {
   activeValidators: ValidatorMap;
   pendingValidators: ValidatorMap;
+  offlineValidators: ValidatorMap;
   slashedValidators: ValidatorMap;
   otherValidators: ValidatorMap;
 };
@@ -41,6 +42,7 @@ export type ValidatorsData = {
 export type ValidatorsBalances = {
   activeBalance: number;
   pendingBalance: number;
+  offlineBalance: number;
   slashedBalance: number;
   otherBalance: number;
 };

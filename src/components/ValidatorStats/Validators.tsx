@@ -5,6 +5,7 @@ export const Validators = ({
   validatorsMaps: {
     activeValidators,
     pendingValidators,
+    offlineValidators,
     slashedValidators,
     otherValidators,
   },
@@ -23,6 +24,16 @@ export const Validators = ({
           Pending:
           <span className="text-pastel-orange">{` ${
             Object.getOwnPropertyNames(pendingValidators).length
+          }`}</span>
+        </p>
+      ) : (
+        <></>
+      )}
+      {Object.getOwnPropertyNames(offlineValidators).length > 0 ? (
+        <p className="text-gray-600 font-bold">
+          Pending:
+          <span className="text-pastel-orange">{` ${
+            Object.getOwnPropertyNames(offlineValidators).length
           }`}</span>
         </p>
       ) : (
