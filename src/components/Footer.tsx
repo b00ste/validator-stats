@@ -1,10 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-export const Footer = ({
-  pageChangeHandler,
-}: {
-  pageChangeHandler: Function;
-}) => {
+const Footer = ({ pageChangeHandler }: { pageChangeHandler: Function }) => {
   const navigate = useNavigate();
 
   return (
@@ -50,3 +46,5 @@ export const Footer = ({
     </footer>
   );
 };
+
+export default Footer;

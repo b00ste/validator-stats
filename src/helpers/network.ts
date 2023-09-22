@@ -2,8 +2,8 @@
 import { consensys_explorer } from "./constants";
 
 //types
-import { PublicKey } from "../typings/UsedDataTypes";
-import { Epoch } from "../typings/FetchedDataTypes";
+import { PublicKey } from "../Types/UsedDataTypes";
+import { Epoch } from "../Types/FetchedDataTypes";
 
 export const getLastEpoch = async () => {
   let lastEpoch = {} as Epoch;

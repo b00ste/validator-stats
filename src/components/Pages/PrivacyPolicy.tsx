@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const PrivacyPolicy = ({
-  mountPrivacyPage,
-}: {
-  mountPrivacyPage: boolean;
-}) => {
+const PrivacyPolicy = ({ mountPrivacyPage }: { mountPrivacyPage: boolean }) => {
   const [opacity, setOpacity] = useState("opacity-0");
   // Run on mount
   useEffect(() => {
@@ -86,3 +82,5 @@ export const PrivacyPolicy = ({
     </div>
   );
 };
+
+export default PrivacyPolicy;

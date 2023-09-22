@@ -16,8 +16,8 @@ export type LandingPageParams = {
   pageChangeHandler: Function;
 };
 
-export type StatsPageParams = {
-  mountStatsPage: boolean;
+export type ValidatorStatsPageParams = {
+  mountValidatorStatsPage: boolean;
   bodyClasses: string;
   stakedLYX: number;
   tokenPrice: TokenPrice;

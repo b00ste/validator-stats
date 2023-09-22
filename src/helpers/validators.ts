@@ -8,13 +8,13 @@ import {
   Attestation,
   ConsensusPerformance,
   ExecutionPerformance,
-} from "../typings/FetchedDataTypes";
+} from "../Types/FetchedDataTypes";
 import {
   PublicKey,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
-} from "../typings/UsedDataTypes";
+} from "../Types/UsedDataTypes";
 import { generateUUID } from "./utils";
 
 const fetchValidatorDataByLink = async (link: string, validators: string[]) => {

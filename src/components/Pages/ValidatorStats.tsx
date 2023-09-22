@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 
 // Stats Tiles
-import { Earnings } from "../ValidatorStats/Earnings";
-import { TimeframePercentageRate } from "../ValidatorStats/TimeframePercentageRate";
-import { Attestations } from "../ValidatorStats/Attestations";
-import { Luck } from "../ValidatorStats/Luck";
-import { Validators } from "../ValidatorStats/Validators";
-import { Balance } from "../ValidatorStats/Balance";
-import { TotalWithdrawals } from "../ValidatorStats/TotalWithdrawals";
-import { WithdrawalBalance } from "../ValidatorStats/WithdrawalBalance";
-import { WithdrawableAmount } from "../ValidatorStats/WithdrawableAmount";
+import { Earnings } from "../ValidatorStatsComponents/Earnings";
+import { TimeframePercentageRate } from "../ValidatorStatsComponents/TimeframePercentageRate";
+import { Attestations } from "../ValidatorStatsComponents/Attestations";
+import { Luck } from "../ValidatorStatsComponents/Luck";
+import { Validators } from "../ValidatorStatsComponents/Validators";
+import { Balance } from "../ValidatorStatsComponents/Balance";
+import { TotalWithdrawals } from "../ValidatorStatsComponents/TotalWithdrawals";
+import { WithdrawalBalance } from "../ValidatorStatsComponents/WithdrawalBalance";
+import { WithdrawableAmount } from "../ValidatorStatsComponents/WithdrawableAmount";
 
 // ts types
-import { StatsPageParams } from "../../typings/ComponentParamsTypes";
+import { ValidatorStatsPageParams } from "../../Types/ComponentParamsTypes";
 
-export const ValidatorStatsPage = ({
-  mountStatsPage,
+const ValidatorStats = ({
+  mountValidatorStatsPage,
   bodyClasses,
   stakedLYX,
   tokenPrice,
   validatorsData: { validatorsMaps, validatorsLuck, validatorsPerformance },
   withdrawalAddressesBalance,
-}: StatsPageParams) => {
+}: ValidatorStatsPageParams) => {
   const {
     activeValidators,
     pendingValidators,
@@ -81,10 +81,10 @@ export const ValidatorStatsPage = ({
   }, []);
   // Run on un-mount
   useEffect(() => {
-    if (!mountStatsPage) {
+    if (!mountValidatorStatsPage) {
       setOpacity("opacity-0");
     }
-  }, [mountStatsPage]);
+  }, [mountValidatorStatsPage]);
 
   const tileClasses =
     "bg-pastel-light-pink p-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
@@ -190,3 +190,5 @@ export const ValidatorStatsPage = ({
     </div>
   );
 };
+
+export default ValidatorStats;

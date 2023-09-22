@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const TermsAndConditions = ({
+const TermsAndConditions = ({
   mountTermsPage,
 }: {
   mountTermsPage: boolean;
@@ -88,3 +88,5 @@ export const TermsAndConditions = ({
     </div>
   );
 };
+
+export default TermsAndConditions;

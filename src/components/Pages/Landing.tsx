@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { LandingPageParams } from "../../typings/ComponentParamsTypes";
+import { LandingPageParams } from "../../Types/ComponentParamsTypes";
 
-export const LandingPage = ({ pageChangeHandler }: LandingPageParams) => {
+const Landing = ({ pageChangeHandler }: LandingPageParams) => {
   const navigate = useNavigate();
 
   const supportProjectAddress = "0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1";
@@ -103,3 +103,5 @@ export const LandingPage = ({ pageChangeHandler }: LandingPageParams) => {
     </div>
   );
 };
+
+export default Landing;

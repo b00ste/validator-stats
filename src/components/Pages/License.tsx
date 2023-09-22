@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const License = ({
-  mountLicensePage,
-}: {
-  mountLicensePage: boolean;
-}) => {
+const License = ({ mountLicensePage }: { mountLicensePage: boolean }) => {
   const [opacity, setOpacity] = useState("opacity-0");
   // Run on mount
   useEffect(() => {
@@ -56,3 +52,5 @@ export const License = ({
     </div>
   );
 };
+
+export default License;

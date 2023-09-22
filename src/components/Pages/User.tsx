@@ -1,8 +1,8 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { consensys_explorer } from "../../helpers/constants";
-import { UserPageParams } from "../../typings/ComponentParamsTypes";
+import { consensys_explorer } from "../../Helpers/constants";
+import { UserPageParams } from "../../Types/ComponentParamsTypes";
 
-export const UserPage = ({
+const User = ({
   mountUserPage,
   bodyClasses,
   publicKeys,
@@ -212,3 +212,5 @@ export const UserPage = ({
     </div>
   );
 };
+
+export default User;

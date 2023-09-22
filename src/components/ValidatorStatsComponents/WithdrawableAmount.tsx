@@ -1,4 +1,4 @@
-import { WithdrawableAmountParams } from "../../typings/ComponentParamsTypes";
+import { WithdrawableAmountParams } from "../../Types/ComponentParamsTypes";
 import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const WithdrawableAmount = ({

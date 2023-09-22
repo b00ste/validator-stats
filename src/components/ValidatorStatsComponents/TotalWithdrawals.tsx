@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // types
-import { WithdrawalsParams } from "../../typings/ComponentParamsTypes";
+import { WithdrawalsParams } from "../../Types/ComponentParamsTypes";
 import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const TotalWithdrawals = ({

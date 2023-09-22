@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
-import { LandingPage } from "./components/Pages/LandingPage";
-import { ValidatorStatsPage } from "./components/Pages/ValidatorStatsPage";
-import { UserPage } from "./components/Pages/UserPage";
-import { ValidatorsPage } from "./components/Pages/ValidatosPage";
-import { TermsAndConditions } from "./components/Pages/TermsAndConditions";
-import { PrivacyPolicy } from "./components/Pages/PrivacyPolicy";
-import { License } from "./components/Pages/License";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Landing from "./components/Pages/Landing";
+import ValidatorStats from "./components/Pages/ValidatorStats";
+import User from "./components/Pages/User";
+import Validators from "./components/Pages/Validatos";
+import TermsAndConditions from "./components/Pages/TermsAndConditions";
+import PrivacyPolicy from "./components/Pages/PrivacyPolicy";
+import License from "./components/Pages/License";
 
 // helpers
 import {
@@ -18,12 +18,12 @@ import {
   fetchValidatorsData,
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
-} from "./helpers/validators";
+} from "./Helpers/validators";
 import {
   getLYXPrice,
   getLastEpoch,
   getWithdrawalAddressesBalance,
-} from "./helpers/network";
+} from "./Helpers/network";
 
 // ts types
 import {
@@ -31,7 +31,7 @@ import {
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
-} from "./typings/UsedDataTypes";
+} from "./Types/UsedDataTypes";
 
 function App() {
   /// ------ Deposior/Withdrawal Addresses ------
@@ -207,17 +207,25 @@ function App() {
   /// Update validators luck & performance if `activeValidators` changes
   useEffect(() => {
     if (
+      !validatorsLuck &&
+      !validatorsPerformance &&
       activeValidators &&
       Object.getOwnPropertyNames(activeValidators).length > 0
     ) {
       updateVaildatorsLuck();
       updateVaildatorsPerformance();
     }
-  }, [activeValidators, updateVaildatorsLuck, updateVaildatorsPerformance]);
+  }, [
+    validatorsLuck,
+    validatorsPerformance,
+    activeValidators,
+    updateVaildatorsLuck,
+    updateVaildatorsPerformance,
+  ]);
 
   /// Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
-    if (!stakedLYX && !currentEpoch && !networkValidators) {
+    if (!stakedLYX || !currentEpoch || !networkValidators) {
       updateNetworkData();
     }
   }, [stakedLYX, currentEpoch, networkValidators, updateNetworkData]);
@@ -240,14 +248,14 @@ function App() {
   /// --------------------------
 
   /// ------ Page Change Handler ------
-  const [mountStatsPage, setMountStatsPage] = useState(
-    window.location.pathname === "/statistics"
+  const [mountValidatorStatsPage, setMountValidatorStatsPage] = useState(
+    window.location.pathname === "/validatorStatistics"
   );
   const [mountUserPage, setMountUserPage] = useState(
     window.location.pathname === "/user"
   );
   const [mountValidatorsPage, setMountValidatorsPage] = useState(
-    window.location.pathname === "/validators"
+    window.location.pathname === "/validatorList"
   );
   const [mountTermsPage, setMountTermsPage] = useState(
     window.location.pathname === "/terms"
@@ -260,9 +268,9 @@ function App() {
   );
   const pageChangeHandler = (navigate: Function, navigateParam: string) => {
     // Update the page mount status
-    setMountStatsPage(navigateParam === "/statistics");
+    setMountValidatorStatsPage(navigateParam === "/validatorStatistics");
     setMountUserPage(navigateParam === "/user");
-    setMountValidatorsPage(navigateParam === "/validators");
+    setMountValidatorsPage(navigateParam === "/validatorList");
     setMountTermsPage(navigateParam === "/terms");
     setMountPrivacyPage(navigateParam === "/privacy");
     setMountLicensePage(navigateParam === "/license");
@@ -319,20 +327,20 @@ function App() {
   return (
     <div
       className={`min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-12 transition-all ${
-        isDropdownOpen ? "pt-64 sm:pt-52" : "pt-44 delay-75 duration-200"
+        isDropdownOpen ? "pt-60" : "pt-44 delay-75 duration-200"
       }`}
     >
       <Router>
         <Routes>
           <Route
             path="/"
-            element={<LandingPage pageChangeHandler={pageChangeHandler} />}
+            element={<Landing pageChangeHandler={pageChangeHandler} />}
           />
           <Route
-            path="/statistics"
+            path="/validatorStatistics"
             element={
-              <ValidatorStatsPage
-                mountStatsPage={mountStatsPage}
+              <ValidatorStats
+                mountValidatorStatsPage={mountValidatorStatsPage}
                 bodyClasses={bodyClasses}
                 stakedLYX={stakedLYX ? stakedLYX : 0}
                 tokenPrice={tokenPrice}
@@ -346,7 +354,7 @@ function App() {
           <Route
             path="/user"
             element={
-              <UserPage
+              <User
                 mountUserPage={mountUserPage}
                 bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
@@ -356,9 +364,9 @@ function App() {
             }
           />
           <Route
-            path="/validators"
+            path="/validatorList"
             element={
-              <ValidatorsPage
+              <Validators
                 mountValidatorsPage={mountValidatorsPage}
                 bodyClasses={bodyClasses}
                 publicKeys={publicKeys}

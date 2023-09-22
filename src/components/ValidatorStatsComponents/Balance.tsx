@@ -1,4 +1,4 @@
-import { BalanceParams } from "../../typings/ComponentParamsTypes";
+import { BalanceParams } from "../../Types/ComponentParamsTypes";
 import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const Balance = ({

@@ -1,8 +1,8 @@
 // helpers
-import { getTimeframePercentageYieldUnformated } from "../../helpers/calculateStakingRewards";
+import { getTimeframePercentageYieldUnformated } from "../../Helpers/calculateStakingRewards";
 
 // ts types
-import { EarningsParams } from "../../typings/ComponentParamsTypes";
+import { EarningsParams } from "../../Types/ComponentParamsTypes";
 import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const Earnings = ({

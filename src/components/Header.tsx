@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
 // types
-import { HeaderParams } from "../typings/ComponentParamsTypes";
+import { HeaderParams } from "../Types/ComponentParamsTypes";
 
-export const Header = ({
+const Header = ({
   networkData: { stakedLYX, currentEpoch, networkValidators },
   tokenPrice: { eurPrice, usdPrice },
   isDropdownOpen,
@@ -16,16 +16,13 @@ export const Header = ({
   const tileClasses =
     "mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis";
 
-  const buttonClasses =
-    "bg-strong-pink text-white px-3 py-1.5 m-1 rounded-lg hover:bg-dark-pink";
+  const buttonClasses = "text-strong-pink m-1 hover:text-dark-pink col-span-1";
 
   return (
     <nav className="absolute top-0 left-4 right-4">
       <div
         className={`bg-pastel-white-pink p-4 rounded-b-3xl shadow transition-all ${
-          isDropdownOpen
-            ? "h-56 sm:h-44 duration-150"
-            : "h-32 delay-75 duration-150"
+          isDropdownOpen ? "h-48 duration-150" : "h-32 delay-75 duration-150"
         }`}
       >
         <div className="container mx-auto grid grid-cols-3">
@@ -61,36 +58,42 @@ export const Header = ({
           </div>
         </div>
         <div
-          className={`container mx-auto grid grid-cols-2 sm:grid-cols-4 transition-all ${
+          className={`container grid grid-cols-1 transition-all ${
             isDropdownOpen
               ? " opacity-100 delay-75 duration-150"
               : "opacity-0 pointer-events-none duration-200"
           }`}
         >
-          <button
-            className={buttonClasses}
-            onClick={() => pageChangeHandler(navigate, "/")}
-          >
-            Home
-          </button>
-          <button
-            className={buttonClasses}
-            onClick={() => pageChangeHandler(navigate, "/statistics")}
-          >
-            Statistics
-          </button>
-          <button
-            className={buttonClasses}
-            onClick={() => pageChangeHandler(navigate, "/validators")}
-          >
-            Validators
-          </button>
-          <button
-            className={buttonClasses}
-            onClick={() => pageChangeHandler(navigate, "/user")}
-          >
-            User
-          </button>
+          <div className="grid grid-cols-2 w-full mx-auto">
+            <button
+              className={buttonClasses}
+              onClick={() => pageChangeHandler(navigate, "/")}
+            >
+              Home
+            </button>
+            <button
+              className={buttonClasses}
+              onClick={() => pageChangeHandler(navigate, "/user")}
+            >
+              User
+            </button>
+          </div>
+          <div className="grid grid-cols-2 w-full mx-auto">
+            <button
+              className={buttonClasses}
+              onClick={() =>
+                pageChangeHandler(navigate, "/validatorStatistics")
+              }
+            >
+              Validator Stats
+            </button>
+            <button
+              className={buttonClasses}
+              onClick={() => pageChangeHandler(navigate, "/validatorList")}
+            >
+              Validators
+            </button>
+          </div>
         </div>
       </div>
       <div className="flex justify-between pl-16 pr-16 space-x-4">
@@ -110,3 +113,5 @@ export const Header = ({
     </nav>
   );
 };
+
+export default Header;

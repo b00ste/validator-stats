@@ -1,4 +1,4 @@
-import { WithdrawalBalanceParams } from "../../typings/ComponentParamsTypes";
+import { WithdrawalBalanceParams } from "../../Types/ComponentParamsTypes";
 import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const WithdrawalBalance = ({

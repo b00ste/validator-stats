@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
 // utils
-import { consensys_explorer } from "../../helpers/constants";
+import { consensys_explorer } from "../../Helpers/constants";
 
 // types
-import { ValidatorsPageParams } from "../../typings/ComponentParamsTypes";
-import { ValidatorMap } from "../../typings/UsedDataTypes";
-import { generateUUID } from "../../helpers/utils";
+import { ValidatorsPageParams } from "../../Types/ComponentParamsTypes";
+import { ValidatorMap } from "../../Types/UsedDataTypes";
+import { generateUUID } from "../../Helpers/utils";
 
-export const ValidatorsPage = ({
+export const Validators = ({
   mountValidatorsPage,
   bodyClasses,
   publicKeys,
@@ -239,3 +239,5 @@ export const ValidatorsPage = ({
     </div>
   );
 };
+
+export default Validators;

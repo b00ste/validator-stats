@@ -1,4 +1,4 @@
-import { DisplayTokenPriceParams } from "../typings/ComponentParamsTypes";
+import { DisplayTokenPriceParams } from "../Types/ComponentParamsTypes";
 
 export const DisplayTokenPrice = ({
   tokenPrice: { eurPrice, usdPrice },
