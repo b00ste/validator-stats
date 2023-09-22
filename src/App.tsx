@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // components
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Landing from "./components/Pages/Landing";
-import ValidatorStats from "./components/Pages/ValidatorStats";
-import User from "./components/Pages/User";
-import Validators from "./components/Pages/Validatos";
-import TermsAndConditions from "./components/Pages/TermsAndConditions";
-import PrivacyPolicy from "./components/Pages/PrivacyPolicy";
-import License from "./components/Pages/License";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
+import Landing from "./Components/Pages/Landing";
+import ValidatorStats from "./Components/Pages/ValidatorStats";
+import User from "./Components/Pages/User";
+import Validators from "./Components/Pages/Validatos";
+import TermsAndConditions from "./Components/Pages/TermsAndConditions";
+import PrivacyPolicy from "./Components/Pages/PrivacyPolicy";
+import License from "./Components/Pages/License";
 
 // helpers
 import {
@@ -32,6 +32,7 @@ import {
   ValidatorsLuck,
   ValidatorsPerformance,
 } from "./Types/UsedDataTypes";
+import PageNotFound from "./Components/Pages/PageNotFound";
 
 function App() {
   /// ------ Deposior/Withdrawal Addresses ------
@@ -390,6 +391,7 @@ function App() {
             path="/license"
             element={<License mountLicensePage={mountLicensePage} />}
           />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
         <Header
           networkData={networkData}
