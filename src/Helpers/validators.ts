@@ -101,7 +101,7 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
 };
 
 export const fetchValidators = async (publicKeys: PublicKey[]) => {
-  const validatorArray: string[] = [];
+  const validators: Record<string, string[]> = {};
   const validatorMap: Record<string, boolean> = {};
   for (let i = 0; i < publicKeys.length; i++) {
     let limitReached = false;
@@ -132,7 +132,12 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
                   validatorMap[data[j].publickey] = true;
 
                   // Add entry to array
-                  validatorArray.push(data[j].publickey);
+                  if (validators[publicKeys[i].address]) {
+                    validators[publicKeys[i].address].push(data[j].publickey);
+                  } else {
+                    validators[publicKeys[i].address] = [];
+                    validators[publicKeys[i].address].push(data[j].publickey);
+                  }
                 }
               }
             }
@@ -148,10 +153,17 @@ export const fetchValidators = async (publicKeys: PublicKey[]) => {
       }
     }
   }
-  return validatorArray ? validatorArray : [];
+  return validators ? validators : {};
 };
 
-export const fetchValidatorsData = async (validatorArray: string[]) => {
+export const fetchValidatorsData = async (
+  validators: Record<string, string[]>
+) => {
+  const validatorArray = [] as string[];
+  for (const pubKey in validators) {
+    validatorArray.push(...validators[pubKey]);
+  }
+
   if (validatorArray.length > 100) {
     const dataCollection: Validator[][] = await fetchValidatorDataByLink(
       `${consensys_explorer}/api/v1/validator/{validators}`,

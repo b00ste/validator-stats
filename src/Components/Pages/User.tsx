@@ -7,7 +7,8 @@ const User = ({
   bodyClasses,
   publicKeys,
   setPublicKeys,
-  setValidatorArray,
+  validators,
+  setValidators,
 }: UserPageParams) => {
   const [error, setError] = useState("");
 
@@ -82,7 +83,7 @@ const User = ({
     setPublicKeys(() =>
       publicKeys.filter((publicKey) => publicKey.address !== addressToDelete)
     );
-    setValidatorArray([]);
+    setValidators({ ...validators, [addressToDelete]: [] });
   };
 
   /// ------ Styling Handling ------
@@ -97,6 +98,8 @@ const User = ({
       setOpacity("opacity-0");
     }
   }, [mountUserPage]);
+
+  const tableHeadStyle = "text-gray-700 px-4 py-1";
   /// ------------------------------
 
   return (
@@ -169,45 +172,76 @@ const User = ({
       {/* <!-- Tile 2: List of Saved Addresses --> */}
       <div className="bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
-        <ul className="space-y-4">
-          {publicKeys.map((publicKey) => (
-            <li
-              className="flex items-center justify-between"
-              key={publicKey.address}
-            >
-              <a
-                href={`${consensys_explorer}/address/${publicKey.address.substring(
-                  2
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="text-pastel-blue hover:underline"
-              >
-                {`${publicKey.address.substring(
-                  0,
-                  4
-                )}...${publicKey.address.substring(
-                  publicKey.address.length - 2,
-                  publicKey.address.length
-                )}`}
-              </a>
-              <span className="text-gray-700">{publicKey.name}</span>
-              <span className="text-gray-700">{publicKey.type}</span>
-              <button
-                className="text-pastel-green hover:text-green-500"
-                onClick={(event) => handleNameEdit(publicKey.address, event)}
-              >
-                Edit
-              </button>
-              <button
-                className="text-pastel-red hover:text-red-600"
-                onClick={() => handleAddressDelete(publicKey.address)}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="overflow-x-scroll">
+          <table className="table-auto break-words w-full text-center">
+            <thead>
+              <tr className="border-b-2 border-gray-300">
+                <th className={tableHeadStyle}>Address</th>
+                <th className={tableHeadStyle}>Name</th>
+                <th className={tableHeadStyle}>Type</th>
+                <th className={tableHeadStyle}>Consensus</th>
+                <th className={tableHeadStyle}>Edit</th>
+                <th className={tableHeadStyle}>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {publicKeys.map((publicKey) => (
+                <tr key={publicKey.address}>
+                  <td>
+                    <a
+                      href={`${consensys_explorer}/address/${publicKey.address.substring(
+                        2
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-pastel-blue hover:underline"
+                    >
+                      {`${publicKey.address.substring(
+                        0,
+                        4
+                      )}...${publicKey.address.substring(
+                        publicKey.address.length - 2,
+                        publicKey.address.length
+                      )}`}
+                    </a>
+                  </td>
+                  <td className="text-gray-700">{publicKey.name}</td>
+                  <td className="text-gray-700">{publicKey.type}</td>
+                  <td>
+                    <a
+                      href={`${consensys_explorer}/dashboard?validators=${validators[
+                        publicKey.address
+                      ].toString()}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-pastel-blue hover:underline"
+                    >
+                      Dashboard
+                    </a>
+                  </td>
+                  <td>
+                    <button
+                      className="text-pastel-green hover:text-green-500"
+                      onClick={(event) =>
+                        handleNameEdit(publicKey.address, event)
+                      }
+                    >
+                      Edit
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="text-pastel-red hover:text-red-600"
+                      onClick={() => handleAddressDelete(publicKey.address)}
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

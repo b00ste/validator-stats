@@ -12,7 +12,7 @@ export const Validators = ({
   mountValidatorsPage,
   bodyClasses,
   publicKeys,
-  validatorArray,
+  validators,
   validatorsMaps: {
     activeValidators,
     pendingValidators,
@@ -195,43 +195,45 @@ export const Validators = ({
               </tr>
             </thead>
             <tbody>
-              {validatorArray.map((validator) => {
-                switch (selectedValidators) {
-                  case "active": {
-                    if (activeValidators[validator]) {
-                      return getValidatorRow(activeValidators, validator);
+              {Object.getOwnPropertyNames(validators).map((pubKey) =>
+                validators[pubKey].map((validator) => {
+                  switch (selectedValidators) {
+                    case "active": {
+                      if (activeValidators[validator]) {
+                        return getValidatorRow(activeValidators, validator);
+                      }
+                      break;
                     }
-                    break;
-                  }
-                  case "pending": {
-                    if (pendingValidators[validator]) {
-                      return getValidatorRow(pendingValidators, validator);
+                    case "pending": {
+                      if (pendingValidators[validator]) {
+                        return getValidatorRow(pendingValidators, validator);
+                      }
+                      break;
                     }
-                    break;
-                  }
-                  case "offline": {
-                    if (offlineValidators[validator]) {
-                      return getValidatorRow(offlineValidators, validator);
+                    case "offline": {
+                      if (offlineValidators[validator]) {
+                        return getValidatorRow(offlineValidators, validator);
+                      }
+                      break;
                     }
-                    break;
-                  }
-                  case "slashed": {
-                    if (slashedValidators[validator]) {
-                      return getValidatorRow(slashedValidators, validator);
+                    case "slashed": {
+                      if (slashedValidators[validator]) {
+                        return getValidatorRow(slashedValidators, validator);
+                      }
+                      break;
                     }
-                    break;
-                  }
-                  case "other": {
-                    if (otherValidators[validator]) {
-                      return getValidatorRow(otherValidators, validator);
+                    case "other": {
+                      if (otherValidators[validator]) {
+                        return getValidatorRow(otherValidators, validator);
+                      }
+                      break;
                     }
-                    break;
+                    default:
+                      return <></>;
                   }
-                  default:
-                    return <></>;
-                }
-                return <></>;
-              })}
+                  return <></>;
+                })
+              )}
             </tbody>
           </table>
         </div>

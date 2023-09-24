@@ -7,7 +7,7 @@ import Footer from "./Components/Footer";
 import Landing from "./Components/Pages/Landing";
 import ValidatorStats from "./Components/Pages/ValidatorStats";
 import User from "./Components/Pages/User";
-import Validators from "./Components/Pages/Validatos";
+import Validators from "./Components/Pages/Validators";
 import TermsAndConditions from "./Components/Pages/TermsAndConditions";
 import PrivacyPolicy from "./Components/Pages/PrivacyPolicy";
 import License from "./Components/Pages/License";
@@ -46,9 +46,12 @@ function App() {
   /// -------------------------------------------
 
   /// ------ Validators Pubkeys ------
-  const storedValidatorArray = localStorage.getItem("validatorArray");
-  const [validatorArray, setValidatorArray] = useState(
-    (storedValidatorArray ? JSON.parse(storedValidatorArray) : []) as string[]
+  const storedValidators = localStorage.getItem("validators");
+  const [validators, setValidators] = useState(
+    (storedValidators ? JSON.parse(storedValidators) : {}) as Record<
+      string,
+      string[]
+    >
   );
   /// --------------------------------
 
@@ -102,7 +105,7 @@ function App() {
   const updateValidatorHandler = useCallback(() => {
     const validators = fetchValidators(publicKeys);
 
-    validators.then((data) => setValidatorArray(data));
+    validators.then((data) => setValidators(data));
   }, [publicKeys]);
 
   const updateWithdrawalAddressesBalanceHandler = useCallback(() => {
@@ -115,7 +118,7 @@ function App() {
   }, [publicKeys]);
 
   const updateValidatorsMaps = useCallback(() => {
-    const fetchedData = fetchValidatorsData(validatorArray);
+    const fetchedData = fetchValidatorsData(validators);
 
     fetchedData.then((data) => {
       setActiveValidators(data.activeValidators);
@@ -124,7 +127,7 @@ function App() {
       setSlashedValidators(data.slashedValidators);
       setOtherValidators(data.otherValidators);
     });
-  }, [validatorArray]);
+  }, [validators]);
 
   const updateVaildatorsLuck = useCallback(() => {
     if (activeValidators) {
@@ -183,8 +186,8 @@ function App() {
 
   /// Save validators to local storage
   useEffect(() => {
-    localStorage.setItem("validatorArray", JSON.stringify(validatorArray));
-  }, [validatorArray]);
+    localStorage.setItem("validators", JSON.stringify(validators));
+  }, [validators]);
 
   /// Update validators and withdrawal addresses balance if `publicKeys` changes
   useEffect(() => {
@@ -200,10 +203,10 @@ function App() {
 
   /// Update validators data (active/pending/slashed/other) if `validatorArray` changes
   useEffect(() => {
-    if (validatorArray.length > 0) {
+    if (Object.getOwnPropertyNames(validators).length > 0) {
       updateValidatorsMaps();
     }
-  }, [validatorArray, updateValidatorsMaps]);
+  }, [validators, updateValidatorsMaps]);
 
   /// Update validators luck & performance if `activeValidators` changes
   useEffect(() => {
@@ -360,7 +363,8 @@ function App() {
                 bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
                 setPublicKeys={setPublicKeys}
-                setValidatorArray={setValidatorArray}
+                validators={validators}
+                setValidators={setValidators}
               />
             }
           />
@@ -371,7 +375,7 @@ function App() {
                 mountValidatorsPage={mountValidatorsPage}
                 bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
-                validatorArray={validatorArray}
+                validators={validators}
                 validatorsMaps={validatorsMaps}
                 validatorsPerformance={
                   validatorsPerformance ? validatorsPerformance : {}

@@ -30,14 +30,15 @@ export type UserPageParams = {
   bodyClasses: string;
   publicKeys: PublicKey[];
   setPublicKeys: React.Dispatch<React.SetStateAction<PublicKey[]>>;
-  setValidatorArray: React.Dispatch<React.SetStateAction<string[]>>;
+  validators: Record<string, string[]>;
+  setValidators: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 };
 
 export type ValidatorsPageParams = {
   mountValidatorsPage: boolean;
   bodyClasses: string;
   publicKeys: PublicKey[];
-  validatorArray: string[];
+  validators: Record<string, string[]>;
   validatorsMaps: ValidatorsMaps;
   validatorsPerformance: ValidatorsPerformance;
 };
