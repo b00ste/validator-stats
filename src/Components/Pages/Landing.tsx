@@ -1,7 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import Notification from "../Notification";
+import { useState } from "react";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [addressCopiedOpacity, setAddressCopiedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
+
+  const handleAddressCopy = () => {
+    setAddressCopiedOpacity("opacity-100");
+    navigator.clipboard.writeText(supportProjectAddress);
+    setTimeout(
+      () => setAddressCopiedOpacity("opacity-0 pointer-events-none"),
+      1500
+    );
+  };
 
   const supportProjectAddress = "0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1";
 
@@ -75,7 +89,7 @@ const Landing = () => {
         </div>
       </section>
 
-      <section className="mt-4 bg-white rounded-lg shadow-lg p-6">
+      <section className="relative mt-4 bg-white rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-semibold mb-4">Support the author:</h2>
         <p className="text-lg mb-4">
           The react app is done for personal use, but its made available to be
@@ -85,14 +99,17 @@ const Landing = () => {
         <div className="text-center break-all grid flex-col grid-cols-1">
           <code
             className="cursor-pointer hover:text-gray-700"
-            onClick={() => {
-              navigator.clipboard.writeText(supportProjectAddress);
-            }}
+            onClick={() => handleAddressCopy()}
           >
             {supportProjectAddress}
           </code>
           <p className="text-xs">(Click on address to copy)</p>
           {/* <img src={qrCode} alt="Support project QR code" /> */}
+
+          <Notification
+            notificationDescription="Address copied!"
+            opacity={addressCopiedOpacity}
+          />
         </div>
       </section>
     </div>

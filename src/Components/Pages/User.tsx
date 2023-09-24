@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { consensys_explorer } from "../../Helpers/constants";
 import { UserPageParams } from "../../Types/ComponentParamsTypes";
+import Notification from "../Notification";
 
 const User = ({
   bodyClasses,
@@ -12,6 +13,15 @@ const User = ({
   setDefaultPage,
 }: UserPageParams) => {
   const [error, setError] = useState("");
+  const [defaultPageChangedOpacity, setDefaultPageChangedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
+  const [addressAddedOpacity, setAddressAddedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
+  const [addressRemovedOpacity, setAddressRemovedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
 
   useEffect(() => {
     localStorage.setItem("publicKeys", JSON.stringify(publicKeys));
@@ -45,6 +55,15 @@ const User = ({
       return;
     }
 
+    if (
+      publicKeys.map((elem) => elem.address).includes(addressRef.current.value)
+    ) {
+      setError("Addres already exists");
+      return;
+    }
+
+    setAddressAddedOpacity("opacity-100");
+
     setPublicKeys([
       ...publicKeys,
       {
@@ -58,6 +77,11 @@ const User = ({
     typeRef.current.value = "";
     nameRef.current.value = "";
     setError("");
+
+    setTimeout(
+      () => setAddressAddedOpacity("opacity-0 pointer-events-none"),
+      1500
+    );
   };
 
   const handleNameEdit = (addressToEdit: string, event: FormEvent) => {
@@ -81,10 +105,16 @@ const User = ({
   };
 
   const handleAddressDelete = (addressToDelete: string) => {
+    setAddressRemovedOpacity("opacity-100");
     setPublicKeys(() =>
       publicKeys.filter((publicKey) => publicKey.address !== addressToDelete)
     );
     setValidators({ ...validators, [addressToDelete]: [] });
+
+    setTimeout(
+      () => setAddressRemovedOpacity("opacity-0 pointer-events-none"),
+      1500
+    );
   };
 
   const handleDefaultPageChange = (
@@ -95,8 +125,14 @@ const User = ({
 
   const handleDefaultPageSelect = (event: React.MouseEvent) => {
     event.preventDefault();
+    setDefaultPageChangedOpacity("opacity-100");
 
     localStorage.setItem("defaultPage", defaultPage);
+
+    setTimeout(
+      () => setDefaultPageChangedOpacity("opacity-0 pointer-events-none"),
+      1500
+    );
   };
 
   /// ------ Styling Handling ------
@@ -106,7 +142,7 @@ const User = ({
   return (
     <div className={`${bodyClasses} sm:grid-cols-3 lg:grid-cols-4`}>
       {/* <!-- Tile 1: Add Address Form --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
@@ -168,10 +204,14 @@ const User = ({
           </button>
         </form>
         {error ? <p className="text-pastel-red font-bold">{error}</p> : ""}
+        <Notification
+          notificationDescription="New address added!"
+          opacity={addressAddedOpacity}
+        />
       </div>
 
       {/* <!-- Tile 2: List of Saved Addresses --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
+      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <div className="overflow-x-scroll">
           <table className="table-auto break-words w-full text-center">
@@ -210,9 +250,11 @@ const User = ({
                   <td className="px-4 py-1 text-gray-700">{publicKey.type}</td>
                   <td className="px-4 py-1">
                     <a
-                      href={`${consensys_explorer}/dashboard?validators=${validators[
-                        publicKey.address
-                      ].toString()}`}
+                      href={`${consensys_explorer}/dashboard?validators=${
+                        validators[publicKey.address]
+                          ? validators[publicKey.address].toString()
+                          : ""
+                      }`}
                       target="_blank"
                       rel="noreferrer"
                       className="text-pastel-blue hover:underline"
@@ -243,10 +285,14 @@ const User = ({
             </tbody>
           </table>
         </div>
+        <Notification
+          notificationDescription="Address removed!"
+          opacity={addressRemovedOpacity}
+        />
       </div>
 
       {/* <!-- Tile 3: Set default starting page --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow col-span-1">
+      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1">
         <h2 className="text-pastel-blue text-2xl mb-4">
           Default starting page
         </h2>
@@ -302,6 +348,10 @@ const User = ({
             >
               Select
             </button>
+            <Notification
+              notificationDescription="Default page updated!"
+              opacity={defaultPageChangedOpacity}
+            />
           </div>
         </form>
       </div>
