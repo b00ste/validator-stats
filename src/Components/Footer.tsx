@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const Footer = ({ pageChangeHandler }: { pageChangeHandler: Function }) => {
+const Footer = () => {
   const navigate = useNavigate();
 
   return (
@@ -19,7 +19,7 @@ const Footer = ({ pageChangeHandler }: { pageChangeHandler: Function }) => {
           </li>
           <li>
             <button
-              onClick={() => pageChangeHandler(navigate, "/terms")}
+              onClick={() => navigate("/terms")}
               className="text-gray-600 text-xs hover:text-pastel-blue"
             >
               Terms and Conditions
@@ -27,7 +27,7 @@ const Footer = ({ pageChangeHandler }: { pageChangeHandler: Function }) => {
           </li>
           <li>
             <button
-              onClick={() => pageChangeHandler(navigate, "/privacy")}
+              onClick={() => navigate("/privacy")}
               className="text-gray-600 text-xs hover:text-pastel-blue"
             >
               Privacy Policy
@@ -35,7 +35,7 @@ const Footer = ({ pageChangeHandler }: { pageChangeHandler: Function }) => {
           </li>
           <li>
             <button
-              onClick={() => pageChangeHandler(navigate, "/license")}
+              onClick={() => navigate("/license")}
               className="text-gray-600 text-xs hover:text-pastel-blue"
             >
               License

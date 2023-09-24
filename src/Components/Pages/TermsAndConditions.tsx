@@ -1,26 +1,6 @@
-import { useEffect, useState } from "react";
-
-const TermsAndConditions = ({
-  mountTermsPage,
-}: {
-  mountTermsPage: boolean;
-}) => {
-  const [opacity, setOpacity] = useState("opacity-0");
-  // Run on mount
-  useEffect(() => {
-    setOpacity("opacity-100");
-  }, []);
-  // Run on un-mount
-  useEffect(() => {
-    if (!mountTermsPage) {
-      setOpacity("opacity-0");
-    }
-  }, [mountTermsPage]);
-
+const TermsAndConditions = () => {
   return (
-    <div
-      className={`bg-pastel-light-pink p-4 m-8 rounded-lg shadow ${opacity}`}
-    >
+    <div className="bg-pastel-light-pink p-4 m-8 rounded-lg shadow">
       <h2 className="text-pastel-blue text-2xl mb-4 font-bold">
         Terms and Conditions
       </h2>

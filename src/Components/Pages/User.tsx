@@ -3,12 +3,13 @@ import { consensys_explorer } from "../../Helpers/constants";
 import { UserPageParams } from "../../Types/ComponentParamsTypes";
 
 const User = ({
-  mountUserPage,
   bodyClasses,
   publicKeys,
   setPublicKeys,
   validators,
   setValidators,
+  defaultPage,
+  setDefaultPage,
 }: UserPageParams) => {
   const [error, setError] = useState("");
 
@@ -86,24 +87,24 @@ const User = ({
     setValidators({ ...validators, [addressToDelete]: [] });
   };
 
-  /// ------ Styling Handling ------
-  const [opacity, setOpacity] = useState("opacity-0");
-  // Run on mount
-  useEffect(() => {
-    setOpacity("opacity-100");
-  }, []);
-  // Run on un-mount
-  useEffect(() => {
-    if (!mountUserPage) {
-      setOpacity("opacity-0");
-    }
-  }, [mountUserPage]);
+  const handleDefaultPageChange = (
+    pageName: "/home" | "/validatorStatistics" | "/validatorList" | "user"
+  ) => {
+    setDefaultPage(pageName === defaultPage ? "" : pageName);
+  };
 
+  const handleDefaultPageSelect = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    localStorage.setItem("defaultPage", defaultPage);
+  };
+
+  /// ------ Styling Handling ------
   const tableHeadStyle = "text-gray-700 px-4 py-1";
   /// ------------------------------
 
   return (
-    <div className={`${bodyClasses} sm:grid-cols-3 lg:grid-cols-4 ${opacity}`}>
+    <div className={`${bodyClasses} sm:grid-cols-3 lg:grid-cols-4`}>
       {/* <!-- Tile 1: Add Address Form --> */}
       <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
@@ -187,7 +188,7 @@ const User = ({
             <tbody>
               {publicKeys.map((publicKey) => (
                 <tr key={publicKey.address}>
-                  <td>
+                  <td className="px-4 py-1">
                     <a
                       href={`${consensys_explorer}/address/${publicKey.address.substring(
                         2
@@ -205,9 +206,9 @@ const User = ({
                       )}`}
                     </a>
                   </td>
-                  <td className="text-gray-700">{publicKey.name}</td>
-                  <td className="text-gray-700">{publicKey.type}</td>
-                  <td>
+                  <td className="px-4 py-1 text-gray-700">{publicKey.name}</td>
+                  <td className="px-4 py-1 text-gray-700">{publicKey.type}</td>
+                  <td className="px-4 py-1">
                     <a
                       href={`${consensys_explorer}/dashboard?validators=${validators[
                         publicKey.address
@@ -219,7 +220,7 @@ const User = ({
                       Dashboard
                     </a>
                   </td>
-                  <td>
+                  <td className="px-4 py-1">
                     <button
                       className="text-pastel-green hover:text-green-500"
                       onClick={(event) =>
@@ -229,7 +230,7 @@ const User = ({
                       Edit
                     </button>
                   </td>
-                  <td>
+                  <td className="px-4 py-1">
                     <button
                       className="text-pastel-red hover:text-red-600"
                       onClick={() => handleAddressDelete(publicKey.address)}
@@ -242,6 +243,67 @@ const User = ({
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* <!-- Tile 3: Set default starting page --> */}
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow col-span-1">
+        <h2 className="text-pastel-blue text-2xl mb-4">
+          Default starting page
+        </h2>
+        <form className="w-full max-w-md">
+          <div>
+            <input
+              type="checkbox"
+              id="/home"
+              checked={"/home" === defaultPage}
+              onChange={() => handleDefaultPageChange("/home")}
+            />
+            <label className="ml-4" htmlFor="/home">
+              Home
+            </label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="/validatorStatistics"
+              checked={"/validatorStatistics" === defaultPage}
+              onChange={() => handleDefaultPageChange("/validatorStatistics")}
+            />
+            <label className="ml-4" htmlFor="/validatorStatistics">
+              Validator Statistics
+            </label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="/validatorList"
+              checked={"/validatorList" === defaultPage}
+              onChange={() => handleDefaultPageChange("/validatorList")}
+            />
+            <label className="ml-4" htmlFor="/validatorList">
+              Validator List
+            </label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="user"
+              checked={"user" === defaultPage}
+              onChange={() => handleDefaultPageChange("user")}
+            />
+            <label className="ml-4" htmlFor="user">
+              User
+            </label>
+          </div>
+          <div className="flex justify-center">
+            <button
+              className="mt-4 py-1 px-2 rounded-md bg-strong-pink hover:bg-dark-pink"
+              onClick={(event) => handleDefaultPageSelect(event)}
+            >
+              Select
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

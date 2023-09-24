@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 // components
 import Header from "./Components/Header";
@@ -35,6 +40,19 @@ import {
 import PageNotFound from "./Components/Pages/PageNotFound";
 
 function App() {
+  /// Default page to redirect from `/`
+  const storedDefaultPage = localStorage.getItem("defaultPage");
+  const [defaultPage, setDefaultPage] = useState(
+    storedDefaultPage
+      ? storedDefaultPage
+      : ("/home" as
+          | "/home"
+          | "/validatorStatistics"
+          | "/validatorList"
+          | "user"
+          | "")
+  );
+
   /// ------ Deposior/Withdrawal Addresses ------
   const storedPublicKeys = localStorage.getItem("publicKeys");
   const [publicKeys, setPublicKeys] = useState(
@@ -251,44 +269,6 @@ function App() {
   }, [refreshHandler]);
   /// --------------------------
 
-  /// ------ Page Change Handler ------
-  const [mountValidatorStatsPage, setMountValidatorStatsPage] = useState(
-    window.location.pathname === "/validatorStatistics"
-  );
-  const [mountUserPage, setMountUserPage] = useState(
-    window.location.pathname === "/user"
-  );
-  const [mountValidatorsPage, setMountValidatorsPage] = useState(
-    window.location.pathname === "/validatorList"
-  );
-  const [mountTermsPage, setMountTermsPage] = useState(
-    window.location.pathname === "/terms"
-  );
-  const [mountPrivacyPage, setMountPrivacyPage] = useState(
-    window.location.pathname === "/privacy"
-  );
-  const [mountLicensePage, setMountLicensePage] = useState(
-    window.location.pathname === "/license"
-  );
-  const pageChangeHandler = (navigate: Function, navigateParam: string) => {
-    // Update the page mount status
-    setMountValidatorStatsPage(navigateParam === "/validatorStatistics");
-    setMountUserPage(navigateParam === "/user");
-    setMountValidatorsPage(navigateParam === "/validatorList");
-    setMountTermsPage(navigateParam === "/terms");
-    setMountPrivacyPage(navigateParam === "/privacy");
-    setMountLicensePage(navigateParam === "/license");
-
-    // Navigate to the new page after the animation ends
-    setTimeout(() => {
-      navigate(navigateParam);
-    }, 75);
-
-    // Close drop down menu
-    setDropdownOpen(false);
-  };
-  /// ---------------------------------
-
   /// ------ Styling ------
   const bodyClasses =
     "container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1";
@@ -338,13 +318,15 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Landing pageChangeHandler={pageChangeHandler} />}
+            element={
+              <Navigate to={defaultPage ? defaultPage : "/home"} replace />
+            }
           />
+          <Route path="/home" element={<Landing />} />
           <Route
             path="/validatorStatistics"
             element={
               <ValidatorStats
-                mountValidatorStatsPage={mountValidatorStatsPage}
                 bodyClasses={bodyClasses}
                 stakedLYX={stakedLYX ? stakedLYX : 0}
                 tokenPrice={tokenPrice}
@@ -359,12 +341,13 @@ function App() {
             path="/user"
             element={
               <User
-                mountUserPage={mountUserPage}
                 bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
                 setPublicKeys={setPublicKeys}
                 validators={validators}
                 setValidators={setValidators}
+                defaultPage={defaultPage}
+                setDefaultPage={setDefaultPage}
               />
             }
           />
@@ -372,7 +355,6 @@ function App() {
             path="/validatorList"
             element={
               <Validators
-                mountValidatorsPage={mountValidatorsPage}
                 bodyClasses={bodyClasses}
                 publicKeys={publicKeys}
                 validators={validators}
@@ -383,18 +365,9 @@ function App() {
               />
             }
           />
-          <Route
-            path="/terms"
-            element={<TermsAndConditions mountTermsPage={mountTermsPage} />}
-          />
-          <Route
-            path="/privacy"
-            element={<PrivacyPolicy mountPrivacyPage={mountPrivacyPage} />}
-          />
-          <Route
-            path="/license"
-            element={<License mountLicensePage={mountLicensePage} />}
-          />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/license" element={<License />} />
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
         <Header
@@ -402,10 +375,9 @@ function App() {
           tokenPrice={tokenPrice}
           isDropdownOpen={isDropdownOpen}
           toggleDropdown={toggleDropdown}
-          pageChangeHandler={pageChangeHandler}
           refreshHandler={refreshHandler}
         />
-        <Footer pageChangeHandler={pageChangeHandler} />
+        <Footer />
       </Router>
     </div>
   );

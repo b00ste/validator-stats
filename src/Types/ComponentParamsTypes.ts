@@ -12,12 +12,7 @@ import {
 
 // ------------ MAIN COMPONENTS PARAM TYPES ------------
 
-export type LandingPageParams = {
-  pageChangeHandler: Function;
-};
-
 export type ValidatorStatsPageParams = {
-  mountValidatorStatsPage: boolean;
   bodyClasses: string;
   stakedLYX: number;
   tokenPrice: TokenPrice;
@@ -26,16 +21,16 @@ export type ValidatorStatsPageParams = {
 };
 
 export type UserPageParams = {
-  mountUserPage: boolean;
   bodyClasses: string;
   publicKeys: PublicKey[];
   setPublicKeys: React.Dispatch<React.SetStateAction<PublicKey[]>>;
   validators: Record<string, string[]>;
   setValidators: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  defaultPage: string;
+  setDefaultPage: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type ValidatorsPageParams = {
-  mountValidatorsPage: boolean;
   bodyClasses: string;
   publicKeys: PublicKey[];
   validators: Record<string, string[]>;
@@ -48,7 +43,6 @@ export type HeaderParams = {
   tokenPrice: TokenPrice;
   isDropdownOpen: boolean;
   toggleDropdown: Function;
-  pageChangeHandler: Function;
   refreshHandler: Function;
 };
 

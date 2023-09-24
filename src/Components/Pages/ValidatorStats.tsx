@@ -15,7 +15,6 @@ import { WithdrawableAmount } from "../ValidatorStatsComponents/WithdrawableAmou
 import { ValidatorStatsPageParams } from "../../Types/ComponentParamsTypes";
 
 const ValidatorStats = ({
-  mountValidatorStatsPage,
   bodyClasses,
   stakedLYX,
   tokenPrice,
@@ -74,17 +73,6 @@ const ValidatorStats = ({
   ]);
 
   /// ------ Styling Handling ------
-  const [opacity, setOpacity] = useState("opacity-0");
-  // Run on mount
-  useEffect(() => {
-    setOpacity("opacity-100");
-  }, []);
-  // Run on un-mount
-  useEffect(() => {
-    if (!mountValidatorStatsPage) {
-      setOpacity("opacity-0");
-    }
-  }, [mountValidatorStatsPage]);
 
   const tileClasses =
     "bg-pastel-light-pink p-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
@@ -92,7 +80,7 @@ const ValidatorStats = ({
 
   return (
     <div
-      className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ${opacity}`}
+      className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4`}
     >
       <Validators tileClasses={tileClasses} validatorsMaps={validatorsMaps} />
       <Balance

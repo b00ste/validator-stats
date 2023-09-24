@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // utils
 import { consensys_explorer } from "../../Helpers/constants";
@@ -9,7 +9,6 @@ import { ValidatorMap } from "../../Types/UsedDataTypes";
 import { generateUUID } from "../../Helpers/utils";
 
 export const Validators = ({
-  mountValidatorsPage,
   bodyClasses,
   publicKeys,
   validators,
@@ -124,23 +123,11 @@ export const Validators = ({
   };
 
   /// ------ Styling Handling ------
-  const [opacity, setOpacity] = useState("opacity-0");
-  // Run on mount
-  useEffect(() => {
-    setOpacity("opacity-100");
-  }, []);
-  // Run on un-mount
-  useEffect(() => {
-    if (!mountValidatorsPage) {
-      setOpacity("opacity-0");
-    }
-  }, [mountValidatorsPage]);
-
   const tableHeadStyle = "text-gray-700 px-4 py-1";
   /// ------------------------------
 
   return (
-    <div className={`${bodyClasses} ${opacity}`}>
+    <div className={bodyClasses}>
       {/* <!-- Tile 1: Validator Buttons --> */}
       <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Select Validators</h2>

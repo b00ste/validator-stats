@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { LandingPageParams } from "../../Types/ComponentParamsTypes";
 
-const Landing = ({ pageChangeHandler }: LandingPageParams) => {
+const Landing = () => {
   const navigate = useNavigate();
 
   const supportProjectAddress = "0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1";
@@ -43,9 +42,7 @@ const Landing = ({ pageChangeHandler }: LandingPageParams) => {
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
-                onClick={() =>
-                  pageChangeHandler(navigate, "/validatorStatistics")
-                }
+                onClick={() => navigate("/validatorStatistics")}
               >
                 Validator Stats
               </button>
@@ -57,7 +54,7 @@ const Landing = ({ pageChangeHandler }: LandingPageParams) => {
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
-                onClick={() => pageChangeHandler(navigate, "/validatorList")}
+                onClick={() => navigate("/validatorList")}
               >
                 Validator List
               </button>
@@ -69,7 +66,7 @@ const Landing = ({ pageChangeHandler }: LandingPageParams) => {
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
-                onClick={() => pageChangeHandler(navigate, "/user")}
+                onClick={() => navigate("/user")}
               >
                 User
               </button>

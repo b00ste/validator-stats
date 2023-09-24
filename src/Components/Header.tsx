@@ -8,7 +8,6 @@ const Header = ({
   tokenPrice: { eurPrice, usdPrice },
   isDropdownOpen,
   toggleDropdown,
-  pageChangeHandler,
   refreshHandler,
 }: HeaderParams) => {
   const navigate = useNavigate();
@@ -65,31 +64,23 @@ const Header = ({
           }`}
         >
           <div className="grid grid-cols-2 w-full mx-auto">
-            <button
-              className={buttonClasses}
-              onClick={() => pageChangeHandler(navigate, "/")}
-            >
+            <button className={buttonClasses} onClick={() => navigate("/home")}>
               Home
             </button>
-            <button
-              className={buttonClasses}
-              onClick={() => pageChangeHandler(navigate, "/user")}
-            >
+            <button className={buttonClasses} onClick={() => navigate("/user")}>
               User
             </button>
           </div>
           <div className="grid grid-cols-2 w-full mx-auto">
             <button
               className={buttonClasses}
-              onClick={() =>
-                pageChangeHandler(navigate, "/validatorStatistics")
-              }
+              onClick={() => navigate("/validatorStatistics")}
             >
               Validator Stats
             </button>
             <button
               className={buttonClasses}
-              onClick={() => pageChangeHandler(navigate, "/validatorList")}
+              onClick={() => navigate("/validatorList")}
             >
               Validators
             </button>
