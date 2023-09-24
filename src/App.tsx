@@ -269,6 +269,13 @@ function App() {
   }, [refreshHandler]);
   /// --------------------------
 
+  /// ------ Navigating handler ------
+  const handlePageNavigation = (navigate: Function, page: string) => {
+    navigate(page);
+    toggleDropdown();
+  };
+  /// --------------------------------
+
   /// ------ Styling ------
   const bodyClasses =
     "container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1";
@@ -322,7 +329,10 @@ function App() {
               <Navigate to={defaultPage ? defaultPage : "/home"} replace />
             }
           />
-          <Route path="/home" element={<Landing />} />
+          <Route
+            path="/home"
+            element={<Landing handlePageNavigation={handlePageNavigation} />}
+          />
           <Route
             path="/validatorStatistics"
             element={
@@ -376,8 +386,9 @@ function App() {
           isDropdownOpen={isDropdownOpen}
           toggleDropdown={toggleDropdown}
           refreshHandler={refreshHandler}
+          handlePageNavigation={handlePageNavigation}
         />
-        <Footer />
+        <Footer handlePageNavigation={handlePageNavigation} />
       </Router>
     </div>
   );

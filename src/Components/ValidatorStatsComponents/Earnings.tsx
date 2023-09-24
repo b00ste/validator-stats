@@ -120,7 +120,7 @@ export const Earnings = ({
         <span className="text-pastel-red">{`${earnings.toLocaleString()} LYX`}</span>
       );
     }
-    return earnings.toLocaleString();
+    return `${earnings.toLocaleString()} LYX`;
   };
 
   const generateEarnings = () => {

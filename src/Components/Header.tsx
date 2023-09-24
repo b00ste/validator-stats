@@ -9,6 +9,7 @@ const Header = ({
   isDropdownOpen,
   toggleDropdown,
   refreshHandler,
+  handlePageNavigation,
 }: HeaderParams) => {
   const navigate = useNavigate();
 
@@ -64,23 +65,31 @@ const Header = ({
           }`}
         >
           <div className="grid grid-cols-2 w-full mx-auto">
-            <button className={buttonClasses} onClick={() => navigate("/home")}>
+            <button
+              className={buttonClasses}
+              onClick={() => handlePageNavigation(navigate, "/home")}
+            >
               Home
             </button>
-            <button className={buttonClasses} onClick={() => navigate("/user")}>
+            <button
+              className={buttonClasses}
+              onClick={() => handlePageNavigation(navigate, "/user")}
+            >
               User
             </button>
           </div>
           <div className="grid grid-cols-2 w-full mx-auto">
             <button
               className={buttonClasses}
-              onClick={() => navigate("/validatorStatistics")}
+              onClick={() =>
+                handlePageNavigation(navigate, "/validatorStatistics")
+              }
             >
               Validator Stats
             </button>
             <button
               className={buttonClasses}
-              onClick={() => navigate("/validatorList")}
+              onClick={() => handlePageNavigation(navigate, "/validatorList")}
             >
               Validators
             </button>

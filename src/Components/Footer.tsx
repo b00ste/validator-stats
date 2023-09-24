@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { FooterParams } from "../Types/ComponentParamsTypes";
 
-const Footer = () => {
+const Footer = ({ handlePageNavigation }: FooterParams) => {
   const navigate = useNavigate();
 
   return (
@@ -19,7 +20,7 @@ const Footer = () => {
           </li>
           <li>
             <button
-              onClick={() => navigate("/terms")}
+              onClick={() => handlePageNavigation(navigate, "/terms")}
               className="text-gray-600 text-xs hover:text-pastel-blue"
             >
               Terms and Conditions
@@ -27,7 +28,7 @@ const Footer = () => {
           </li>
           <li>
             <button
-              onClick={() => navigate("/privacy")}
+              onClick={() => handlePageNavigation(navigate, "/privacy")}
               className="text-gray-600 text-xs hover:text-pastel-blue"
             >
               Privacy Policy
@@ -35,7 +36,7 @@ const Footer = () => {
           </li>
           <li>
             <button
-              onClick={() => navigate("/license")}
+              onClick={() => handlePageNavigation(navigate, "/license")}
               className="text-gray-600 text-xs hover:text-pastel-blue"
             >
               License

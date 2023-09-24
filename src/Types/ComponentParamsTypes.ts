@@ -12,6 +12,10 @@ import {
 
 // ------------ MAIN COMPONENTS PARAM TYPES ------------
 
+export type LandingPageParams = {
+  handlePageNavigation: Function;
+};
+
 export type ValidatorStatsPageParams = {
   bodyClasses: string;
   stakedLYX: number;
@@ -42,11 +46,14 @@ export type HeaderParams = {
   networkData: NetworkData;
   tokenPrice: TokenPrice;
   isDropdownOpen: boolean;
-  toggleDropdown: Function;
+  handlePageNavigation: Function;
   refreshHandler: Function;
+  toggleDropdown: Function;
 };
 
-export type FooterParams = {};
+export type FooterParams = {
+  handlePageNavigation: Function;
+};
 
 // ------------ VALIDATOR STATS COMPONENTS PARAM TYPES ------------
 

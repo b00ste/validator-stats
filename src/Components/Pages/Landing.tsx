@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import Notification from "../Notification";
 import { useState } from "react";
+import { LandingPageParams } from "../../Types/ComponentParamsTypes";
 
-const Landing = () => {
+const Landing = ({ handlePageNavigation }: LandingPageParams) => {
   const navigate = useNavigate();
   const [addressCopiedOpacity, setAddressCopiedOpacity] = useState(
     "opacity-0 pointer-events-none"
@@ -56,7 +57,9 @@ const Landing = () => {
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
-                onClick={() => navigate("/validatorStatistics")}
+                onClick={() =>
+                  handlePageNavigation(navigate, "/validatorStatistics")
+                }
               >
                 Validator Stats
               </button>
@@ -68,7 +71,7 @@ const Landing = () => {
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
-                onClick={() => navigate("/validatorList")}
+                onClick={() => handlePageNavigation(navigate, "/validatorList")}
               >
                 Validator List
               </button>
@@ -80,7 +83,7 @@ const Landing = () => {
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
-                onClick={() => navigate("/user")}
+                onClick={() => handlePageNavigation(navigate, "/user")}
               >
                 User
               </button>
