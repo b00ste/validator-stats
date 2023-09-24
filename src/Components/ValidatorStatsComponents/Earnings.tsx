@@ -86,14 +86,18 @@ export const Earnings = ({
     const { consensusTimeframeParam, executionTimeframeParam } =
       getTimeframeParamNames();
     for (const index in validatorsPerformance) {
-      totalEarnings +=
-        validatorsPerformance[index].consensusPerformance[
-          consensusTimeframeParam
-        ] / 1e9;
-      totalEarnings +=
-        validatorsPerformance[index].executionPerformance[
-          executionTimeframeParam
-        ] / 1e18;
+      if (validatorsPerformance[index].consensusPerformance) {
+        totalEarnings +=
+          validatorsPerformance[index].consensusPerformance[
+            consensusTimeframeParam
+          ] / 1e9;
+      }
+      if (validatorsPerformance[index].executionPerformance) {
+        totalEarnings +=
+          validatorsPerformance[index].executionPerformance[
+            executionTimeframeParam
+          ] / 1e18;
+      }
     }
 
     return totalEarnings;
