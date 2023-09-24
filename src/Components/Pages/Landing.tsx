@@ -13,70 +13,68 @@ const Landing = ({ pageChangeHandler }: LandingPageParams) => {
           Monitor Your Ethereum Validators
         </h2>
         <p className="text-lg mb-4">
-          Effortlessly oversee the status and performance of your Ethereum
-          validators with our powerful monitoring tool. Here's what you can do:
+          Effortlessly manage and optimize your Ethereum validator portfolio
+          using our robust monitoring tool. Here's what you can achieve:
         </p>
+        <ul className="mb-8">
+          <li className="list-disc my-4 ml-8 underline underline-offset-4 decoration-dark-pink">
+            Keep a close watch on the real-time status of your validators, along
+            with the accumulated LYX earnings and withdrawals.
+          </li>
+          <li className="list-disc my-4 ml-8 underline underline-offset-4 decoration-dark-pink">
+            Monitor the total balance across your withdrawal addresses.
+          </li>
+          <li className="list-disc my-4 ml-8 underline underline-offset-4 decoration-dark-pink">
+            Dive deep into your earnings data, with detailed breakdowns
+            available for daily, weekly, monthly, annual, and total earnings.
+          </li>
+          <li className="list-disc my-4 ml-8 underline underline-offset-4 decoration-dark-pink">
+            Evaluate validator performance with an easy-to-understand
+            performance percentage, ensuring your investments are performing
+            optimally.
+          </li>
+        </ul>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-pastel-green p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Validator Status</h3>
+            <h3 className="text-xl font-semibold mb-2">Validator Statistics</h3>
             <p className="text-gray-700">
-              Stay informed about the activity, pending actions, and any
-              penalties incurred by your validators.
+              Check the validator statistics page.
             </p>
-          </div>
-          <div className="bg-pastel-purple p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Token Withdrawals</h3>
-            <p className="text-gray-700">
-              Easily track total token withdrawals, available withdrawal
-              amounts, and the balances of withdrawal addresses.
-            </p>
-          </div>
-          <div className="bg-pastel-blue p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Earnings Analysis</h3>
-            <p className="text-gray-700">
-              Gain valuable insights into your earnings, with detailed data
-              available for daily, weekly, monthly, annual, and total earnings.
-            </p>
-          </div>
-          <div className="bg-pastel-pink p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Percentage Rates</h3>
-            <p className="text-gray-700">
-              View approximate percentage rates for daily, weekly, monthly, and
-              annual earnings, helping you make informed decisions.
-            </p>
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
+                onClick={() =>
+                  pageChangeHandler(navigate, "/validatorStatistics")
+                }
+              >
+                Validator Stats
+              </button>
+            </div>
           </div>
           <div className="bg-pastel-orange p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">
-              Validator Performance
-            </h3>
-            <p className="text-gray-700">
-              Assess validator performance with a performance percentage,
-              ensuring optimal performance for your investments.
-            </p>
+            <h3 className="text-xl font-semibold mb-2">Validator List</h3>
+            <p className="text-gray-700">Check the list of validators.</p>
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
+                onClick={() => pageChangeHandler(navigate, "/validatorList")}
+              >
+                Validator List
+              </button>
+            </div>
           </div>
-          <div className="bg-pastel-red p-4 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold mb-2">Validator Luck</h3>
-            <p className="text-gray-700">
-              Evaluate your validators' luck, providing insights into the
-              probability of being selected to propose a block.
-            </p>
+          <div className="bg-pastel-blue p-4 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-2">User</h3>
+            <p className="text-gray-700">Update your withdrawal addresses</p>
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
+                onClick={() => pageChangeHandler(navigate, "/user")}
+              >
+                User
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <section className="mt-4 bg-white rounded-lg shadow-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4">Get Started Today</h2>
-        <p className="text-lg mb-4">
-          Add you withdrawal or deposit address and start monitoring your
-          Ethereum validators effortlessly.
-        </p>
-        <div className="text-center">
-          <button
-            className="bg-pastel-green text-white px-3 py-1.5 m-1 rounded-lg hover:bg-dark-pink"
-            onClick={() => pageChangeHandler(navigate, "/user")}
-          >
-            User Page
-          </button>
         </div>
       </section>
 
