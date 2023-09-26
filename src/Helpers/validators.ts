@@ -71,31 +71,6 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
       }
     }
 
-    if (i - validators.length > 0) {
-      try {
-        await fetch(
-          link.replace(
-            "{validators}",
-            validators
-              .slice(i - 100, validators.length)
-              .toString()
-              .replaceAll(",", "%2C")
-          ),
-          {
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          }
-        ).then((res) =>
-          res.json().then(({ data }) => dataCollection.push(data))
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
     return dataCollection;
   }
 };
@@ -266,23 +241,22 @@ export const fetchValidatorsLuck = async (activeValidators: ValidatorMap) => {
       pubkeys
     )) as ValidatorsLuck[];
 
+    let percentageSum = 0;
+    let sampleSizeSum = 0;
+
     dataCollection.forEach((elem, index) => {
       if (elem.proposal_luck) {
-        if (index === 0) {
-          validatorsLuck.proposal_luck = elem.proposal_luck;
-        } else if (index === dataCollection.length - 1) {
-          validatorsLuck.proposal_luck =
-            (100 * index * validatorsLuck.proposal_luck +
-              (pubkeys.length % 100) * elem.proposal_luck) /
-            100;
+        percentageSum += elem.proposal_luck;
+
+        if (index === dataCollection.length - 1) {
+          sampleSizeSum += pubkeys.length - 100 * index;
         } else {
-          validatorsLuck.proposal_luck =
-            index * validatorsLuck.proposal_luck + elem.proposal_luck;
+          sampleSizeSum += 100;
         }
-        validatorsLuck.proposal_luck += elem.proposal_luck;
-        validatorsLuck.proposal_luck = validatorsLuck.proposal_luck / 2;
       }
     });
+
+    validatorsLuck.proposal_luck = (percentageSum / sampleSizeSum) * 100;
   } else {
     try {
       await fetch(
