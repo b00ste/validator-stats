@@ -232,7 +232,7 @@ const User = ({
   };
 
   /// ------ Styling Handling ------
-  const tableHeadClasses = "text-slate-gray px-4 py-1";
+  const tableHeadClasses = "text-slate-gray px-4 py-1 w-max font-extrabold";
 
   const textInputClasses =
     "w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:border-pastel-blue text-center border-2 border-lavender-pink";
@@ -297,7 +297,7 @@ const User = ({
       <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1 sm:col-span-2">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <div className="overflow-x-scroll">
-          <table className="table-auto break-words w-full text-center">
+          <table className="table-auto w-max text-center">
             <thead>
               <tr className="border-b-2 border-gray-300">
                 <th className={tableHeadClasses}>Address</th>
@@ -402,7 +402,7 @@ const User = ({
                 className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl border-2 border-lavender-pink"
                 key={elem.address}
               >
-                <p className="inline-block">{elem.name}</p>
+                <p className="inline-block text-slate-gray">{elem.name}</p>
                 <span
                   className="ml-2 font-extrabold hover:cursor-pointer hover:opacity-70"
                   onClick={() => handleAddressRemovalFromNewGroup(elem)}
@@ -460,7 +460,7 @@ const User = ({
           Withdrawal Address Groups
         </h2>
         <div className="overflow-x-scroll">
-          <table className="table-auto break-words w-full text-center">
+          <table className="table-auto w-max text-center">
             <thead>
               <tr className="border-b-2 border-gray-300">
                 <th className={tableHeadClasses}>Name</th>
@@ -477,35 +477,37 @@ const User = ({
                     .toString()}
                 >
                   <td className="px-4 py-1">{group.name}</td>
-                  <td className="px-4 py-1 text-slate-gray">
+                  <td className="px-4 py-1 text-slate-gray grid grid-cols-3 w-max">
                     {group.withdrawalAddresses.map((elem) => (
-                      <p className="inline-block px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink">
+                      <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
                         {elem.name}
                       </p>
                     ))}
                   </td>
-                  {group.name !== "Main" ? (
-                    <>
-                      <td className="px-4 py-1">
-                        <button
-                          className="text-pastel-green hover:text-green-500 transition-colors"
-                          onClick={(event) => handleGroupRemoval(event, group)}
-                        >
-                          Edit
-                        </button>
-                      </td>
-                      <td className="px-4 py-1">
-                        <button
-                          className="text-pastel-red hover:text-red-600 transition-colors"
-                          onClick={(event) => handleGroupRemoval(event, group)}
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                  <td className="px-4 py-1">
+                    {group.name !== "Main" ? (
+                      <button
+                        className="text-pastel-green hover:text-green-500 transition-colors w-"
+                        onClick={(event) => handleGroupRemoval(event, group)}
+                      >
+                        Edit
+                      </button>
+                    ) : (
+                      "Cannot edit Main Group"
+                    )}
+                  </td>
+                  <td className="px-4 py-1">
+                    {group.name !== "Main" ? (
+                      <button
+                        className="text-pastel-red hover:text-red-600 transition-colors"
+                        onClick={(event) => handleGroupRemoval(event, group)}
+                      >
+                        Remove
+                      </button>
+                    ) : (
+                      "Cannot remove Main Group"
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -78,6 +78,20 @@ function App() {
           { name: "Main", key: generateUUID(), withdrawalAddresses },
         ]) as WithdrawalAddressesGroup[]
   );
+  /// If the stored Main Group is different that the generated one, update it
+  useEffect(() => {
+    if (
+      withdrawalAddresses &&
+      withdrawalAddressesGroups.filter((group) => group.name === "Main")[0]
+        .withdrawalAddresses !== withdrawalAddresses
+    ) {
+      withdrawalAddressesGroups.map((group) =>
+        group.name === "Main"
+          ? { name: group.name, key: group.key, withdrawalAddresses }
+          : group
+      );
+    }
+  });
   /// -----------------------------------------
 
   /// ------ Validators withdrawalAddresses ------
