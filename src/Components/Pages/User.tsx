@@ -232,19 +232,21 @@ const User = ({
   };
 
   /// ------ Styling Handling ------
-  const tableHeadStyle = "text-gray-700 px-4 py-1";
+  const tableHeadClasses = "text-slate-gray px-4 py-1";
+  const textInputClasses =
+    "w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:ring focus:border-pastel-blue text-center border-2 border-lavender-pink";
   /// ------------------------------
 
   return (
     <div className={`${bodyClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`}>
       {/* <!-- Tile 1: Add Address Form --> */}
-      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="relative bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
             <label
               htmlFor="ethAddress"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-slate-gray text-sm font-bold mb-2"
             >
               Ethereum Address:
             </label>
@@ -253,14 +255,14 @@ const User = ({
               id="ethAddress"
               name="ethAddress"
               placeholder="Address"
-              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              className={textInputClasses}
               ref={addressRef}
             />
           </div>
           <div className="mb-4">
             <label
               htmlFor="name"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-slate-gray text-sm font-bold mb-2"
             >
               Name:
             </label>
@@ -269,7 +271,7 @@ const User = ({
               id="name"
               name="name"
               placeholder="Name"
-              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              className={textInputClasses}
               ref={nameRef}
             />
           </div>
@@ -289,17 +291,17 @@ const User = ({
       </div>
 
       {/* <!-- Tile 2: List of Saved Addresses --> */}
-      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2">
+      <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1 sm:col-span-2">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <div className="overflow-x-scroll">
           <table className="table-auto break-words w-full text-center">
             <thead>
               <tr className="border-b-2 border-gray-300">
-                <th className={tableHeadStyle}>Address</th>
-                <th className={tableHeadStyle}>Name</th>
-                <th className={tableHeadStyle}>Consensus</th>
-                <th className={tableHeadStyle}></th>
-                <th className={tableHeadStyle}></th>
+                <th className={tableHeadClasses}>Address</th>
+                <th className={tableHeadClasses}>Name</th>
+                <th className={tableHeadClasses}>Consensus</th>
+                <th className={tableHeadClasses}></th>
+                <th className={tableHeadClasses}></th>
               </tr>
             </thead>
             <tbody>
@@ -323,7 +325,9 @@ const User = ({
                       )}`}
                     </a>
                   </td>
-                  <td className="px-4 py-1 text-gray-700">{publicKey.name}</td>
+                  <td className="px-4 py-1 text-slate-gray">
+                    {publicKey.name}
+                  </td>
                   <td className="px-4 py-1">
                     <a
                       href={`${consensys_explorer}/dashboard?validators=${
@@ -368,7 +372,7 @@ const User = ({
       </div>
 
       {/* <!-- Tile 3: New Withdrawal Addresses Group --> */}
-      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="relative bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">
           Withdrawal addresses groups
         </h2>
@@ -376,7 +380,7 @@ const User = ({
           <div className="mb-4">
             <label
               htmlFor="groupName"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block text-slate-gray text-sm font-bold mb-2"
             >
               Group name:
             </label>
@@ -385,14 +389,14 @@ const User = ({
               id="groupName"
               name="groupName"
               placeholder="Group name"
-              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              className={textInputClasses}
               ref={groupNameRef}
             />
           </div>
           <div className="mb-4">
             {newGroup.map((elem) => (
               <div
-                className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl"
+                className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl border-2 border-lavender-pink"
                 key={elem.address}
               >
                 <p className="inline-block">{elem.name}</p>
@@ -448,7 +452,7 @@ const User = ({
       </div>
 
       {/* <!-- Tile 4: List of Withdrawal Address Groups --> */}
-      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2">
+      <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1 sm:col-span-2">
         <h2 className="text-pastel-blue text-2xl mb-4">
           Withdrawal Address Groups
         </h2>
@@ -456,10 +460,10 @@ const User = ({
           <table className="table-auto break-words w-full text-center">
             <thead>
               <tr className="border-b-2 border-gray-300">
-                <th className={tableHeadStyle}>Name</th>
-                <th className={tableHeadStyle}>Withdrawal Addresses</th>
-                <th className={tableHeadStyle}></th>
-                <th className={tableHeadStyle}></th>
+                <th className={tableHeadClasses}>Name</th>
+                <th className={tableHeadClasses}>Withdrawal Addresses</th>
+                <th className={tableHeadClasses}></th>
+                <th className={tableHeadClasses}></th>
               </tr>
             </thead>
             <tbody>
@@ -470,9 +474,9 @@ const User = ({
                     .toString()}
                 >
                   <td className="px-4 py-1">{group.name}</td>
-                  <td className="px-4 py-1 text-gray-700">
+                  <td className="px-4 py-1 text-slate-gray">
                     {group.withdrawalAddresses.map((elem) => (
-                      <p className="inline-block px-2 py-1 m-1 bg-soft-pink rounded-lg">
+                      <p className="inline-block px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink">
                         {elem.name}
                       </p>
                     ))}
@@ -511,7 +515,7 @@ const User = ({
       </div>
 
       {/* <!-- Tile 5: Set default starting page --> */}
-      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1">
+      <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1">
         <h2 className="text-pastel-blue text-2xl mb-4">
           Default starting page
         </h2>

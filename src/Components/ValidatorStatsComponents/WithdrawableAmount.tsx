@@ -10,7 +10,7 @@ export const WithdrawableAmount = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Withdrawable Amount</div>
-      <p className="text-gray-600 font-bold">
+      <p className="text-slate-gray font-bold">
         {`${(
           activeBalance / 1e9 -
           activeValidatorsCount * 32

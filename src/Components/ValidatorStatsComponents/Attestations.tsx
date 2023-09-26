@@ -63,15 +63,17 @@ export const Attestations = ({
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Attestations</div>
       <div className="grid content-center grid-cols-2">
-        <p className="text-gray-600 font-bold mr-1 text-right">Executed:</p>
+        <p className="text-slate-gray font-bold mr-1 text-right">Executed:</p>
         <p className="text-pastel-green font-bold ml-1 text-left">
           {performance.totalExecutedAttestations}
         </p>
-        <p className="text-gray-600 font-bold mr-1 text-right">Missed:</p>
+        <p className="text-slate-gray font-bold mr-1 text-right">Missed:</p>
         <p className="text-pastel-red font-bold ml-1 text-left">
           {performance.totalMissedAttestations}
         </p>
-        <p className="text-gray-600 font-bold mr-1 text-right">Performance:</p>
+        <p className="text-slate-gray font-bold mr-1 text-right">
+          Performance:
+        </p>
         {returnColouredAttestationsPerformance()}
       </div>
     </div>

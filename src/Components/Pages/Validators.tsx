@@ -139,13 +139,13 @@ export const Validators = ({
   };
 
   /// ------ Styling Handling ------
-  const tableHeadStyle = "text-gray-700 px-4 py-1";
+  const tableHeadStyle = "text-slate-gray px-4 py-1";
   /// ------------------------------
 
   return (
     <div className={bodyClasses}>
       {/* <!-- Tile 1: Select Validator Status Buttons --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">
           Select Validator Status
         </h2>
@@ -204,7 +204,7 @@ export const Validators = ({
       </div>
 
       {/* <!-- Tile 1: Select Account Buttons --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div className="bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Select Account</h2>
         <div>
           {withdrawalAddresses.map((elem) => (
@@ -224,7 +224,7 @@ export const Validators = ({
       </div>
 
       {/* <!-- Tile 2: List of Ethereum Validators --> */}
-      <div className="bg-pastel-light-pink p-4 rounded-lg shadow">
+      <div className="bg-misty-rose p-4 rounded-lg shadow">
         <h2 className="text-pastel-blue text-2xl mb-4">Ethereum Validators</h2>
         <div className="overflow-x-scroll">
           <table className="table-auto break-words w-full text-center">

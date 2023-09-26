@@ -141,7 +141,7 @@ export const Earnings = ({
         <div className="text-pastel-blue text-xl mb-2">
           {getTimeframeTitle()}
         </div>
-        <p className="text-gray-600 font-bold">
+        <p className="text-slate-gray font-bold">
           {getErningsComparedToAPR(earnings)}
         </p>
         {timeframe !== "total" ? (

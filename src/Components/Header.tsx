@@ -22,7 +22,7 @@ const Header = ({
   return (
     <nav className="absolute top-0 left-4 right-4">
       <div
-        className={`bg-pastel-white-pink p-4 rounded-b-3xl shadow transition-all ${
+        className={`bg-misty-rose p-4 rounded-b-3xl shadow transition-all ${
           isDropdownOpen ? "h-60 duration-150" : "h-32 delay-75 duration-150"
         }`}
       >

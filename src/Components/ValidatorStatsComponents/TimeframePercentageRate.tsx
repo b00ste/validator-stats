@@ -29,7 +29,7 @@ export const TimeframePercentageRate = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">{getTimeframeTitle()}</div>
-      <p className="text-gray-600 font-bold">
+      <p className="text-slate-gray font-bold">
         {`${getTimeframePercentageYield({
           totalAtStake: stakedLYX / 1e9,
           timeframe,

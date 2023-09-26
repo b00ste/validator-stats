@@ -15,14 +15,14 @@ export const Balance = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Validator Balance</div>
-      <p className="text-gray-600 font-bold">
+      <p className="text-slate-gray font-bold">
         Active:
         <span className="text-pastel-green">{` ${(
           activeBalance / 1e9
         ).toLocaleString()} LYX`}</span>
       </p>
       {pendingBalance > 0 ? (
-        <p className="text-gray-600 font-bold">
+        <p className="text-slate-gray font-bold">
           Pending:
           <span className="text-pastel-orange">{` ${(
             pendingBalance / 1e9
@@ -32,7 +32,7 @@ export const Balance = ({
         <></>
       )}
       {offlineBalance > 0 ? (
-        <p className="text-gray-600 font-bold">
+        <p className="text-slate-gray font-bold">
           Offline:
           <span className="text-pastel-red">{` ${(
             offlineBalance / 1e9
@@ -42,7 +42,7 @@ export const Balance = ({
         <></>
       )}
       {slashedBalance > 0 ? (
-        <p className="text-gray-600 font-bold">
+        <p className="text-slate-gray font-bold">
           Slashed:
           <span className="text-pastel-red">{` ${(
             slashedBalance / 1e9
@@ -52,7 +52,7 @@ export const Balance = ({
         <></>
       )}
       {otherBalance > 0 ? (
-        <p className="text-gray-600 font-bold">
+        <p className="text-slate-gray font-bold">
           Other:
           <span className="text-pastel-red">{` ${(
             otherBalance / 1e9

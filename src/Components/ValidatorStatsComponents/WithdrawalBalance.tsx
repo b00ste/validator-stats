@@ -29,10 +29,10 @@ export const WithdrawalBalance = ({
       {selectedGroup.withdrawalAddresses.map((withdrawalAddress) =>
         withdrawalAddressesBalance[withdrawalAddress.address] ? (
           <div className="grid grid-cols-2 w-full">
-            <p className="text-gray-600 font-bold col-span-1 text-left ml-4">
+            <p className="text-slate-gray font-bold col-span-1 text-left ml-4">
               {`${withdrawalAddress.name}:`}
             </p>
-            <p className="text-gray-600 font-bold col-span-1 text-right mr-4">
+            <p className="text-slate-gray font-bold col-span-1 text-right mr-4">
               {`${withdrawalAddressesBalance[
                 withdrawalAddress.address
               ].toLocaleString()} LYX`}
@@ -43,10 +43,10 @@ export const WithdrawalBalance = ({
         )
       )}
       <div className="grid grid-cols-2 w-full">
-        <p className="text-gray-600 font-bold col-span-1 text-left ml-4">
+        <p className="text-slate-gray font-bold col-span-1 text-left ml-4">
           Total:
         </p>
-        <p className="text-gray-600 font-bold col-span-1 text-right mr-4">
+        <p className="text-slate-gray font-bold col-span-1 text-right mr-4">
           {`${totalBalance.toLocaleString()} LYX`}
         </p>
       </div>

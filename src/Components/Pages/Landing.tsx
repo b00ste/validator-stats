@@ -22,7 +22,7 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
 
   return (
     <div className="container mx-auto p-4">
-      <section className="bg-white rounded-lg shadow-lg p-6">
+      <section className="bg-misty-rose rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-semibold mb-4">
           Monitor Your Ethereum Validators
         </h2>
@@ -49,9 +49,9 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
           </li>
         </ul>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-pastel-green p-4 rounded-lg shadow-md">
+          <div className="bg-alabaster p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">Validator Statistics</h3>
-            <p className="text-gray-700">
+            <p className="text-slate-gray">
               Check the validator statistics page.
             </p>
             <div className="flex justify-center mt-4">
@@ -65,9 +65,9 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
               </button>
             </div>
           </div>
-          <div className="bg-pastel-orange p-4 rounded-lg shadow-md">
+          <div className="bg-alabaster p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">Validator List</h3>
-            <p className="text-gray-700">Check the list of validators.</p>
+            <p className="text-slate-gray">Check the list of validators.</p>
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
@@ -77,9 +77,9 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
               </button>
             </div>
           </div>
-          <div className="bg-pastel-blue p-4 rounded-lg shadow-md">
+          <div className="bg-alabaster p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">User</h3>
-            <p className="text-gray-700">Update your withdrawal addresses</p>
+            <p className="text-slate-gray">Update your withdrawal addresses</p>
             <div className="flex justify-center mt-4">
               <button
                 className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
@@ -92,7 +92,7 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
         </div>
       </section>
 
-      <section className="relative mt-4 bg-white rounded-lg shadow-lg p-6">
+      <section className="relative mt-4 bg-misty-rose rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-semibold mb-4">Support the author:</h2>
         <p className="text-lg mb-4">
           The react app is done for personal use, but its made available to be
@@ -101,7 +101,7 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
         </p>
         <div className="text-center break-all grid flex-col grid-cols-1">
           <code
-            className="cursor-pointer hover:text-gray-700"
+            className="cursor-pointer hover:text-slate-gray"
             onClick={() => handleAddressCopy()}
           >
             {supportProjectAddress}

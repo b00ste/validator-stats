@@ -348,7 +348,7 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-12 transition-all ${
+      className={`min-h-screen relative flex flex-col justify-center items-center bg-pink pb-12 transition-all ${
         isDropdownOpen ? "pt-72" : "pt-44 delay-75 duration-200"
       }`}
     >

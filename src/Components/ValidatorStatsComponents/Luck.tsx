@@ -33,7 +33,7 @@ export const Luck = ({
   return (
     <div className={tileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Luck</div>
-      <p className="text-gray-600 font-bold">
+      <p className="text-slate-gray font-bold">
         {`${proposalLuck.toLocaleString()} %`}
       </p>
     </div>

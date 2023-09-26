@@ -5,7 +5,7 @@ const Footer = ({ handlePageNavigation }: FooterParams) => {
   const navigate = useNavigate();
 
   return (
-    <footer className="absolute bottom-0 left-4 right-4 rounded-t-3xl bg-pastel-white-pink p-2 text-center shadow">
+    <footer className="absolute bottom-0 left-4 right-4 rounded-t-3xl bg-misty-rose p-2 text-center shadow">
       <div className="container mx-auto">
         <ul className="flex justify-center space-x-2.5">
           <li>
@@ -13,7 +13,7 @@ const Footer = ({ handlePageNavigation }: FooterParams) => {
               href="https://github.com/b00ste"
               target="_blank"
               rel="noreferrer"
-              className="text-gray-600 text-xs hover:text-pastel-blue"
+              className="text-slate-gray text-xs hover:text-pastel-blue"
             >
               Author
             </a>
@@ -21,7 +21,7 @@ const Footer = ({ handlePageNavigation }: FooterParams) => {
           <li>
             <button
               onClick={() => handlePageNavigation(navigate, "/terms")}
-              className="text-gray-600 text-xs hover:text-pastel-blue"
+              className="text-slate-gray text-xs hover:text-pastel-blue"
             >
               Terms and Conditions
             </button>
@@ -29,7 +29,7 @@ const Footer = ({ handlePageNavigation }: FooterParams) => {
           <li>
             <button
               onClick={() => handlePageNavigation(navigate, "/privacy")}
-              className="text-gray-600 text-xs hover:text-pastel-blue"
+              className="text-slate-gray text-xs hover:text-pastel-blue"
             >
               Privacy Policy
             </button>
@@ -37,7 +37,7 @@ const Footer = ({ handlePageNavigation }: FooterParams) => {
           <li>
             <button
               onClick={() => handlePageNavigation(navigate, "/license")}
-              className="text-gray-600 text-xs hover:text-pastel-blue"
+              className="text-slate-gray text-xs hover:text-pastel-blue"
             >
               License
             </button>

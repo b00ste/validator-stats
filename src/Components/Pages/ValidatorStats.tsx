@@ -133,7 +133,7 @@ const ValidatorStats = ({
   /// ------ Styling Handling ------
 
   const tileClasses =
-    "bg-pastel-light-pink p-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
+    "bg-misty-rose p-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
   /// ------------------------------
 
   return (
