@@ -6,30 +6,34 @@ import { DisplayTokenPrice } from "../DisplayTokenPrice";
 
 export const TotalWithdrawals = ({
   tileClasses,
+  selectedGroup,
   activeValidators,
   tokenPrice,
 }: WithdrawalsParams) => {
   const [totalWithdrawals, setTotalWithdrawals] = useState(0);
-  const [totalWithdrawalsNeedsUpdate, setTotalWithdrawalsNeedsUpdate] =
-    useState(true);
 
   useEffect(() => {
-    if (
-      Object.getOwnPropertyNames(activeValidators).length > 0 &&
-      totalWithdrawalsNeedsUpdate
-    ) {
+    if (Object.getOwnPropertyNames(activeValidators).length > 0) {
       let newTotalWithdrawals = 0;
-      for (const validatorAddress in activeValidators) {
-        if (activeValidators[validatorAddress].total_withdrawals) {
-          newTotalWithdrawals +=
-            activeValidators[validatorAddress].total_withdrawals;
+
+      for (let i = 0; i < selectedGroup.withdrawalAddresses.length; i++) {
+        const withdrawalAddresses =
+          selectedGroup.withdrawalAddresses[i].address;
+        for (const validatorAddress in activeValidators[withdrawalAddresses]) {
+          if (
+            activeValidators[withdrawalAddresses][validatorAddress]
+              .total_withdrawals
+          ) {
+            newTotalWithdrawals +=
+              activeValidators[withdrawalAddresses][validatorAddress]
+                .total_withdrawals;
+          }
         }
       }
-      setTotalWithdrawals(newTotalWithdrawals);
 
-      setTotalWithdrawalsNeedsUpdate(false);
+      setTotalWithdrawals(newTotalWithdrawals);
     }
-  }, [activeValidators, totalWithdrawalsNeedsUpdate, totalWithdrawals]);
+  }, [selectedGroup, activeValidators]);
 
   return (
     <div className={tileClasses}>

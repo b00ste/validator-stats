@@ -4,7 +4,7 @@ import { DisplayTokenPrice } from "../DisplayTokenPrice";
 export const WithdrawableAmount = ({
   tileClasses,
   tokenPrice,
-  activeValidators,
+  activeValidatorsCount,
   activeBalance,
 }: WithdrawableAmountParams) => {
   return (
@@ -13,15 +13,12 @@ export const WithdrawableAmount = ({
       <p className="text-gray-600 font-bold">
         {`${(
           activeBalance / 1e9 -
-          Object.getOwnPropertyNames(activeValidators).length * 32
+          activeValidatorsCount * 32
         ).toLocaleString()} LYX`}
       </p>
       <DisplayTokenPrice
         tokenPrice={tokenPrice}
-        tokenAmount={
-          activeBalance / 1e9 -
-          Object.getOwnPropertyNames(activeValidators).length * 32
-        }
+        tokenAmount={activeBalance / 1e9 - activeValidatorsCount * 32}
       />
     </div>
   );

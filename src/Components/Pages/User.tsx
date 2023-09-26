@@ -1,35 +1,50 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { consensys_explorer } from "../../Helpers/constants";
 import { UserPageParams } from "../../Types/ComponentParamsTypes";
 import Notification from "../Notification";
+import {
+  WithdrawalAddresses,
+  WithdrawalAddressesGroup,
+} from "../../Types/UsedDataTypes";
+import { generateUUID } from "../../Helpers/utils";
 
 const User = ({
   bodyClasses,
-  publicKeys,
-  setPublicKeys,
+  withdrawalAddresses,
+  setWithdrawalAddresses,
   validators,
   setValidators,
   defaultPage,
   setDefaultPage,
+  withdrawalAddressesGroups,
+  setWithdrawalAddressessGroups,
 }: UserPageParams) => {
   const [error, setError] = useState("");
-  const [defaultPageChangedOpacity, setDefaultPageChangedOpacity] = useState(
-    "opacity-0 pointer-events-none"
-  );
+  const [newGroup, setNewGroup] = useState([] as WithdrawalAddresses[]);
+  const [newGroupError, setNewGroupError] = useState("");
+
+  /// ------ Notifications ------
   const [addressAddedOpacity, setAddressAddedOpacity] = useState(
     "opacity-0 pointer-events-none"
   );
   const [addressRemovedOpacity, setAddressRemovedOpacity] = useState(
     "opacity-0 pointer-events-none"
   );
-
-  useEffect(() => {
-    localStorage.setItem("publicKeys", JSON.stringify(publicKeys));
-  }, [publicKeys]);
+  const [groupCreatedOpacity, setGroupCreatedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
+  const [groupRemovedOpacity, setGroupRemovedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
+  const [defaultPageChangedOpacity, setDefaultPageChangedOpacity] = useState(
+    "opacity-0 pointer-events-none"
+  );
+  /// ---------------------------
 
   const addressRef = useRef<any>();
   const nameRef = useRef<any>();
-  const typeRef = useRef<any>();
+  const groupNameRef = useRef<any>();
+  const groupElementsRef = useRef<any>("choose");
 
   const handleAddressSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -48,15 +63,9 @@ const User = ({
     }
 
     if (
-      typeRef.current.value !== "depositor" &&
-      typeRef.current.value !== "withdrawal"
-    ) {
-      setError("Please select the type of the address");
-      return;
-    }
-
-    if (
-      publicKeys.map((elem) => elem.address).includes(addressRef.current.value)
+      withdrawalAddresses
+        .map((elem) => elem.address)
+        .includes(addressRef.current.value)
     ) {
       setError("Addres already exists");
       return;
@@ -64,17 +73,15 @@ const User = ({
 
     setAddressAddedOpacity("opacity-100");
 
-    setPublicKeys([
-      ...publicKeys,
+    setWithdrawalAddresses([
+      ...withdrawalAddresses,
       {
         address: addressRef.current.value,
-        type: typeRef.current.value,
         name: nameRef.current.value,
       },
     ]);
 
     addressRef.current.value = "";
-    typeRef.current.value = "";
     nameRef.current.value = "";
     setError("");
 
@@ -92,8 +99,8 @@ const User = ({
       return;
     }
 
-    setPublicKeys(() =>
-      publicKeys.map((publicKey) => {
+    setWithdrawalAddresses(() =>
+      withdrawalAddresses.map((publicKey) => {
         if (publicKey.address === addressToEdit)
           return { ...publicKey, name: nameRef.current.value };
         return publicKey;
@@ -106,13 +113,102 @@ const User = ({
 
   const handleAddressDelete = (addressToDelete: string) => {
     setAddressRemovedOpacity("opacity-100");
-    setPublicKeys(() =>
-      publicKeys.filter((publicKey) => publicKey.address !== addressToDelete)
+    setWithdrawalAddresses(() =>
+      withdrawalAddresses.filter(
+        (publicKey) => publicKey.address !== addressToDelete
+      )
     );
     setValidators({ ...validators, [addressToDelete]: [] });
 
     setTimeout(
       () => setAddressRemovedOpacity("opacity-0 pointer-events-none"),
+      1500
+    );
+  };
+
+  const handleCreateGroupChange = () => {
+    if (groupElementsRef.current.value !== "choose address") {
+      if (!newGroup.includes(groupElementsRef.current.value)) {
+        const updatedGroup = [
+          ...newGroup,
+          withdrawalAddresses.filter(
+            (elem) => groupElementsRef.current.value === elem.name
+          )[0],
+        ];
+
+        setNewGroup(updatedGroup);
+
+        groupElementsRef.current.value = "choose address";
+      }
+    }
+  };
+
+  const handleAddressRemovalFromNewGroup = (
+    elemToRemove: WithdrawalAddresses
+  ) => {
+    if (newGroup.includes(elemToRemove)) {
+      const updatedGroup = newGroup.filter(
+        (elem) => elem.address !== elemToRemove.address
+      );
+
+      setNewGroup(updatedGroup);
+    }
+  };
+
+  const handleCreateGroupSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    if (groupNameRef.current.value.length === 0) {
+      setNewGroupError("Please set a group name.");
+      return;
+    }
+
+    if (newGroup.length === 0) {
+      setNewGroupError("Please choose addresses for the new group.");
+      return;
+    }
+
+    setGroupCreatedOpacity("opacity-100");
+
+    const newWithdrawalAddressesGroup = [
+      ...withdrawalAddressesGroups,
+      {
+        name: groupNameRef.current.value,
+        withdrawalAddresses: newGroup,
+        key: generateUUID(),
+      },
+    ];
+    setWithdrawalAddressessGroups(newWithdrawalAddressesGroup);
+
+    setNewGroup([]);
+    groupNameRef.current.value = "";
+    groupElementsRef.current.value = "choose address";
+
+    setTimeout(
+      () => setGroupCreatedOpacity("opacity-0 pointer-events-none"),
+      1500
+    );
+  };
+
+  const handleGroupRemoval = (
+    event: FormEvent,
+    groupToRemove: WithdrawalAddressesGroup
+  ) => {
+    event.preventDefault();
+
+    if (groupToRemove.name === "Main") {
+      return;
+    }
+
+    setGroupRemovedOpacity("opacity-100");
+
+    const newWithdrawalAddressesGroup = withdrawalAddressesGroups.filter(
+      (group) => group !== groupToRemove
+    );
+    setWithdrawalAddressessGroups(newWithdrawalAddressesGroup);
+
+    setTimeout(
+      () => setGroupRemovedOpacity("opacity-0 pointer-events-none"),
       1500
     );
   };
@@ -140,7 +236,7 @@ const User = ({
   /// ------------------------------
 
   return (
-    <div className={`${bodyClasses} sm:grid-cols-3 lg:grid-cols-4`}>
+    <div className={`${bodyClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`}>
       {/* <!-- Tile 1: Add Address Form --> */}
       <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
@@ -156,7 +252,7 @@ const User = ({
               type="text"
               id="ethAddress"
               name="ethAddress"
-              placeholder="address"
+              placeholder="Address"
               className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
               ref={addressRef}
             />
@@ -172,32 +268,14 @@ const User = ({
               type="text"
               id="name"
               name="name"
-              placeholder="name"
+              placeholder="Name"
               className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
               ref={nameRef}
             />
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="addressType"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Select Type:
-            </label>
-            <select
-              id="addressType"
-              name="addressType"
-              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
-              defaultValue="withdrawal"
-              ref={typeRef}
-            >
-              <option value="depositor">Depositor</option>
-              <option value="withdrawal">Withdrawal</option>
-            </select>
-          </div>
           <button
             type="submit"
-            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink w-full"
+            className="bg-strong-pink hover:bg-dark-pink transition-colors text-white px-4 py-2 rounded-lg w-full"
             onClick={(event) => handleAddressSubmit(event)}
           >
             Add Address
@@ -211,7 +289,7 @@ const User = ({
       </div>
 
       {/* <!-- Tile 2: List of Saved Addresses --> */}
-      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2 lg:col-span-3">
+      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2">
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <div className="overflow-x-scroll">
           <table className="table-auto break-words w-full text-center">
@@ -219,14 +297,13 @@ const User = ({
               <tr className="border-b-2 border-gray-300">
                 <th className={tableHeadStyle}>Address</th>
                 <th className={tableHeadStyle}>Name</th>
-                <th className={tableHeadStyle}>Type</th>
                 <th className={tableHeadStyle}>Consensus</th>
-                <th className={tableHeadStyle}>Edit</th>
-                <th className={tableHeadStyle}>Remove</th>
+                <th className={tableHeadStyle}></th>
+                <th className={tableHeadStyle}></th>
               </tr>
             </thead>
             <tbody>
-              {publicKeys.map((publicKey) => (
+              {withdrawalAddresses.map((publicKey) => (
                 <tr key={publicKey.address}>
                   <td className="px-4 py-1">
                     <a
@@ -247,7 +324,6 @@ const User = ({
                     </a>
                   </td>
                   <td className="px-4 py-1 text-gray-700">{publicKey.name}</td>
-                  <td className="px-4 py-1 text-gray-700">{publicKey.type}</td>
                   <td className="px-4 py-1">
                     <a
                       href={`${consensys_explorer}/dashboard?validators=${
@@ -264,7 +340,7 @@ const User = ({
                   </td>
                   <td className="px-4 py-1">
                     <button
-                      className="text-pastel-green hover:text-green-500"
+                      className="text-pastel-green hover:text-green-500 transition-colors"
                       onClick={(event) =>
                         handleNameEdit(publicKey.address, event)
                       }
@@ -274,7 +350,7 @@ const User = ({
                   </td>
                   <td className="px-4 py-1">
                     <button
-                      className="text-pastel-red hover:text-red-600"
+                      className="text-pastel-red hover:text-red-600 transition-colors"
                       onClick={() => handleAddressDelete(publicKey.address)}
                     >
                       Remove
@@ -291,7 +367,150 @@ const User = ({
         />
       </div>
 
-      {/* <!-- Tile 3: Set default starting page --> */}
+      {/* <!-- Tile 3: New Withdrawal Addresses Group --> */}
+      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+        <h2 className="text-pastel-blue text-2xl mb-4">
+          Withdrawal addresses groups
+        </h2>
+        <form className="w-full max-w-md">
+          <div className="mb-4">
+            <label
+              htmlFor="groupName"
+              className="block text-gray-700 text-sm font-bold mb-2"
+            >
+              Group name:
+            </label>
+            <input
+              type="text"
+              id="groupName"
+              name="groupName"
+              placeholder="Group name"
+              className="w-full border rounded-lg py-2 px-3 text-gray-700 focus:outline-none focus:ring focus:border-pastel-blue text-center"
+              ref={groupNameRef}
+            />
+          </div>
+          <div className="mb-4">
+            {newGroup.map((elem) => (
+              <div
+                className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl"
+                key={elem.address}
+              >
+                <p className="inline-block">{elem.name}</p>
+                <span
+                  className="ml-2 font-extrabold hover:cursor-pointer hover:opacity-70"
+                  onClick={() => handleAddressRemovalFromNewGroup(elem)}
+                >
+                  X
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="withdawalAddressesList" className="block mb-4">
+              {newGroup.length === 0
+                ? "Add a withdrawal address to the group"
+                : "Add another withdrawal address to the group"}
+            </label>
+            <select
+              name="withdawalAddressesList"
+              ref={groupElementsRef}
+              onChange={() => handleCreateGroupChange()}
+              defaultValue="choose address"
+              className="appearance-none px-4 py-2 rounded-xl bg-lavander-pink focus:outline-none hover:cursor-pointer hover:bg-soft-pink transition-colors"
+            >
+              <option value="choose address">Choose address</option>
+              {withdrawalAddresses
+                .filter((elem) => !newGroup.includes(elem))
+                .map((withdrawalAddress) => (
+                  <option value={withdrawalAddress.name}>
+                    {withdrawalAddress.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="bg-strong-pink hover:bg-dark-pink text-white px-4 py-2 rounded-lg w-full transition-colors"
+            onClick={(event) => handleCreateGroupSubmit(event)}
+          >
+            Create Group
+          </button>
+        </form>
+        {newGroupError ? (
+          <p className="text-pastel-red font-bold">{newGroupError}</p>
+        ) : (
+          ""
+        )}
+        <Notification
+          notificationDescription="New group created!"
+          opacity={groupCreatedOpacity}
+        />
+      </div>
+
+      {/* <!-- Tile 4: List of Withdrawal Address Groups --> */}
+      <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1 sm:col-span-2">
+        <h2 className="text-pastel-blue text-2xl mb-4">
+          Withdrawal Address Groups
+        </h2>
+        <div className="overflow-x-scroll">
+          <table className="table-auto break-words w-full text-center">
+            <thead>
+              <tr className="border-b-2 border-gray-300">
+                <th className={tableHeadStyle}>Name</th>
+                <th className={tableHeadStyle}>Withdrawal Addresses</th>
+                <th className={tableHeadStyle}></th>
+                <th className={tableHeadStyle}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {withdrawalAddressesGroups.map((group) => (
+                <tr
+                  key={group.withdrawalAddresses
+                    .map((elem) => elem.address)
+                    .toString()}
+                >
+                  <td className="px-4 py-1">{group.name}</td>
+                  <td className="px-4 py-1 text-gray-700">
+                    {group.withdrawalAddresses.map((elem) => (
+                      <p className="inline-block px-2 py-1 m-1 bg-soft-pink rounded-lg">
+                        {elem.name}
+                      </p>
+                    ))}
+                  </td>
+                  {group.name !== "Main" ? (
+                    <>
+                      <td className="px-4 py-1">
+                        <button
+                          className="text-pastel-green hover:text-green-500 transition-colors"
+                          onClick={(event) => handleGroupRemoval(event, group)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className="px-4 py-1">
+                        <button
+                          className="text-pastel-red hover:text-red-600 transition-colors"
+                          onClick={(event) => handleGroupRemoval(event, group)}
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Notification
+          notificationDescription="Group removed!"
+          opacity={groupRemovedOpacity}
+        />
+      </div>
+
+      {/* <!-- Tile 5: Set default starting page --> */}
       <div className="relative bg-pastel-light-pink p-4 rounded-lg shadow col-span-1">
         <h2 className="text-pastel-blue text-2xl mb-4">
           Default starting page
@@ -343,7 +562,7 @@ const User = ({
           </div>
           <div className="flex justify-center">
             <button
-              className="mt-4 py-1 px-2 rounded-md bg-strong-pink hover:bg-dark-pink"
+              className="mt-4 py-1 px-2 rounded-md bg-strong-pink hover:bg-dark-pink transition-colors"
               onClick={(event) => handleDefaultPageSelect(event)}
             >
               Select

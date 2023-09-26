@@ -1,6 +1,6 @@
 import {
   NetworkData,
-  PublicKey,
+  WithdrawalAddresses,
   TokenPrice,
   ValidatorMap,
   ValidatorsBalances,
@@ -8,6 +8,7 @@ import {
   ValidatorsLuck,
   ValidatorsMaps,
   ValidatorsPerformance,
+  WithdrawalAddressesGroup,
 } from "./UsedDataTypes";
 
 // ------------ MAIN COMPONENTS PARAM TYPES ------------
@@ -21,25 +22,32 @@ export type ValidatorStatsPageParams = {
   stakedLYX: number;
   tokenPrice: TokenPrice;
   validatorsData: ValidatorsData;
-  withdrawalAddressesBalance: number;
+  withdrawalAddressesGroups: WithdrawalAddressesGroup[];
+  withdrawalAddressesBalance: Record<string, number>;
 };
 
 export type UserPageParams = {
   bodyClasses: string;
-  publicKeys: PublicKey[];
-  setPublicKeys: React.Dispatch<React.SetStateAction<PublicKey[]>>;
+  withdrawalAddresses: WithdrawalAddresses[];
+  setWithdrawalAddresses: React.Dispatch<
+    React.SetStateAction<WithdrawalAddresses[]>
+  >;
   validators: Record<string, string[]>;
   setValidators: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   defaultPage: string;
   setDefaultPage: React.Dispatch<React.SetStateAction<string>>;
+  withdrawalAddressesGroups: WithdrawalAddressesGroup[];
+  setWithdrawalAddressessGroups: React.Dispatch<
+    React.SetStateAction<WithdrawalAddressesGroup[]>
+  >;
 };
 
 export type ValidatorsPageParams = {
   bodyClasses: string;
-  publicKeys: PublicKey[];
+  withdrawalAddresses: WithdrawalAddresses[];
   validators: Record<string, string[]>;
   validatorsMaps: ValidatorsMaps;
-  validatorsPerformance: ValidatorsPerformance;
+  validatorsPerformance: Record<string, ValidatorsPerformance>;
 };
 
 export type HeaderParams = {
@@ -75,12 +83,14 @@ export type EarningsParams = {
   tokenPrice: TokenPrice;
   stakedLYX: number;
   activeBalance: number;
-  validatorsPerformance: ValidatorsPerformance;
+  selectedGroup: WithdrawalAddressesGroup;
+  validatorsPerformance: Record<string, ValidatorsPerformance>;
 };
 
 export type LuckParams = {
   tileClasses: string;
-  validatorsLuck: ValidatorsLuck;
+  selectedGroup: WithdrawalAddressesGroup;
+  validatorsLuck: Record<string, ValidatorsLuck>;
 };
 
 export type LYXPriceParams = {
@@ -90,30 +100,39 @@ export type LYXPriceParams = {
 
 export type PerformanceParams = {
   tileClasses: string;
-  validatorsPerformance: ValidatorsPerformance;
+  selectedGroup: WithdrawalAddressesGroup;
+  validatorsPerformance: Record<string, ValidatorsPerformance>;
 };
 
 export type ValidatorsParams = {
   tileClasses: string;
-  validatorsMaps: ValidatorsMaps;
+  validatorsCount: {
+    activeValidatorsCount: number;
+    pendingValidatorsCount: number;
+    offlineValidatorsCount: number;
+    slashedValidatorsCount: number;
+    otherValidatorsCount: number;
+  };
 };
 
 export type WithdrawalBalanceParams = {
   tileClasses: string;
   tokenPrice: TokenPrice;
-  withdrawalAddressesBalance: number;
+  selectedGroup: WithdrawalAddressesGroup;
+  withdrawalAddressesBalance: Record<string, number>;
 };
 
 export type WithdrawalsParams = {
   tileClasses: string;
-  activeValidators: ValidatorMap;
+  selectedGroup: WithdrawalAddressesGroup;
+  activeValidators: Record<string, ValidatorMap>;
   tokenPrice: TokenPrice;
 };
 
 export type WithdrawableAmountParams = {
   tileClasses: string;
   tokenPrice: TokenPrice;
-  activeValidators: ValidatorMap;
+  activeValidatorsCount: number;
   activeBalance: number;
 };
 

@@ -2,7 +2,7 @@
 import { consensys_explorer } from "./constants";
 
 //types
-import { PublicKey } from "../Types/UsedDataTypes";
+import { WithdrawalAddresses } from "../Types/UsedDataTypes";
 import { Epoch } from "../Types/FetchedDataTypes";
 
 export const getLastEpoch = async () => {
@@ -25,48 +25,49 @@ export const getLastEpoch = async () => {
 };
 
 export const getWithdrawalAddressesBalance = async (
-  publicKeys: PublicKey[]
+  withdrawalAddresses: WithdrawalAddresses[]
 ) => {
-  let balance = 0;
-  for (let i = 0; i < publicKeys.length; i++) {
-    const publicKey = publicKeys[i];
+  const withdrawalAddressessBalance = {} as Record<string, number>;
+
+  for (let i = 0; i < withdrawalAddresses.length; i++) {
+    const withdrawalAddress = withdrawalAddresses[i].address;
 
     let retrievedBalance = "";
     const tracker = {} as Record<string, boolean>;
-    if (publicKey.type === "withdrawal") {
-      try {
-        await fetch(
-          `${consensys_explorer}/api/v1/execution/address/${publicKey.address}`,
-          {
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
-            },
-          }
-        )
-          .then((res) => res.json())
-          .then(
-            ({
-              data: { ether, address },
-            }: {
-              data: { ether: string; address: string };
-            }) => {
-              if (!tracker[address]) {
-                retrievedBalance = ether;
-                tracker[address] = true;
-              }
-            }
-          );
-      } catch (error) {
-        console.log(error);
-      }
 
-      balance += Number.parseFloat(retrievedBalance);
+    try {
+      await fetch(
+        `${consensys_explorer}/api/v1/execution/address/${withdrawalAddress}`,
+        {
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then(
+          ({
+            data: { ether, address },
+          }: {
+            data: { ether: string; address: string };
+          }) => {
+            if (!tracker[address]) {
+              retrievedBalance = ether;
+              tracker[address] = true;
+            }
+          }
+        );
+    } catch (error) {
+      console.log(error);
     }
+
+    withdrawalAddressessBalance[withdrawalAddress] =
+      Number.parseFloat(retrievedBalance);
   }
 
-  return balance;
+  return withdrawalAddressessBalance;
 };
 
 export const getLYXPrice = async () => {

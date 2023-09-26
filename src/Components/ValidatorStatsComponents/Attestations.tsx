@@ -3,6 +3,7 @@ import { PerformanceParams } from "../../Types/ComponentParamsTypes";
 
 export const Attestations = ({
   tileClasses,
+  selectedGroup,
   validatorsPerformance,
 }: PerformanceParams) => {
   const [performance, setPerformance] = useState({
@@ -11,26 +12,27 @@ export const Attestations = ({
     totalAttestationCount: 0,
     executedAttestationsPercentage: 0,
   });
-  const [performanceNeedsUpdate, setPerformanceNeedsUpdate] = useState(true);
 
   useEffect(() => {
-    if (
-      Object.getOwnPropertyNames(validatorsPerformance).length > 0 &&
-      performanceNeedsUpdate
-    ) {
+    if (Object.getOwnPropertyNames(validatorsPerformance).length > 0) {
       let totalExecutedAttestations = 0;
       let totalMissedAttestations = 0;
       let totalAttestationCount = 0;
-      for (const validatorIndex in validatorsPerformance) {
-        totalExecutedAttestations +=
-          validatorsPerformance[validatorIndex].attestationPerformance
-            .executedAttestations;
-        totalMissedAttestations +=
-          validatorsPerformance[validatorIndex].attestationPerformance
-            .missedAttestations;
-        totalAttestationCount +=
-          validatorsPerformance[validatorIndex].attestationPerformance
-            .attestationCount;
+
+      for (let i = 0; i < selectedGroup.withdrawalAddresses.length; i++) {
+        const withdrawalAddress = selectedGroup.withdrawalAddresses[i].address;
+
+        for (const validatorIndex in validatorsPerformance[withdrawalAddress]) {
+          totalExecutedAttestations +=
+            validatorsPerformance[withdrawalAddress][validatorIndex]
+              .attestationPerformance.executedAttestations;
+          totalMissedAttestations +=
+            validatorsPerformance[withdrawalAddress][validatorIndex]
+              .attestationPerformance.missedAttestations;
+          totalAttestationCount +=
+            validatorsPerformance[withdrawalAddress][validatorIndex]
+              .attestationPerformance.attestationCount;
+        }
       }
 
       const executedAttestationsPercentage =
@@ -42,10 +44,8 @@ export const Attestations = ({
         totalAttestationCount,
         executedAttestationsPercentage,
       });
-
-      setPerformanceNeedsUpdate(false);
     }
-  }, [validatorsPerformance, performanceNeedsUpdate]);
+  }, [selectedGroup, validatorsPerformance]);
 
   const returnColouredAttestationsPerformance = () => {
     if (performance.executedAttestationsPercentage > 90) {

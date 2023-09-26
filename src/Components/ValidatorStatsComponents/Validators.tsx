@@ -2,12 +2,12 @@ import { ValidatorsParams } from "../../Types/ComponentParamsTypes";
 
 export const Validators = ({
   tileClasses,
-  validatorsMaps: {
-    activeValidators,
-    pendingValidators,
-    offlineValidators,
-    slashedValidators,
-    otherValidators,
+  validatorsCount: {
+    activeValidatorsCount,
+    pendingValidatorsCount,
+    offlineValidatorsCount,
+    slashedValidatorsCount,
+    otherValidatorsCount,
   },
 }: ValidatorsParams) => {
   return (
@@ -16,45 +16,37 @@ export const Validators = ({
       <p className="text-gray-600 font-bold">
         Active:
         <span className="text-pastel-green ">
-          {` ${Object.getOwnPropertyNames(activeValidators).length}`}
+          {` ${activeValidatorsCount}`}
         </span>
       </p>
-      {Object.getOwnPropertyNames(pendingValidators).length > 0 ? (
+      {pendingValidatorsCount > 0 ? (
         <p className="text-gray-600 font-bold">
           Pending:
-          <span className="text-pastel-orange">{` ${
-            Object.getOwnPropertyNames(pendingValidators).length
-          }`}</span>
+          <span className="text-pastel-orange">{` ${pendingValidatorsCount}`}</span>
         </p>
       ) : (
         <></>
       )}
-      {Object.getOwnPropertyNames(offlineValidators).length > 0 ? (
+      {offlineValidatorsCount > 0 ? (
         <p className="text-gray-600 font-bold">
           Pending:
-          <span className="text-pastel-orange">{` ${
-            Object.getOwnPropertyNames(offlineValidators).length
-          }`}</span>
+          <span className="text-pastel-orange">{` ${offlineValidatorsCount}`}</span>
         </p>
       ) : (
         <></>
       )}
-      {Object.getOwnPropertyNames(slashedValidators).length > 0 ? (
+      {slashedValidatorsCount > 0 ? (
         <p className="text-gray-600 font-bold">
           Slashed:
-          <span className="text-pastel-red">{` ${
-            Object.getOwnPropertyNames(slashedValidators).length
-          }`}</span>
+          <span className="text-pastel-red">{` ${slashedValidatorsCount}`}</span>
         </p>
       ) : (
         <></>
       )}
-      {Object.getOwnPropertyNames(otherValidators).length > 0 ? (
+      {otherValidatorsCount > 0 ? (
         <p className="text-gray-600 font-bold">
           Other:
-          <span className="text-pastel-red">{` ${
-            Object.getOwnPropertyNames(otherValidators).length
-          }`}</span>
+          <span className="text-pastel-red">{` ${otherValidatorsCount}`}</span>
         </p>
       ) : (
         <></>

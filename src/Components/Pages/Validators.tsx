@@ -10,7 +10,7 @@ import { generateUUID } from "../../Helpers/utils";
 
 export const Validators = ({
   bodyClasses,
-  publicKeys,
+  withdrawalAddresses,
   validators,
   validatorsMaps: {
     activeValidators,
@@ -21,23 +21,26 @@ export const Validators = ({
   },
   validatorsPerformance,
 }: ValidatorsPageParams) => {
-  const [selectedValidators, setSelectedValidators] = useState("active");
+  const [selectedValidatorStatus, setSelectedValidatorStatus] =
+    useState("active");
+  const [selectedAccount, SetSelectedAccount] = useState(
+    withdrawalAddresses[0] ? withdrawalAddresses[0].address : ""
+  );
 
   const findAddressName = (bytes: string) => {
     if (bytes.length === 66) {
       const address = `0x${bytes.substring(bytes.length - 40)}`;
 
       return (
-        <td className={tableHeadStyle} key={generateUUID()}>
+        <td className={tableHeadStyle} key={address}>
           <a
             href={`${consensys_explorer}/address/${address}`}
             target="_blank"
             rel="noreferrer"
             className="text-pastel-blue hover:underline overflow-hidden"
-            key={generateUUID()}
           >
             {
-              publicKeys.filter(
+              withdrawalAddresses.filter(
                 (elem) => elem.address.toLowerCase() === address.toLowerCase()
               )[0].name
             }
@@ -48,7 +51,7 @@ export const Validators = ({
       const address = bytes;
 
       return (
-        <td className={tableHeadStyle}>
+        <td className={tableHeadStyle} key={address}>
           <a
             href={`${consensys_explorer}/address/${address}`}
             target="_blank"
@@ -56,7 +59,7 @@ export const Validators = ({
             className="text-pastel-blue hover:underline overflow-hidden"
           >
             {
-              publicKeys.filter(
+              withdrawalAddresses.filter(
                 (elem) => elem.address.toLowerCase() === address.toLowerCase()
               )[0].name
             }
@@ -68,10 +71,17 @@ export const Validators = ({
     return <td className={tableHeadStyle}>Name Unknown</td>;
   };
 
-  const getValidatorRow = (validatorMap: ValidatorMap, validator: string) => {
+  const getValidatorRow = (
+    validatorMap: ValidatorMap,
+    validator: string,
+    index: number
+  ) => {
     return (
-      <tr key={generateUUID()}>
-        <td key={generateUUID()}>
+      <tr key={validator}>
+        <td className={tableHeadStyle} key={validator + "_nr"}>
+          {`${index + 1}.`}
+        </td>
+        <td key={validator + "_link"}>
           <a
             href={`${consensys_explorer}/validator/${validator.substring(2)}`}
             target="_blank"
@@ -85,31 +95,37 @@ export const Validators = ({
             )}`}
           </a>
         </td>
-        <td className={tableHeadStyle} key={generateUUID()}>
+        <td className={tableHeadStyle} key={validator + "_index"}>
           {validatorMap[validator].validatorindex}
         </td>
-        <td className={tableHeadStyle} key={generateUUID()}>
+        <td className={tableHeadStyle} key={validator + "_balance"}>
           {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
         </td>
-        <td className={tableHeadStyle} key={generateUUID()}>
-          {validatorsPerformance[validatorMap[validator].validatorindex]
-            ? validatorsPerformance[validatorMap[validator].validatorindex]
-                .attestationPerformance.executedAttestations
+        <td
+          className={tableHeadStyle}
+          key={validator + "_executedAttestations"}
+        >
+          {validatorsPerformance[selectedAccount]
+            ? validatorsPerformance[selectedAccount][
+                validatorMap[validator].validatorindex
+              ].attestationPerformance.executedAttestations
             : 0}
         </td>
-        <td className={tableHeadStyle} key={generateUUID()}>
-          {validatorsPerformance[validatorMap[validator].validatorindex]
-            ? validatorsPerformance[validatorMap[validator].validatorindex]
-                .attestationPerformance.missedAttestations
+        <td className={tableHeadStyle} key={validator + "_missedAttestantions"}>
+          {validatorsPerformance[selectedAccount]
+            ? validatorsPerformance[selectedAccount][
+                validatorMap[validator].validatorindex
+              ].attestationPerformance.missedAttestations
             : 0}
         </td>
-        <td className={tableHeadStyle} key={generateUUID()}>
+        <td className={tableHeadStyle} key={validator + "_performance"}>
           {`${
-            validatorsPerformance[validatorMap[validator].validatorindex]
+            validatorsPerformance[selectedAccount]
               ? (
-                  (validatorsPerformance[validatorMap[validator].validatorindex]
-                    .attestationPerformance.executedAttestations /
-                    validatorsPerformance[
+                  (validatorsPerformance[selectedAccount][
+                    validatorMap[validator].validatorindex
+                  ].attestationPerformance.executedAttestations /
+                    validatorsPerformance[selectedAccount][
                       validatorMap[validator].validatorindex
                     ].attestationPerformance.attestationCount) *
                   100
@@ -128,40 +144,82 @@ export const Validators = ({
 
   return (
     <div className={bodyClasses}>
-      {/* <!-- Tile 1: Validator Buttons --> */}
+      {/* <!-- Tile 1: Select Validator Status Buttons --> */}
       <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
-        <h2 className="text-pastel-blue text-2xl mb-4">Select Validators</h2>
+        <h2 className="text-pastel-blue text-2xl mb-4">
+          Select Validator Status
+        </h2>
         <div>
           <button
-            className="bg-strong-pink text-white px-4 py-2 rounded-lg mb-2 hover:bg-dark-pink m-2"
-            onClick={() => setSelectedValidators("active")}
+            className={`${
+              selectedValidatorStatus === "active"
+                ? "bg-pastel-blue"
+                : "bg-strong-pink hover:bg-dark-pink"
+            } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
+            onClick={() => setSelectedValidatorStatus("active")}
           >
             Active
           </button>
           <button
-            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink m-2"
-            onClick={() => setSelectedValidators("pending")}
+            className={`${
+              selectedValidatorStatus === "pending"
+                ? "bg-pastel-blue"
+                : "bg-strong-pink hover:bg-dark-pink"
+            } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
+            onClick={() => setSelectedValidatorStatus("pending")}
           >
             Pending
           </button>
           <button
-            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink m-2"
-            onClick={() => setSelectedValidators("offline")}
+            className={`${
+              selectedValidatorStatus === "offline"
+                ? "bg-pastel-blue"
+                : "bg-strong-pink hover:bg-dark-pink"
+            } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
+            onClick={() => setSelectedValidatorStatus("offline")}
           >
             Offline
           </button>
           <button
-            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink m-2"
-            onClick={() => setSelectedValidators("slashed")}
+            className={`${
+              selectedValidatorStatus === "slashed"
+                ? "bg-pastel-blue"
+                : "bg-strong-pink hover:bg-dark-pink"
+            } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
+            onClick={() => setSelectedValidatorStatus("slashed")}
           >
             Slashed
           </button>
           <button
-            className="bg-strong-pink text-white px-4 py-2 rounded-lg hover:bg-dark-pink m-2"
-            onClick={() => setSelectedValidators("other")}
+            className={`${
+              selectedValidatorStatus === "other"
+                ? "bg-pastel-blue"
+                : "bg-strong-pink hover:bg-dark-pink"
+            } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
+            onClick={() => setSelectedValidatorStatus("other")}
           >
             Other
           </button>
+        </div>
+      </div>
+
+      {/* <!-- Tile 1: Select Account Buttons --> */}
+      <div className="bg-pastel-light-pink p-4 rounded-lg shadow text-center flex flex-col items-center">
+        <h2 className="text-pastel-blue text-2xl mb-4">Select Account</h2>
+        <div>
+          {withdrawalAddresses.map((elem) => (
+            <button
+              key={elem.address}
+              className={`${
+                selectedAccount === elem.address
+                  ? "bg-pastel-blue"
+                  : "bg-strong-pink hover:bg-dark-pink"
+              } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
+              onClick={() => SetSelectedAccount(elem.address)}
+            >
+              {elem.name}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -172,6 +230,7 @@ export const Validators = ({
           <table className="table-auto break-words w-full text-center">
             <thead>
               <tr className="border-b-2 border-gray-300">
+                <th className={tableHeadStyle}>Nr.</th>
                 <th className={tableHeadStyle}>Address</th>
                 <th className={tableHeadStyle}>Index</th>
                 <th className={tableHeadStyle}>Balance (LYX)</th>
@@ -182,36 +241,56 @@ export const Validators = ({
               </tr>
             </thead>
             <tbody>
-              {Object.getOwnPropertyNames(validators).map((pubKey) =>
-                validators[pubKey].map((validator) => {
-                  switch (selectedValidators) {
+              {validators[selectedAccount] ? (
+                validators[selectedAccount].map((validator, index) => {
+                  switch (selectedValidatorStatus) {
                     case "active": {
-                      if (activeValidators[validator]) {
-                        return getValidatorRow(activeValidators, validator);
+                      if (activeValidators[selectedAccount]) {
+                        return getValidatorRow(
+                          activeValidators[selectedAccount],
+                          validator,
+                          index
+                        );
                       }
                       break;
                     }
                     case "pending": {
-                      if (pendingValidators[validator]) {
-                        return getValidatorRow(pendingValidators, validator);
+                      if (pendingValidators[selectedAccount]) {
+                        return getValidatorRow(
+                          pendingValidators[selectedAccount],
+                          validator,
+                          index
+                        );
                       }
                       break;
                     }
                     case "offline": {
-                      if (offlineValidators[validator]) {
-                        return getValidatorRow(offlineValidators, validator);
+                      if (offlineValidators[selectedAccount]) {
+                        return getValidatorRow(
+                          offlineValidators[selectedAccount],
+                          validator,
+                          index
+                        );
                       }
                       break;
                     }
                     case "slashed": {
-                      if (slashedValidators[validator]) {
-                        return getValidatorRow(slashedValidators, validator);
+                      if (slashedValidators[selectedAccount]) {
+                        return getValidatorRow(
+                          slashedValidators[selectedAccount],
+                          validator,
+                          index
+                        );
                       }
                       break;
                     }
                     case "other": {
-                      if (otherValidators[validator]) {
-                        return getValidatorRow(otherValidators, validator);
+                      if (otherValidators[selectedAccount]) {
+                        return getValidatorRow(
+                          otherValidators[selectedAccount],
+                          validator,
+                          index
+                        );
                       }
                       break;
                     }
@@ -220,6 +299,8 @@ export const Validators = ({
                   }
                   return <></>;
                 })
+              ) : (
+                <></>
               )}
             </tbody>
           </table>

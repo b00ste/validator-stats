@@ -16,13 +16,14 @@ const Header = ({
   const tileClasses =
     "mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis";
 
-  const buttonClasses = "text-strong-pink m-1 hover:text-dark-pink col-span-1";
+  const buttonClasses =
+    "inline-block bg-strong-pink hover:bg-dark-pink text-white transition-colors px-4 py-2 rounded-xl m-1";
 
   return (
     <nav className="absolute top-0 left-4 right-4">
       <div
         className={`bg-pastel-white-pink p-4 rounded-b-3xl shadow transition-all ${
-          isDropdownOpen ? "h-48 duration-150" : "h-32 delay-75 duration-150"
+          isDropdownOpen ? "h-60 duration-150" : "h-32 delay-75 duration-150"
         }`}
       >
         <div className="container mx-auto grid grid-cols-3">
@@ -64,7 +65,7 @@ const Header = ({
               : "opacity-0 pointer-events-none duration-200"
           }`}
         >
-          <div className="grid grid-cols-2 w-full mx-auto">
+          <div className="flex justify-center content-center w-full mx-auto">
             <button
               className={buttonClasses}
               onClick={() => handlePageNavigation(navigate, "/home")}
@@ -77,8 +78,6 @@ const Header = ({
             >
               User
             </button>
-          </div>
-          <div className="grid grid-cols-2 w-full mx-auto">
             <button
               className={buttonClasses}
               onClick={() =>
@@ -87,6 +86,8 @@ const Header = ({
             >
               Validator Stats
             </button>
+          </div>
+          <div className="flex justify-center content-center w-full mx-auto">
             <button
               className={buttonClasses}
               onClick={() => handlePageNavigation(navigate, "/validatorList")}
@@ -98,13 +99,13 @@ const Header = ({
       </div>
       <div className="flex justify-between pl-16 pr-16 space-x-4">
         <button
-          className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
+          className="bg-strong-pink hover:bg-dark-pink text-white transition-colors px-3 py-1.5 rounded-b-lg max-h-10"
           onClick={() => refreshHandler()}
         >
           Refresh Data
         </button>
         <button
-          className="bg-strong-pink text-white px-3 py-1.5 rounded-b-lg hover:bg-dark-pink max-h-10"
+          className="bg-strong-pink hover:bg-dark-pink text-white transition-colors px-3 py-1.5 rounded-b-lg max-h-10"
           onClick={() => toggleDropdown()}
         >
           Menu

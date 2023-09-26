@@ -4,10 +4,15 @@ import {
   ExecutionPerformance,
 } from "./FetchedDataTypes";
 
-export type PublicKey = {
+export type WithdrawalAddresses = {
   address: string;
   name: string;
-  type: "depositor" | "withdrawal";
+};
+
+export type WithdrawalAddressesGroup = {
+  name: string;
+  key: string;
+  withdrawalAddresses: WithdrawalAddresses[];
 };
 
 export type ValidatorMap = Record<string, Validator>;
@@ -17,6 +22,7 @@ export type ValidatorsLuck = {
   next_proposal_estimate_ts: number;
   proposal_luck: number;
   time_frame_name: string;
+  sampleSize: number;
 };
 
 export type AttestationPerformance = {
@@ -26,17 +32,17 @@ export type AttestationPerformance = {
 };
 
 export type ValidatorsMaps = {
-  activeValidators: ValidatorMap;
-  pendingValidators: ValidatorMap;
-  offlineValidators: ValidatorMap;
-  slashedValidators: ValidatorMap;
-  otherValidators: ValidatorMap;
+  activeValidators: Record<string, ValidatorMap>;
+  pendingValidators: Record<string, ValidatorMap>;
+  offlineValidators: Record<string, ValidatorMap>;
+  slashedValidators: Record<string, ValidatorMap>;
+  otherValidators: Record<string, ValidatorMap>;
 };
 
 export type ValidatorsData = {
   validatorsMaps: ValidatorsMaps;
-  validatorsLuck: ValidatorsLuck;
-  validatorsPerformance: ValidatorsPerformance;
+  validatorsLuck: Record<string, ValidatorsLuck>;
+  validatorsPerformance: Record<string, ValidatorsPerformance>;
 };
 
 export type ValidatorsBalances = {

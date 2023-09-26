@@ -11,6 +11,7 @@ export const Earnings = ({
   tokenPrice,
   stakedLYX,
   activeBalance,
+  selectedGroup,
   validatorsPerformance,
 }: EarningsParams) => {
   const getTimeframeParamNames = (): {
@@ -85,18 +86,27 @@ export const Earnings = ({
     let totalEarnings = 0;
     const { consensusTimeframeParam, executionTimeframeParam } =
       getTimeframeParamNames();
-    for (const index in validatorsPerformance) {
-      if (validatorsPerformance[index].consensusPerformance) {
-        totalEarnings +=
-          validatorsPerformance[index].consensusPerformance[
-            consensusTimeframeParam
-          ] / 1e9;
-      }
-      if (validatorsPerformance[index].executionPerformance) {
-        totalEarnings +=
-          validatorsPerformance[index].executionPerformance[
-            executionTimeframeParam
-          ] / 1e18;
+
+    for (let i = 0; i < selectedGroup.withdrawalAddresses.length; i++) {
+      const withdrawalAddress = selectedGroup.withdrawalAddresses[i].address;
+
+      for (const validatorIndex in validatorsPerformance[withdrawalAddress]) {
+        if (
+          validatorsPerformance[withdrawalAddress][validatorIndex]
+            .consensusPerformance
+        ) {
+          totalEarnings +=
+            validatorsPerformance[withdrawalAddress][validatorIndex]
+              .consensusPerformance[consensusTimeframeParam] / 1e9;
+        }
+        if (
+          validatorsPerformance[withdrawalAddress][validatorIndex]
+            .executionPerformance
+        ) {
+          totalEarnings +=
+            validatorsPerformance[withdrawalAddress][validatorIndex]
+              .executionPerformance[executionTimeframeParam] / 1e18;
+        }
       }
     }
 

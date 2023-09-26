@@ -32,12 +32,14 @@ import {
 
 // ts types
 import {
-  PublicKey,
+  WithdrawalAddresses,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
+  WithdrawalAddressesGroup,
 } from "./Types/UsedDataTypes";
 import PageNotFound from "./Components/Pages/PageNotFound";
+import { generateUUID } from "./Helpers/utils";
 
 function App() {
   /// Default page to redirect from `/`
@@ -53,17 +55,32 @@ function App() {
           | "")
   );
 
-  /// ------ Deposior/Withdrawal Addresses ------
-  const storedPublicKeys = localStorage.getItem("publicKeys");
-  const [publicKeys, setPublicKeys] = useState(
-    (storedPublicKeys ? JSON.parse(storedPublicKeys) : []) as PublicKey[]
+  /// ------ Withdrawal Addresses ------
+  const storedWithdrawalAddresses = localStorage.getItem("withdrawalAddresses");
+  const [withdrawalAddresses, setWithdrawalAddresses] = useState(
+    (storedWithdrawalAddresses
+      ? JSON.parse(storedWithdrawalAddresses)
+      : []) as WithdrawalAddresses[]
   );
-  const [withdrawalAddressesBalance, setWithdrawalAddressesBalance] = useState(
-    undefined as number | undefined
+  const [withdrawalAddressesBalance, setWithdrawalAddressessBalance] = useState(
+    undefined as Record<string, number> | undefined
   );
   /// -------------------------------------------
 
-  /// ------ Validators Pubkeys ------
+  /// ------ Withdrawal Addresses Groups ------
+  const storedWithdrawalAddressessGroups = localStorage.getItem(
+    "withdrawalAddressesGroups"
+  );
+  const [withdrawalAddressesGroups, setWithdrawalAddressessGroups] = useState(
+    (storedWithdrawalAddressessGroups
+      ? JSON.parse(storedWithdrawalAddressessGroups)
+      : [
+          { name: "Main", key: generateUUID(), withdrawalAddresses },
+        ]) as WithdrawalAddressesGroup[]
+  );
+  /// -----------------------------------------
+
+  /// ------ Validators withdrawalAddresses ------
   const storedValidators = localStorage.getItem("validators");
   const [validators, setValidators] = useState(
     (storedValidators ? JSON.parse(storedValidators) : {}) as Record<
@@ -75,25 +92,25 @@ function App() {
 
   /// ------ Validator Data ------
   const [activeValidators, setActiveValidators] = useState(
-    undefined as ValidatorMap | undefined
+    undefined as Record<string, ValidatorMap> | undefined
   );
   const [pendingValidators, setPendingValidators] = useState(
-    undefined as ValidatorMap | undefined
+    undefined as Record<string, ValidatorMap> | undefined
   );
   const [offlineValidators, setOfflineValidators] = useState(
-    undefined as ValidatorMap | undefined
+    undefined as Record<string, ValidatorMap> | undefined
   );
   const [slashedValidators, setSlashedValidators] = useState(
-    undefined as ValidatorMap | undefined
+    undefined as Record<string, ValidatorMap> | undefined
   );
   const [otherValidators, setOtherValidators] = useState(
-    undefined as ValidatorMap | undefined
+    undefined as Record<string, ValidatorMap> | undefined
   );
   const [validatorsLuck, setValidatorsLuck] = useState(
-    undefined as ValidatorsLuck | undefined
+    undefined as Record<string, ValidatorsLuck> | undefined
   );
   const [validatorsPerformance, setValidatorsPerformance] = useState(
-    undefined as ValidatorsPerformance | undefined
+    undefined as Record<string, ValidatorsPerformance> | undefined
   );
   /// ----------------------------
 
@@ -121,19 +138,19 @@ function App() {
 
   /// ------ Handlers for Data Update ------
   const updateValidatorHandler = useCallback(() => {
-    const validators = fetchValidators(publicKeys);
+    const validators = fetchValidators(withdrawalAddresses);
 
     validators.then((data) => setValidators(data));
-  }, [publicKeys]);
+  }, [withdrawalAddresses]);
 
   const updateWithdrawalAddressesBalanceHandler = useCallback(() => {
     const newWithdrawalAddressesBalance =
-      getWithdrawalAddressesBalance(publicKeys);
+      getWithdrawalAddressesBalance(withdrawalAddresses);
 
     newWithdrawalAddressesBalance.then((data) =>
-      setWithdrawalAddressesBalance(data)
+      setWithdrawalAddressessBalance(data)
     );
-  }, [publicKeys]);
+  }, [withdrawalAddresses]);
 
   const updateValidatorsMaps = useCallback(() => {
     const fetchedData = fetchValidatorsData(validators);
@@ -202,19 +219,40 @@ function App() {
   ]);
   /// --------------------------------------
 
-  /// Save validators to local storage
+  /// ------ Update storage items ------
+  useEffect(() => {
+    localStorage.setItem(
+      "withdrawalAddresses",
+      JSON.stringify(withdrawalAddresses)
+    );
+  }, [withdrawalAddresses]);
+
+  useEffect(() => {
+    if (withdrawalAddressesGroups[0].name === "Main") {
+      withdrawalAddressesGroups[0].withdrawalAddresses = withdrawalAddresses;
+    }
+  }, [withdrawalAddressesGroups, withdrawalAddresses]);
+
   useEffect(() => {
     localStorage.setItem("validators", JSON.stringify(validators));
   }, [validators]);
 
-  /// Update validators and withdrawal addresses balance if `publicKeys` changes
   useEffect(() => {
-    if (publicKeys.length > 0) {
+    localStorage.setItem(
+      "withdrawalAddressesGroups",
+      JSON.stringify(withdrawalAddressesGroups)
+    );
+  }, [withdrawalAddressesGroups]);
+  /// ----------------------------------
+
+  /// Update validators and withdrawal addresses balance if `withdrawalAddresses` changes
+  useEffect(() => {
+    if (withdrawalAddresses.length > 0) {
       updateValidatorHandler();
       updateWithdrawalAddressesBalanceHandler();
     }
   }, [
-    publicKeys,
+    withdrawalAddresses,
     updateValidatorHandler,
     updateWithdrawalAddressesBalanceHandler,
   ]);
@@ -263,7 +301,7 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       refreshHandler();
-    }, 60000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [refreshHandler]);
@@ -292,14 +330,7 @@ function App() {
 
   const validatorsData = {
     validatorsMaps,
-    validatorsLuck: validatorsLuck
-      ? validatorsLuck
-      : {
-          average_proposal_interval: 0,
-          next_proposal_estimate_ts: 0,
-          proposal_luck: 0,
-          time_frame_name: "",
-        },
+    validatorsLuck: validatorsLuck ? validatorsLuck : {},
     validatorsPerformance: validatorsPerformance ? validatorsPerformance : {},
   };
 
@@ -318,7 +349,7 @@ function App() {
   return (
     <div
       className={`min-h-screen relative flex flex-col justify-center items-center bg-soft-pink pb-12 transition-all ${
-        isDropdownOpen ? "pt-60" : "pt-44 delay-75 duration-200"
+        isDropdownOpen ? "pt-72" : "pt-44 delay-75 duration-200"
       }`}
     >
       <Router>
@@ -341,8 +372,9 @@ function App() {
                 stakedLYX={stakedLYX ? stakedLYX : 0}
                 tokenPrice={tokenPrice}
                 validatorsData={validatorsData}
+                withdrawalAddressesGroups={withdrawalAddressesGroups}
                 withdrawalAddressesBalance={
-                  withdrawalAddressesBalance ? withdrawalAddressesBalance : 0
+                  withdrawalAddressesBalance ? withdrawalAddressesBalance : {}
                 }
               />
             }
@@ -352,12 +384,14 @@ function App() {
             element={
               <User
                 bodyClasses={bodyClasses}
-                publicKeys={publicKeys}
-                setPublicKeys={setPublicKeys}
+                withdrawalAddresses={withdrawalAddresses}
+                setWithdrawalAddresses={setWithdrawalAddresses}
                 validators={validators}
                 setValidators={setValidators}
                 defaultPage={defaultPage}
                 setDefaultPage={setDefaultPage}
+                withdrawalAddressesGroups={withdrawalAddressesGroups}
+                setWithdrawalAddressessGroups={setWithdrawalAddressessGroups}
               />
             }
           />
@@ -366,7 +400,7 @@ function App() {
             element={
               <Validators
                 bodyClasses={bodyClasses}
-                publicKeys={publicKeys}
+                withdrawalAddresses={withdrawalAddresses}
                 validators={validators}
                 validatorsMaps={validatorsMaps}
                 validatorsPerformance={
