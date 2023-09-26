@@ -233,8 +233,11 @@ const User = ({
 
   /// ------ Styling Handling ------
   const tableHeadClasses = "text-slate-gray px-4 py-1";
+
   const textInputClasses =
-    "w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:ring focus:border-pastel-blue text-center border-2 border-lavender-pink";
+    "w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:border-pastel-blue text-center border-2 border-lavender-pink";
+
+  const checkboxLabelClasses = "ml-4 text-xl";
   /// ------------------------------
 
   return (
@@ -420,7 +423,7 @@ const User = ({
               ref={groupElementsRef}
               onChange={() => handleCreateGroupChange()}
               defaultValue="choose address"
-              className="appearance-none px-4 py-2 rounded-xl bg-lavander-pink focus:outline-none hover:cursor-pointer hover:bg-soft-pink transition-colors"
+              className="appearance-none px-4 py-2 rounded-xl bg-lavander-pink focus:outline-none hover:cursor-pointer hover:bg-soft-pink transition-colors border-2 border-lavender-pink"
             >
               <option value="choose address">Choose address</option>
               {withdrawalAddresses
@@ -527,7 +530,7 @@ const User = ({
               checked={"/home" === defaultPage}
               onChange={() => handleDefaultPageChange("/home")}
             />
-            <label className="ml-4" htmlFor="/home">
+            <label className={checkboxLabelClasses} htmlFor="/home">
               Home
             </label>
           </div>
@@ -538,7 +541,10 @@ const User = ({
               checked={"/validatorStatistics" === defaultPage}
               onChange={() => handleDefaultPageChange("/validatorStatistics")}
             />
-            <label className="ml-4" htmlFor="/validatorStatistics">
+            <label
+              className={checkboxLabelClasses}
+              htmlFor="/validatorStatistics"
+            >
               Validator Statistics
             </label>
           </div>
@@ -549,7 +555,7 @@ const User = ({
               checked={"/validatorList" === defaultPage}
               onChange={() => handleDefaultPageChange("/validatorList")}
             />
-            <label className="ml-4" htmlFor="/validatorList">
+            <label className={checkboxLabelClasses} htmlFor="/validatorList">
               Validator List
             </label>
           </div>
@@ -560,13 +566,13 @@ const User = ({
               checked={"user" === defaultPage}
               onChange={() => handleDefaultPageChange("user")}
             />
-            <label className="ml-4" htmlFor="user">
+            <label className={checkboxLabelClasses} htmlFor="user">
               User
             </label>
           </div>
           <div className="flex justify-center">
             <button
-              className="mt-4 py-1 px-2 rounded-md bg-strong-pink hover:bg-dark-pink transition-colors"
+              className="mt-4 py-2 px-4 rounded-md bg-strong-pink hover:bg-dark-pink transition-colors"
               onClick={(event) => handleDefaultPageSelect(event)}
             >
               Select
