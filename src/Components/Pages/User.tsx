@@ -213,6 +213,11 @@ const User = ({
     );
   };
 
+  const handleGroupEdit = (event: FormEvent) => {
+    event.preventDefault();
+    alert("WIP");
+  };
+
   const handleDefaultPageChange = (
     pageName: "/home" | "/validatorStatistics" | "/validatorList" | "user"
   ) => {
@@ -238,6 +243,9 @@ const User = ({
     "w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:border-pastel-blue text-center border-2 border-lavender-pink";
 
   const checkboxLabelClasses = "ml-4 text-xl";
+
+  const buttonClasses =
+    "bg-strong-pink hover:bg-dark-pink border-2 border-dark-pink text-white px-4 py-2 rounded-lg w-full transition-colors";
   /// ------------------------------
 
   return (
@@ -280,7 +288,7 @@ const User = ({
           </div>
           <button
             type="submit"
-            className="bg-strong-pink hover:bg-dark-pink transition-colors text-white px-4 py-2 rounded-lg w-full"
+            className={buttonClasses}
             onClick={(event) => handleAddressSubmit(event)}
           >
             Add Address
@@ -423,7 +431,7 @@ const User = ({
               ref={groupElementsRef}
               onChange={() => handleCreateGroupChange()}
               defaultValue="choose address"
-              className="appearance-none px-4 py-2 rounded-xl bg-lavander-pink focus:outline-none hover:cursor-pointer hover:bg-soft-pink transition-colors border-2 border-lavender-pink"
+              className="appearance-none px-4 py-2 rounded-xl bg-soft-pink focus:outline-none hover:cursor-pointer hover:bg-lavender-pink transition-colors border-2 border-lavender-pink"
             >
               <option value="choose address">Choose address</option>
               {withdrawalAddresses
@@ -437,7 +445,7 @@ const User = ({
           </div>
           <button
             type="submit"
-            className="bg-strong-pink hover:bg-dark-pink text-white px-4 py-2 rounded-lg w-full transition-colors"
+            className={buttonClasses}
             onClick={(event) => handleCreateGroupSubmit(event)}
           >
             Create Group
@@ -488,7 +496,7 @@ const User = ({
                     {group.name !== "Main" ? (
                       <button
                         className="text-pastel-green hover:text-green-500 transition-colors w-"
-                        onClick={(event) => handleGroupRemoval(event, group)}
+                        onClick={(event) => handleGroupEdit(event)}
                       >
                         Edit
                       </button>
@@ -525,56 +533,58 @@ const User = ({
           Default starting page
         </h2>
         <form className="w-full max-w-md">
-          <div>
-            <input
-              type="checkbox"
-              id="/home"
-              checked={"/home" === defaultPage}
-              onChange={() => handleDefaultPageChange("/home")}
-            />
-            <label className={checkboxLabelClasses} htmlFor="/home">
-              Home
-            </label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="/validatorStatistics"
-              checked={"/validatorStatistics" === defaultPage}
-              onChange={() => handleDefaultPageChange("/validatorStatistics")}
-            />
-            <label
-              className={checkboxLabelClasses}
-              htmlFor="/validatorStatistics"
-            >
-              Validator Statistics
-            </label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="/validatorList"
-              checked={"/validatorList" === defaultPage}
-              onChange={() => handleDefaultPageChange("/validatorList")}
-            />
-            <label className={checkboxLabelClasses} htmlFor="/validatorList">
-              Validator List
-            </label>
-          </div>
-          <div>
-            <input
-              type="checkbox"
-              id="user"
-              checked={"user" === defaultPage}
-              onChange={() => handleDefaultPageChange("user")}
-            />
-            <label className={checkboxLabelClasses} htmlFor="user">
-              User
-            </label>
+          <div className="pb-4">
+            <div>
+              <input
+                type="checkbox"
+                id="/home"
+                checked={"/home" === defaultPage}
+                onChange={() => handleDefaultPageChange("/home")}
+              />
+              <label className={checkboxLabelClasses} htmlFor="/home">
+                Home
+              </label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="/validatorStatistics"
+                checked={"/validatorStatistics" === defaultPage}
+                onChange={() => handleDefaultPageChange("/validatorStatistics")}
+              />
+              <label
+                className={checkboxLabelClasses}
+                htmlFor="/validatorStatistics"
+              >
+                Validator Statistics
+              </label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="/validatorList"
+                checked={"/validatorList" === defaultPage}
+                onChange={() => handleDefaultPageChange("/validatorList")}
+              />
+              <label className={checkboxLabelClasses} htmlFor="/validatorList">
+                Validator List
+              </label>
+            </div>
+            <div>
+              <input
+                type="checkbox"
+                id="user"
+                checked={"user" === defaultPage}
+                onChange={() => handleDefaultPageChange("user")}
+              />
+              <label className={checkboxLabelClasses} htmlFor="user">
+                User
+              </label>
+            </div>
           </div>
           <div className="flex justify-center">
             <button
-              className="mt-4 py-2 px-4 rounded-md bg-strong-pink hover:bg-dark-pink transition-colors"
+              className={buttonClasses}
               onClick={(event) => handleDefaultPageSelect(event)}
             >
               Select
