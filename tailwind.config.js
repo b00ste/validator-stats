@@ -20,6 +20,26 @@ module.exports = {
         "misty-rose": "#ffe8e1",
         pink: "#ffc4d1",
         alabaster: "#EAEEE7",
+
+        // https://coolors.co/686868-c2aff0-9191e9-457eac-2d5d7b
+        mauve: "#C2AFF0",
+
+        // https://coolors.co/191716-440d0f-603a40-84596b-af9bb6
+        "rose-quartz": "#AF9BB6",
+
+        // https://coolors.co/b8336a-726da8-7d8cc4-a0d2db-c490d1
+        "raspberry-rose": "#B8336A",
+        wisteria: "#C490D1",
+
+        // https://coolors.co/8fd694-7dba84-77ad78-6f8f72-504b43
+        celadon: "#8fd694",
+        emerald: "#7dba84",
+        asparagus: "#77ad78",
+        "reseda-green": "#6f8f72",
+        "walnut-brown": "#504b43",
+
+        // https://coolors.co/6f2dbd-a663cc-b298dc-b8d0eb-b9faf8
+        amethyst: "#A663CC",
       },
     },
   },

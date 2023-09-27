@@ -10,6 +10,8 @@ import { generateUUID } from "../../Helpers/utils";
 
 const User = ({
   bodyClasses,
+  tileClasses,
+  buttonClasses,
   withdrawalAddresses,
   setWithdrawalAddresses,
   validators,
@@ -244,14 +246,17 @@ const User = ({
 
   const checkboxLabelClasses = "ml-4 text-xl";
 
-  const buttonClasses =
-    "bg-strong-pink hover:bg-dark-pink border-2 border-dark-pink text-white px-4 py-2 rounded-lg w-full transition-colors";
+  const additionalButtonClasses = "w-full";
+
+  const specificTileClasses = `${tileClasses} p-4`;
   /// ------------------------------
 
   return (
     <div className={`${bodyClasses} grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`}>
       {/* <!-- Tile 1: Add Address Form --> */}
-      <div className="relative bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div
+        className={`${specificTileClasses} text-center flex flex-col items-center justify-evenly`}
+      >
         <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
@@ -288,7 +293,7 @@ const User = ({
           </div>
           <button
             type="submit"
-            className={buttonClasses}
+            className={`${buttonClasses} ${additionalButtonClasses}`}
             onClick={(event) => handleAddressSubmit(event)}
           >
             Add Address
@@ -302,7 +307,9 @@ const User = ({
       </div>
 
       {/* <!-- Tile 2: List of Saved Addresses --> */}
-      <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1 sm:col-span-2">
+      <div
+        className={`${specificTileClasses} col-span-1 sm:col-span-2 overflow-scroll`}
+      >
         <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
         <div className="overflow-x-scroll">
           <table className="table-auto w-max text-center">
@@ -383,7 +390,9 @@ const User = ({
       </div>
 
       {/* <!-- Tile 3: New Withdrawal Addresses Group --> */}
-      <div className="relative bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div
+        className={`${specificTileClasses} text-center flex flex-col items-center justify-evenly`}
+      >
         <h2 className="text-pastel-blue text-2xl mb-4">
           Withdrawal addresses groups
         </h2>
@@ -445,7 +454,7 @@ const User = ({
           </div>
           <button
             type="submit"
-            className={buttonClasses}
+            className={`${buttonClasses} ${additionalButtonClasses}`}
             onClick={(event) => handleCreateGroupSubmit(event)}
           >
             Create Group
@@ -463,7 +472,9 @@ const User = ({
       </div>
 
       {/* <!-- Tile 4: List of Withdrawal Address Groups --> */}
-      <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1 sm:col-span-2">
+      <div
+        className={`${specificTileClasses} col-span-1 sm:col-span-2 overflow-scroll`}
+      >
         <h2 className="text-pastel-blue text-2xl mb-4">
           Withdrawal Address Groups
         </h2>
@@ -528,7 +539,7 @@ const User = ({
       </div>
 
       {/* <!-- Tile 5: Set default starting page --> */}
-      <div className="relative bg-misty-rose p-4 rounded-lg shadow col-span-1">
+      <div className={`${specificTileClasses} col-span-1`}>
         <h2 className="text-pastel-blue text-2xl mb-4">
           Default starting page
         </h2>
@@ -584,7 +595,7 @@ const User = ({
           </div>
           <div className="flex justify-center">
             <button
-              className={buttonClasses}
+              className={`${buttonClasses} ${additionalButtonClasses}`}
               onClick={(event) => handleDefaultPageSelect(event)}
             >
               Select

@@ -14,11 +14,16 @@ import {
 // ------------ MAIN COMPONENTS PARAM TYPES ------------
 
 export type LandingPageParams = {
+  bodyClasses: string;
+  tileClasses: string;
+  buttonClasses: string;
   handlePageNavigation: Function;
 };
 
 export type ValidatorStatsPageParams = {
   bodyClasses: string;
+  tileClasses: string;
+  buttonClasses: string;
   stakedLYX: number;
   tokenPrice: TokenPrice;
   validatorsData: ValidatorsData;
@@ -28,6 +33,8 @@ export type ValidatorStatsPageParams = {
 
 export type UserPageParams = {
   bodyClasses: string;
+  tileClasses: string;
+  buttonClasses: string;
   withdrawalAddresses: WithdrawalAddresses[];
   setWithdrawalAddresses: React.Dispatch<
     React.SetStateAction<WithdrawalAddresses[]>
@@ -44,6 +51,7 @@ export type UserPageParams = {
 
 export type ValidatorsPageParams = {
   bodyClasses: string;
+  tileClasses: string;
   withdrawalAddresses: WithdrawalAddresses[];
   validators: Record<string, string[]>;
   validatorsMaps: ValidatorsMaps;
@@ -51,6 +59,7 @@ export type ValidatorsPageParams = {
 };
 
 export type HeaderParams = {
+  buttonClasses: string;
   networkData: NetworkData;
   tokenPrice: TokenPrice;
   isDropdownOpen: boolean;

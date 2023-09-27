@@ -3,7 +3,12 @@ import Notification from "../Notification";
 import { useState } from "react";
 import { LandingPageParams } from "../../Types/ComponentParamsTypes";
 
-const Landing = ({ handlePageNavigation }: LandingPageParams) => {
+const Landing = ({
+  bodyClasses,
+  tileClasses,
+  buttonClasses,
+  handlePageNavigation,
+}: LandingPageParams) => {
   const navigate = useNavigate();
   const [addressCopiedOpacity, setAddressCopiedOpacity] = useState(
     "opacity-0 pointer-events-none"
@@ -20,9 +25,11 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
 
   const supportProjectAddress = "0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1";
 
+  const specificTileClasses = `${tileClasses} p-6`;
+
   return (
-    <div className="container mx-auto p-4">
-      <section className="bg-misty-rose rounded-lg shadow-lg p-6">
+    <div className={bodyClasses}>
+      <section className={specificTileClasses}>
         <h2 className="text-2xl font-semibold mb-4">
           Monitor Your Ethereum Validators
         </h2>
@@ -49,14 +56,14 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
           </li>
         </ul>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-alabaster p-4 rounded-lg shadow-md">
+          <div className="bg-alabaster border-2 border-wisteria p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">Validator Statistics</h3>
             <p className="text-slate-gray">
               Check the validator statistics page.
             </p>
             <div className="flex justify-center mt-4">
               <button
-                className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
+                className={buttonClasses}
                 onClick={() =>
                   handlePageNavigation(navigate, "/validatorStatistics")
                 }
@@ -65,24 +72,24 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
               </button>
             </div>
           </div>
-          <div className="bg-alabaster p-4 rounded-lg shadow-md">
+          <div className="bg-alabaster border-2 border-wisteria p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">Validator List</h3>
             <p className="text-slate-gray">Check the list of validators.</p>
             <div className="flex justify-center mt-4">
               <button
-                className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
+                className={buttonClasses}
                 onClick={() => handlePageNavigation(navigate, "/validatorList")}
               >
                 Validator List
               </button>
             </div>
           </div>
-          <div className="bg-alabaster p-4 rounded-lg shadow-md">
+          <div className="bg-alabaster border-2 border-wisteria p-4 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold mb-2">User</h3>
             <p className="text-slate-gray">Update your withdrawal addresses</p>
             <div className="flex justify-center mt-4">
               <button
-                className="bg-strong-pink py-2 px-4 rounded-3xl hover:bg-dark-pink"
+                className={buttonClasses}
                 onClick={() => handlePageNavigation(navigate, "/user")}
               >
                 User
@@ -92,7 +99,7 @@ const Landing = ({ handlePageNavigation }: LandingPageParams) => {
         </div>
       </section>
 
-      <section className="relative mt-4 bg-misty-rose rounded-lg shadow-lg p-6">
+      <section className={specificTileClasses}>
         <h2 className="text-2xl font-semibold mb-4">Support the author:</h2>
         <p className="text-lg mb-4">
           The react app is done for personal use, but its made available to be

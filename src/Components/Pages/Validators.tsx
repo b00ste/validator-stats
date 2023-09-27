@@ -10,6 +10,7 @@ import { generateUUID } from "../../Helpers/utils";
 
 export const Validators = ({
   bodyClasses,
+  tileClasses,
   withdrawalAddresses,
   validators,
   validatorsMaps: {
@@ -140,12 +141,16 @@ export const Validators = ({
 
   /// ------ Styling Handling ------
   const tableHeadStyle = "text-slate-gray px-4 py-1";
+
+  const specificTileClasses = `${tileClasses} p-4`;
   /// ------------------------------
 
   return (
     <div className={bodyClasses}>
       {/* <!-- Tile 1: Select Validator Status Buttons --> */}
-      <div className="bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div
+        className={`${specificTileClasses} text-center flex flex-col items-center`}
+      >
         <h2 className="text-pastel-blue text-2xl mb-4">
           Select Validator Status
         </h2>
@@ -204,7 +209,9 @@ export const Validators = ({
       </div>
 
       {/* <!-- Tile 1: Select Account Buttons --> */}
-      <div className="bg-misty-rose p-4 rounded-lg shadow text-center flex flex-col items-center">
+      <div
+        className={`${specificTileClasses} text-center flex flex-col items-center`}
+      >
         <h2 className="text-pastel-blue text-2xl mb-4">Select Account</h2>
         <div>
           {withdrawalAddresses.map((elem) => (
@@ -224,7 +231,7 @@ export const Validators = ({
       </div>
 
       {/* <!-- Tile 2: List of Ethereum Validators --> */}
-      <div className="bg-misty-rose p-4 rounded-lg shadow">
+      <div className={specificTileClasses}>
         <h2 className="text-pastel-blue text-2xl mb-4">Ethereum Validators</h2>
         <div className="overflow-x-scroll">
           <table className="table-auto break-words w-full text-center">

@@ -17,6 +17,7 @@ import { ValidatorMap } from "../../Types/UsedDataTypes";
 
 const ValidatorStats = ({
   bodyClasses,
+  tileClasses,
   stakedLYX,
   tokenPrice,
   validatorsData: { validatorsMaps, validatorsLuck, validatorsPerformance },
@@ -131,14 +132,12 @@ const ValidatorStats = ({
   ]);
 
   /// ------ Styling Handling ------
-
-  const tileClasses =
-    "bg-misty-rose p-2 rounded-lg shadow text-center flex flex-col items-center justify-center";
+  const specificTileClasses = `${tileClasses} text-center p-2 flex flex-col items-center justify-evenly`;
   /// ------------------------------
 
   return (
     <div className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3`}>
-      <div className={`${tileClasses} sm:col-span-2 md:col-span-3`}>
+      <div className={`${specificTileClasses} sm:col-span-2 md:col-span-3`}>
         <div className="text-pastel-blue text-xl mb-2">Select Group</div>
         <div className="flex items-center justify-center flex-wrap">
           {withdrawalAddressesGroups.map((group) => (
@@ -147,7 +146,7 @@ const ValidatorStats = ({
               className={`${
                 selectedGroup.name === group.name
                   ? "bg-pastel-blue"
-                  : "bg-strong-pink hover:bg-dark-pink"
+                  : "bg-strong-pink hover:bg-dark-pink border-2"
               } inline-block text-white transition-colors px-4 py-2 rounded-xl m-1`}
               onClick={() => setSelectedGroup(group)}
             >
@@ -157,7 +156,7 @@ const ValidatorStats = ({
         </div>
       </div>
       <Validators
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         validatorsCount={{
           activeValidatorsCount,
           pendingValidatorsCount,
@@ -167,7 +166,7 @@ const ValidatorStats = ({
         }}
       />
       <Balance
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         validatorsBalances={{
           activeBalance,
@@ -178,26 +177,26 @@ const ValidatorStats = ({
         }}
       />
       <WithdrawableAmount
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         activeValidatorsCount={activeValidatorsCount}
         activeBalance={activeBalance}
       />
       <TotalWithdrawals
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         selectedGroup={selectedGroup}
         activeValidators={activeValidators}
         tokenPrice={tokenPrice}
       />
       <WithdrawalBalance
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         selectedGroup={selectedGroup}
         withdrawalAddressesBalance={withdrawalAddressesBalance}
       />
       <Earnings
         timeframe="daily"
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -206,7 +205,7 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="weekly"
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -215,7 +214,7 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="monthly"
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -224,7 +223,7 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="annual"
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -233,7 +232,7 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="total"
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -241,32 +240,32 @@ const ValidatorStats = ({
         validatorsPerformance={validatorsPerformance}
       />
       <Attestations
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         selectedGroup={selectedGroup}
         validatorsPerformance={validatorsPerformance}
       />
       <Luck
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         selectedGroup={selectedGroup}
         validatorsLuck={validatorsLuck}
       />
       <TimeframePercentageRate
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         timeframe="daily"
         stakedLYX={stakedLYX}
       />
       <TimeframePercentageRate
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         timeframe="weekly"
         stakedLYX={stakedLYX}
       />
       <TimeframePercentageRate
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
       />
       <TimeframePercentageRate
-        tileClasses={tileClasses}
+        tileClasses={specificTileClasses}
         timeframe="annual"
         stakedLYX={stakedLYX}
       />

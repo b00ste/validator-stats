@@ -331,6 +331,13 @@ function App() {
   /// ------ Styling ------
   const bodyClasses =
     "container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1";
+
+  const tileClasses =
+    "relative bg-misty-rose border border-emerald rounded-lg shadow-lg";
+
+  const buttonClasses =
+    "bg-strong-pink hover:bg-dark-pink border-2 border-dark-pink text-white transition-colors px-4 py-2 rounded-lg ";
+
   /// ---------------------
 
   /// ------ Compartimetised Data ------
@@ -376,13 +383,22 @@ function App() {
           />
           <Route
             path="/home"
-            element={<Landing handlePageNavigation={handlePageNavigation} />}
+            element={
+              <Landing
+                bodyClasses={bodyClasses}
+                tileClasses={tileClasses}
+                buttonClasses={buttonClasses}
+                handlePageNavigation={handlePageNavigation}
+              />
+            }
           />
           <Route
             path="/validatorStatistics"
             element={
               <ValidatorStats
                 bodyClasses={bodyClasses}
+                tileClasses={tileClasses}
+                buttonClasses={buttonClasses}
                 stakedLYX={stakedLYX ? stakedLYX : 0}
                 tokenPrice={tokenPrice}
                 validatorsData={validatorsData}
@@ -398,6 +414,8 @@ function App() {
             element={
               <User
                 bodyClasses={bodyClasses}
+                tileClasses={tileClasses}
+                buttonClasses={buttonClasses}
                 withdrawalAddresses={withdrawalAddresses}
                 setWithdrawalAddresses={setWithdrawalAddresses}
                 validators={validators}
@@ -414,6 +432,7 @@ function App() {
             element={
               <Validators
                 bodyClasses={bodyClasses}
+                tileClasses={tileClasses}
                 withdrawalAddresses={withdrawalAddresses}
                 validators={validators}
                 validatorsMaps={validatorsMaps}
@@ -429,6 +448,7 @@ function App() {
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
         <Header
+          buttonClasses={buttonClasses}
           networkData={networkData}
           tokenPrice={tokenPrice}
           isDropdownOpen={isDropdownOpen}
