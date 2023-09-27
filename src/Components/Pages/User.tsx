@@ -257,14 +257,16 @@ const User = ({
       <div
         className={`${specificTileClasses} text-center flex flex-col items-center justify-evenly`}
       >
-        <h2 className="text-pastel-blue text-2xl mb-4">Add Ethereum Address</h2>
+        <h2 className="text-pastel-blue text-2xl mb-4">
+          Add Withdrawal Address
+        </h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
             <label
               htmlFor="ethAddress"
               className="block text-slate-gray text-sm font-bold mb-2"
             >
-              Ethereum Address:
+              Withdrawal Address:
             </label>
             <input
               type="text"
@@ -310,7 +312,9 @@ const User = ({
       <div
         className={`${specificTileClasses} col-span-1 sm:col-span-2 overflow-scroll`}
       >
-        <h2 className="text-pastel-blue text-2xl mb-4">Saved Addresses</h2>
+        <h2 className="text-pastel-blue text-2xl mb-4">
+          Saved Withdrawal Addresses
+        </h2>
         <div className="overflow-x-scroll">
           <table className="table-auto w-max text-center">
             <thead>
@@ -394,7 +398,7 @@ const User = ({
         className={`${specificTileClasses} text-center flex flex-col items-center justify-evenly`}
       >
         <h2 className="text-pastel-blue text-2xl mb-4">
-          Withdrawal addresses groups
+          Create Groups of Withdrawal Addresses
         </h2>
         <form className="w-full max-w-md">
           <div className="mb-4">
@@ -476,7 +480,7 @@ const User = ({
         className={`${specificTileClasses} col-span-1 sm:col-span-2 overflow-scroll`}
       >
         <h2 className="text-pastel-blue text-2xl mb-4">
-          Withdrawal Address Groups
+          Groups of Withdrawal Addresses
         </h2>
         <div className="overflow-x-scroll">
           <table className="table-auto w-max text-center">
