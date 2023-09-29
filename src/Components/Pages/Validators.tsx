@@ -5,8 +5,9 @@ import { consensys_explorer } from "../../Helpers/constants";
 
 // types
 import { ValidatorsPageParams } from "../../Types/ComponentParamsTypes";
-import { ValidatorMap } from "../../Types/UsedDataTypes";
+import { ValidatorMap, ValidatorsPerformance } from "../../Types/UsedDataTypes";
 import { generateUUID } from "../../Helpers/utils";
+import { Validator } from "../../Types/FetchedDataTypes";
 
 export const Validators = ({
   bodyClasses,
@@ -72,71 +73,125 @@ export const Validators = ({
     return <td className={tableHeadStyle}>Name Unknown</td>;
   };
 
+  const getExecutedAttestations = (
+    accountValidatorsPerformance: ValidatorsPerformance,
+    validatorData: Validator
+  ) => {
+    if (accountValidatorsPerformance) {
+      const validatorPerformance =
+        accountValidatorsPerformance[validatorData.validatorindex];
+
+      return (
+        <>
+          {validatorPerformance
+            ? validatorPerformance.attestationPerformance.executedAttestations
+            : 0}
+        </>
+      );
+    } else return <></>;
+  };
+
+  const getMissedAttestations = (
+    accountValidatorsPerformance: ValidatorsPerformance,
+    validatorData: Validator
+  ) => {
+    if (accountValidatorsPerformance) {
+      const validatorPerformance =
+        accountValidatorsPerformance[validatorData.validatorindex];
+
+      return (
+        <>
+          {validatorPerformance
+            ? validatorPerformance.attestationPerformance.missedAttestations
+            : 0}
+        </>
+      );
+    } else return <></>;
+  };
+  const getAttestationsRatio = (
+    accountValidatorsPerformance: ValidatorsPerformance,
+    validatorData: Validator
+  ) => {
+    if (accountValidatorsPerformance) {
+      const validatorPerformance =
+        accountValidatorsPerformance[validatorData.validatorindex];
+
+      return (
+        <>
+          {validatorPerformance
+            ? (
+                (validatorPerformance.attestationPerformance
+                  .executedAttestations /
+                  validatorPerformance.attestationPerformance
+                    .attestationCount) *
+                100
+              ).toLocaleString()
+            : 0}
+        </>
+      );
+    } else return <></>;
+  };
+
   const getValidatorRow = (
     validatorMap: ValidatorMap,
     validator: string,
     index: number
   ) => {
-    return (
-      <tr key={validator}>
-        <td className={tableHeadStyle} key={validator + "_nr"}>
-          {`${index + 1}.`}
-        </td>
-        <td key={validator + "_link"}>
-          <a
-            href={`${consensys_explorer}/validator/${validator.substring(2)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="text-pastel-blue hover:underline overflow-hidden"
-            key={generateUUID()}
+    const validatorData = validatorMap[validator];
+    if (validatorData) {
+      return (
+        <tr key={validator}>
+          <td className={tableHeadStyle} key={validator + "_nr"}>
+            {`${index + 1}.`}
+          </td>
+          <td key={validator + "_link"}>
+            <a
+              href={`${consensys_explorer}/validator/${validator.substring(2)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-pastel-blue hover:underline overflow-hidden"
+              key={generateUUID()}
+            >
+              {`${validator.substring(0, 4)}...${validator.substring(
+                validator.length - 2,
+                validator.length
+              )}`}
+            </a>
+          </td>
+          <td className={tableHeadStyle} key={validator + "_index"}>
+            {validatorMap[validator].validatorindex}
+          </td>
+          <td className={tableHeadStyle} key={validator + "_balance"}>
+            {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
+          </td>
+          <td
+            className={tableHeadStyle}
+            key={validator + "_executedAttestations"}
           >
-            {`${validator.substring(0, 4)}...${validator.substring(
-              validator.length - 2,
-              validator.length
-            )}`}
-          </a>
-        </td>
-        <td className={tableHeadStyle} key={validator + "_index"}>
-          {validatorMap[validator].validatorindex}
-        </td>
-        <td className={tableHeadStyle} key={validator + "_balance"}>
-          {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
-        </td>
-        <td
-          className={tableHeadStyle}
-          key={validator + "_executedAttestations"}
-        >
-          {validatorsPerformance[selectedAccount]
-            ? validatorsPerformance[selectedAccount][
-                validatorMap[validator].validatorindex
-              ].attestationPerformance.executedAttestations
-            : 0}
-        </td>
-        <td className={tableHeadStyle} key={validator + "_missedAttestantions"}>
-          {validatorsPerformance[selectedAccount]
-            ? validatorsPerformance[selectedAccount][
-                validatorMap[validator].validatorindex
-              ].attestationPerformance.missedAttestations
-            : 0}
-        </td>
-        <td className={tableHeadStyle} key={validator + "_performance"}>
-          {`${
-            validatorsPerformance[selectedAccount]
-              ? (
-                  (validatorsPerformance[selectedAccount][
-                    validatorMap[validator].validatorindex
-                  ].attestationPerformance.executedAttestations /
-                    validatorsPerformance[selectedAccount][
-                      validatorMap[validator].validatorindex
-                    ].attestationPerformance.attestationCount) *
-                  100
-                ).toLocaleString()
-              : 0
-          } %`}
-        </td>
-        {findAddressName(validatorMap[validator].withdrawalcredentials)}
-      </tr>
-    );
+            {getExecutedAttestations(
+              validatorsPerformance[selectedAccount],
+              validatorData
+            )}
+          </td>
+          <td
+            className={tableHeadStyle}
+            key={validator + "_missedAttestantions"}
+          >
+            {getMissedAttestations(
+              validatorsPerformance[selectedAccount],
+              validatorData
+            )}
+          </td>
+          <td className={tableHeadStyle} key={validator + "_performance"}>
+            {getAttestationsRatio(
+              validatorsPerformance[selectedAccount],
+              validatorData
+            )}
+          </td>
+          {findAddressName(validatorMap[validator].withdrawalcredentials)}
+        </tr>
+      );
+    } else return <></>;
   };
 
   /// ------ Styling Handling ------
