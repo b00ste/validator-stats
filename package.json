@@ -1,5 +1,5 @@
 {
-  "name": "validator-monitoring-service-pwa",
+  "name": "validator-monitoring-service",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
