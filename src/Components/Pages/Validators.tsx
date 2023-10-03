@@ -1,12 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState } from 'react';
 
 // utils
-import { consensys_explorer } from "../../Helpers/constants";
+import { consensys_explorer } from '../../Helpers/constants';
 
 // types
-import { ValidatorsPageParams } from "../../Types/ComponentParamsTypes";
-import { ValidatorMap, ValidatorsPerformance } from "../../Types/UsedDataTypes";
-import { Validator } from "../../Types/FetchedDataTypes";
+import { ValidatorsPageParams } from '../../Types/ComponentParamsTypes';
+import { ValidatorMap, ValidatorsPerformance } from '../../Types/UsedDataTypes';
+import { Validator } from '../../Types/FetchedDataTypes';
 
 export const Validators = ({
   bodyClasses,
@@ -23,9 +23,9 @@ export const Validators = ({
   validatorsPerformance,
 }: ValidatorsPageParams) => {
   const [selectedValidatorStatus, setSelectedValidatorStatus] =
-    useState("active");
+    useState('active');
   const [selectedAccount, SetSelectedAccount] = useState(
-    withdrawalAddresses[0] ? withdrawalAddresses[0].address : ""
+    withdrawalAddresses[0] ? withdrawalAddresses[0].address : '',
   );
 
   const findAddressName = (bytes: string) => {
@@ -42,7 +42,7 @@ export const Validators = ({
           >
             {
               withdrawalAddresses.filter(
-                (elem) => elem.address.toLowerCase() === address.toLowerCase()
+                (elem) => elem.address.toLowerCase() === address.toLowerCase(),
               )[0].name
             }
           </a>
@@ -61,7 +61,7 @@ export const Validators = ({
           >
             {
               withdrawalAddresses.filter(
-                (elem) => elem.address.toLowerCase() === address.toLowerCase()
+                (elem) => elem.address.toLowerCase() === address.toLowerCase(),
               )[0].name
             }
           </a>
@@ -74,7 +74,7 @@ export const Validators = ({
 
   const getExecutedAttestations = (
     accountValidatorsPerformance: ValidatorsPerformance,
-    validatorData: Validator
+    validatorData: Validator,
   ) => {
     if (accountValidatorsPerformance) {
       const validatorPerformance =
@@ -92,7 +92,7 @@ export const Validators = ({
 
   const getMissedAttestations = (
     accountValidatorsPerformance: ValidatorsPerformance,
-    validatorData: Validator
+    validatorData: Validator,
   ) => {
     if (accountValidatorsPerformance) {
       const validatorPerformance =
@@ -110,7 +110,7 @@ export const Validators = ({
 
   const getAttestationsRatio = (
     accountValidatorsPerformance: ValidatorsPerformance,
-    validatorData: Validator
+    validatorData: Validator,
   ) => {
     if (accountValidatorsPerformance) {
       const validatorPerformance =
@@ -135,7 +135,7 @@ export const Validators = ({
   const getValidatorRow = (
     validatorMap: ValidatorMap,
     validator: string,
-    index: number
+    index: number,
   ) => {
     const validatorData = validatorMap[validator];
     return (
@@ -151,7 +151,7 @@ export const Validators = ({
             >
               {`${validator.substring(0, 4)}...${validator.substring(
                 validator.length - 2,
-                validator.length
+                validator.length,
               )}`}
             </a>
           </td>
@@ -165,7 +165,7 @@ export const Validators = ({
             {validatorData
               ? getExecutedAttestations(
                   validatorsPerformance[selectedAccount],
-                  validatorData
+                  validatorData,
                 )
               : 0}
           </td>
@@ -173,7 +173,7 @@ export const Validators = ({
             {validatorData
               ? getMissedAttestations(
                   validatorsPerformance[selectedAccount],
-                  validatorData
+                  validatorData,
                 )
               : 0}
           </td>
@@ -181,7 +181,7 @@ export const Validators = ({
             {validatorData
               ? getAttestationsRatio(
                   validatorsPerformance[selectedAccount],
-                  validatorData
+                  validatorData,
                 )
               : 0}
           </td>
@@ -192,7 +192,7 @@ export const Validators = ({
   };
 
   /// ------ Styling Handling ------
-  const tableHeadStyle = "text-slate-gray px-4 py-1";
+  const tableHeadStyle = 'text-slate-gray px-4 py-1';
 
   const specificTileClasses = `${tileClasses} p-4`;
   /// ------------------------------
@@ -209,51 +209,51 @@ export const Validators = ({
         <div>
           <button
             className={`${
-              selectedValidatorStatus === "active"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'active'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("active")}
+            onClick={() => setSelectedValidatorStatus('active')}
           >
             Active
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "pending"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'pending'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("pending")}
+            onClick={() => setSelectedValidatorStatus('pending')}
           >
             Pending
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "offline"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'offline'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("offline")}
+            onClick={() => setSelectedValidatorStatus('offline')}
           >
             Offline
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "slashed"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'slashed'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("slashed")}
+            onClick={() => setSelectedValidatorStatus('slashed')}
           >
             Slashed
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "other"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'other'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("other")}
+            onClick={() => setSelectedValidatorStatus('other')}
           >
             Other
           </button>
@@ -271,8 +271,8 @@ export const Validators = ({
               key={elem.address}
               className={`${
                 selectedAccount === elem.address
-                  ? "bg-pastel-blue"
-                  : "bg-strong-pink hover:bg-dark-pink"
+                  ? 'bg-pastel-blue'
+                  : 'bg-strong-pink hover:bg-dark-pink'
               } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
               onClick={() => SetSelectedAccount(elem.address)}
             >
@@ -303,52 +303,52 @@ export const Validators = ({
               {validators[selectedAccount] ? (
                 validators[selectedAccount].map((validator, index) => {
                   switch (selectedValidatorStatus) {
-                    case "active": {
+                    case 'active': {
                       if (activeValidators[selectedAccount]) {
                         return getValidatorRow(
                           activeValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "pending": {
+                    case 'pending': {
                       if (pendingValidators[selectedAccount]) {
                         return getValidatorRow(
                           pendingValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "offline": {
+                    case 'offline': {
                       if (offlineValidators[selectedAccount]) {
                         return getValidatorRow(
                           offlineValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "slashed": {
+                    case 'slashed': {
                       if (slashedValidators[selectedAccount]) {
                         return getValidatorRow(
                           slashedValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "other": {
+                    case 'other': {
                       if (otherValidators[selectedAccount]) {
                         return getValidatorRow(
                           otherValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;

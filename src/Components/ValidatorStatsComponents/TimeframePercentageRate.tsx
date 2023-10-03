@@ -1,8 +1,8 @@
 // utils
-import { getTimeframePercentageYield } from "../../Helpers/calculateStakingRewards";
+import { getTimeframePercentageYield } from '../../Helpers/calculateStakingRewards';
 
 // types
-import { TimeframePercentageRateParams } from "../../Types/ComponentParamsTypes";
+import { TimeframePercentageRateParams } from '../../Types/ComponentParamsTypes';
 
 export const TimeframePercentageRate = ({
   timeframe,
@@ -11,17 +11,17 @@ export const TimeframePercentageRate = ({
 }: TimeframePercentageRateParams) => {
   let getTimeframeTitle = () => {
     switch (timeframe) {
-      case "daily": {
-        return "Daily Rate";
+      case 'daily': {
+        return 'Daily Rate';
       }
-      case "weekly": {
-        return "Weekly Rate";
+      case 'weekly': {
+        return 'Weekly Rate';
       }
-      case "monthly": {
-        return "Monthly Rate";
+      case 'monthly': {
+        return 'Monthly Rate';
       }
-      case "annual": {
-        return "Annual Rate";
+      case 'annual': {
+        return 'Annual Rate';
       }
     }
   };

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // types
-import { WithdrawalsParams } from "../../Types/ComponentParamsTypes";
-import { DisplayTokenPrice } from "../DisplayTokenPrice";
+import { WithdrawalsParams } from '../../Types/ComponentParamsTypes';
+import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
 export const TotalWithdrawals = ({
   tileClasses,

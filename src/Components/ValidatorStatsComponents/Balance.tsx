@@ -1,5 +1,5 @@
-import { BalanceParams } from "../../Types/ComponentParamsTypes";
-import { DisplayTokenPrice } from "../DisplayTokenPrice";
+import { BalanceParams } from '../../Types/ComponentParamsTypes';
+import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
 export const Balance = ({
   tileClasses,

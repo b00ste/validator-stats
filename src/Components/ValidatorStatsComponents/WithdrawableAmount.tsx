@@ -1,5 +1,5 @@
-import { WithdrawableAmountParams } from "../../Types/ComponentParamsTypes";
-import { DisplayTokenPrice } from "../DisplayTokenPrice";
+import { WithdrawableAmountParams } from '../../Types/ComponentParamsTypes';
+import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
 export const WithdrawableAmount = ({
   tileClasses,

@@ -1,4 +1,4 @@
-import { ValidatorsParams } from "../../Types/ComponentParamsTypes";
+import { ValidatorsParams } from '../../Types/ComponentParamsTypes';
 
 export const Validators = ({
   tileClasses,

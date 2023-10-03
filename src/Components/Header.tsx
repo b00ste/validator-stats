@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 // types
-import { HeaderParams } from "../Types/ComponentParamsTypes";
+import { HeaderParams } from '../Types/ComponentParamsTypes';
 
 const Header = ({
   buttonClasses,
@@ -15,15 +15,15 @@ const Header = ({
   const navigate = useNavigate();
 
   const tileClasses =
-    "mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis";
+    'mb-2 text-center flex flex-col items-center justify-center overflow-clip overflow-ellipsis';
 
-  const additionalButtonClasses = "inline-block m-1";
+  const additionalButtonClasses = 'inline-block m-1';
 
   return (
     <nav className="absolute top-0 left-4 right-4">
       <div
         className={`bg-misty-rose border-2 border-t-0 border-emerald p-4 rounded-b-3xl shadow transition-all ${
-          isDropdownOpen ? "h-60 duration-150" : "h-32 delay-75 duration-150"
+          isDropdownOpen ? 'h-60 duration-150' : 'h-32 delay-75 duration-150'
         }`}
       >
         <div className="container mx-auto grid grid-cols-3">
@@ -61,27 +61,27 @@ const Header = ({
         <div
           className={`container mx-auto grid grid-cols-1 transition-all ${
             isDropdownOpen
-              ? "opacity-100 delay-75 duration-150"
-              : "opacity-0 pointer-events-none duration-200"
+              ? 'opacity-100 delay-75 duration-150'
+              : 'opacity-0 pointer-events-none duration-200'
           }`}
         >
           <div className="flex justify-center content-center w-full mx-auto">
             <button
               className={`${buttonClasses} ${additionalButtonClasses}`}
-              onClick={() => handlePageNavigation(navigate, "/home")}
+              onClick={() => handlePageNavigation(navigate, '/home')}
             >
               Home
             </button>
             <button
               className={`${buttonClasses} ${additionalButtonClasses}`}
-              onClick={() => handlePageNavigation(navigate, "/user")}
+              onClick={() => handlePageNavigation(navigate, '/user')}
             >
               User
             </button>
             <button
               className={`${buttonClasses} ${additionalButtonClasses}`}
               onClick={() =>
-                handlePageNavigation(navigate, "/validatorStatistics")
+                handlePageNavigation(navigate, '/validatorStatistics')
               }
             >
               Validator Stats
@@ -90,7 +90,7 @@ const Header = ({
           <div className="flex justify-center content-center w-full mx-auto">
             <button
               className={`${buttonClasses} ${additionalButtonClasses}`}
-              onClick={() => handlePageNavigation(navigate, "/validatorList")}
+              onClick={() => handlePageNavigation(navigate, '/validatorList')}
             >
               Validators
             </button>
