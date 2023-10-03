@@ -38,9 +38,7 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
       )
         .then((res) => res.json())
         .then(({ data }) => (dataCollection = data));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
     return dataCollection;
   } else {
@@ -66,9 +64,7 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
         ).then((res) =>
           res.json().then(({ data }) => dataCollection.push(data))
         );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
 
     return dataCollection;
@@ -123,9 +119,7 @@ export const fetchValidators = async (
               }
             }
           );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
 
       if (elementsFound < 200) {
         limitReached = true;
@@ -314,9 +308,7 @@ export const fetchValidatorsLuck = async (
             ({ data }: { data: ValidatorsLuck }) =>
               (validatorsLuck[pubKey] = data)
           );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   }
 

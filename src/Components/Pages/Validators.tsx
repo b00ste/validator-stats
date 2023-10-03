@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 // utils
 import { consensys_explorer } from "../../Helpers/constants";
@@ -6,7 +6,6 @@ import { consensys_explorer } from "../../Helpers/constants";
 // types
 import { ValidatorsPageParams } from "../../Types/ComponentParamsTypes";
 import { ValidatorMap, ValidatorsPerformance } from "../../Types/UsedDataTypes";
-import { generateUUID } from "../../Helpers/utils";
 import { Validator } from "../../Types/FetchedDataTypes";
 
 export const Validators = ({
@@ -34,7 +33,7 @@ export const Validators = ({
       const address = `0x${bytes.substring(bytes.length - 40)}`;
 
       return (
-        <td className={tableHeadStyle} key={address}>
+        <td className={tableHeadStyle}>
           <a
             href={`${consensys_explorer}/address/${address}`}
             target="_blank"
@@ -88,7 +87,7 @@ export const Validators = ({
             : 0}
         </>
       );
-    } else return <></>;
+    } else return <>0</>;
   };
 
   const getMissedAttestations = (
@@ -106,8 +105,9 @@ export const Validators = ({
             : 0}
         </>
       );
-    } else return <></>;
+    } else return <>0</>;
   };
+
   const getAttestationsRatio = (
     accountValidatorsPerformance: ValidatorsPerformance,
     validatorData: Validator
@@ -129,7 +129,7 @@ export const Validators = ({
             : 0}
         </>
       );
-    } else return <></>;
+    } else return <>0</>;
   };
 
   const getValidatorRow = (
@@ -138,19 +138,16 @@ export const Validators = ({
     index: number
   ) => {
     const validatorData = validatorMap[validator];
-    if (validatorData) {
-      return (
-        <tr key={validator}>
-          <td className={tableHeadStyle} key={validator + "_nr"}>
-            {`${index + 1}.`}
-          </td>
-          <td key={validator + "_link"}>
+    return (
+      <Fragment key={validator}>
+        <tr>
+          <td className={tableHeadStyle}>{`${index + 1}.`}</td>
+          <td>
             <a
               href={`${consensys_explorer}/validator/${validator.substring(2)}`}
               target="_blank"
               rel="noreferrer"
               className="text-pastel-blue hover:underline overflow-hidden"
-              key={generateUUID()}
             >
               {`${validator.substring(0, 4)}...${validator.substring(
                 validator.length - 2,
@@ -158,40 +155,40 @@ export const Validators = ({
               )}`}
             </a>
           </td>
-          <td className={tableHeadStyle} key={validator + "_index"}>
+          <td className={tableHeadStyle}>
             {validatorMap[validator].validatorindex}
           </td>
-          <td className={tableHeadStyle} key={validator + "_balance"}>
+          <td className={tableHeadStyle}>
             {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
           </td>
-          <td
-            className={tableHeadStyle}
-            key={validator + "_executedAttestations"}
-          >
-            {getExecutedAttestations(
-              validatorsPerformance[selectedAccount],
-              validatorData
-            )}
+          <td className={tableHeadStyle}>
+            {validatorData
+              ? getExecutedAttestations(
+                  validatorsPerformance[selectedAccount],
+                  validatorData
+                )
+              : 0}
           </td>
-          <td
-            className={tableHeadStyle}
-            key={validator + "_missedAttestantions"}
-          >
-            {getMissedAttestations(
-              validatorsPerformance[selectedAccount],
-              validatorData
-            )}
+          <td className={tableHeadStyle}>
+            {validatorData
+              ? getMissedAttestations(
+                  validatorsPerformance[selectedAccount],
+                  validatorData
+                )
+              : 0}
           </td>
-          <td className={tableHeadStyle} key={validator + "_performance"}>
-            {getAttestationsRatio(
-              validatorsPerformance[selectedAccount],
-              validatorData
-            )}
+          <td className={tableHeadStyle}>
+            {validatorData
+              ? getAttestationsRatio(
+                  validatorsPerformance[selectedAccount],
+                  validatorData
+                )
+              : 0}
           </td>
           {findAddressName(validatorMap[validator].withdrawalcredentials)}
         </tr>
-      );
-    } else return <></>;
+      </Fragment>
+    );
   };
 
   /// ------ Styling Handling ------
@@ -356,10 +353,8 @@ export const Validators = ({
                       }
                       break;
                     }
-                    default:
-                      return <></>;
                   }
-                  return <></>;
+                  return <Fragment key={validator}></Fragment>;
                 })
               ) : (
                 <></>

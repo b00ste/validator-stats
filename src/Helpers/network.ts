@@ -17,9 +17,7 @@ export const getLastEpoch = async () => {
     })
       .then((res) => res.json())
       .then(({ data }) => (lastEpoch = data));
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 
   return lastEpoch;
 };
@@ -59,9 +57,7 @@ export const getWithdrawalAddressesBalance = async (
             }
           }
         );
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
     withdrawalAddressessBalance[withdrawalAddress] =
       Number.parseFloat(retrievedBalance);
@@ -90,9 +86,7 @@ export const getLYXPrice = async () => {
         eurPrice = data["lukso-token-2"].eur;
         usdPrice = data["lukso-token-2"].usd;
       });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 
   return {
     eurPrice,

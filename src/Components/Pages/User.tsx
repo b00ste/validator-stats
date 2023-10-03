@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, Fragment, useRef, useState } from "react";
 import { consensys_explorer } from "../../Helpers/constants";
 import { UserPageParams } from "../../Types/ComponentParamsTypes";
 import Notification from "../Notification";
@@ -328,61 +328,63 @@ const User = ({
             </thead>
             <tbody>
               {withdrawalAddresses.map((publicKey) => (
-                <tr key={publicKey.address}>
-                  <td className="px-4 py-1">
-                    <a
-                      href={`${consensys_explorer}/address/${publicKey.address.substring(
-                        2
-                      )}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-pastel-blue hover:underline"
-                    >
-                      {`${publicKey.address.substring(
-                        0,
-                        4
-                      )}...${publicKey.address.substring(
-                        publicKey.address.length - 2,
-                        publicKey.address.length
-                      )}`}
-                    </a>
-                  </td>
-                  <td className="px-4 py-1 text-slate-gray">
-                    {publicKey.name}
-                  </td>
-                  <td className="px-4 py-1">
-                    <a
-                      href={`${consensys_explorer}/dashboard?validators=${
-                        validators[publicKey.address]
-                          ? validators[publicKey.address].toString()
-                          : ""
-                      }`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-pastel-blue hover:underline"
-                    >
-                      Dashboard
-                    </a>
-                  </td>
-                  <td className="px-4 py-1">
-                    <button
-                      className="text-pastel-green hover:text-green-500 transition-colors"
-                      onClick={(event) =>
-                        handleNameEdit(publicKey.address, event)
-                      }
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td className="px-4 py-1">
-                    <button
-                      className="text-pastel-red hover:text-red-600 transition-colors"
-                      onClick={() => handleAddressDelete(publicKey.address)}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
+                <Fragment key={publicKey.address}>
+                  <tr>
+                    <td className="px-4 py-1">
+                      <a
+                        href={`${consensys_explorer}/address/${publicKey.address.substring(
+                          2
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-pastel-blue hover:underline"
+                      >
+                        {`${publicKey.address.substring(
+                          0,
+                          4
+                        )}...${publicKey.address.substring(
+                          publicKey.address.length - 2,
+                          publicKey.address.length
+                        )}`}
+                      </a>
+                    </td>
+                    <td className="px-4 py-1 text-slate-gray">
+                      {publicKey.name}
+                    </td>
+                    <td className="px-4 py-1">
+                      <a
+                        href={`${consensys_explorer}/dashboard?validators=${
+                          validators[publicKey.address]
+                            ? validators[publicKey.address].toString()
+                            : ""
+                        }`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-pastel-blue hover:underline"
+                      >
+                        Dashboard
+                      </a>
+                    </td>
+                    <td className="px-4 py-1">
+                      <button
+                        className="text-pastel-green hover:text-green-500 transition-colors"
+                        onClick={(event) =>
+                          handleNameEdit(publicKey.address, event)
+                        }
+                      >
+                        Edit
+                      </button>
+                    </td>
+                    <td className="px-4 py-1">
+                      <button
+                        className="text-pastel-red hover:text-red-600 transition-colors"
+                        onClick={() => handleAddressDelete(publicKey.address)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                </Fragment>
               ))}
             </tbody>
           </table>
@@ -419,18 +421,17 @@ const User = ({
           </div>
           <div className="mb-4">
             {newGroup.map((elem) => (
-              <div
-                className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl border-2 border-lavender-pink"
-                key={elem.address}
-              >
-                <p className="inline-block text-slate-gray">{elem.name}</p>
-                <span
-                  className="ml-2 font-extrabold hover:cursor-pointer hover:opacity-70"
-                  onClick={() => handleAddressRemovalFromNewGroup(elem)}
-                >
-                  X
-                </span>
-              </div>
+              <Fragment key={elem.address}>
+                <div className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl border-2 border-lavender-pink">
+                  <p className="inline-block text-slate-gray">{elem.name}</p>
+                  <span
+                    className="ml-2 font-extrabold hover:cursor-pointer hover:opacity-70"
+                    onClick={() => handleAddressRemovalFromNewGroup(elem)}
+                  >
+                    X
+                  </span>
+                </div>
+              </Fragment>
             ))}
           </div>
           <div className="mb-4">
@@ -450,9 +451,11 @@ const User = ({
               {withdrawalAddresses
                 .filter((elem) => !newGroup.includes(elem))
                 .map((withdrawalAddress) => (
-                  <option value={withdrawalAddress.name}>
-                    {withdrawalAddress.name}
-                  </option>
+                  <Fragment key={withdrawalAddress.address}>
+                    <option value={withdrawalAddress.name}>
+                      {withdrawalAddress.name}
+                    </option>
+                  </Fragment>
                 ))}
             </select>
           </div>
@@ -494,44 +497,48 @@ const User = ({
             </thead>
             <tbody>
               {withdrawalAddressesGroups.map((group) => (
-                <tr
-                  key={group.withdrawalAddresses
-                    .map((elem) => elem.address)
-                    .toString()}
-                >
-                  <td className="px-4 py-1">{group.name}</td>
-                  <td className="px-4 py-1 text-slate-gray grid grid-cols-3 w-max">
-                    {group.withdrawalAddresses.map((elem) => (
-                      <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
-                        {elem.name}
-                      </p>
-                    ))}
-                  </td>
-                  <td className="px-4 py-1">
-                    {group.name !== "Main" ? (
-                      <button
-                        className="text-pastel-green hover:text-green-500 transition-colors w-"
-                        onClick={(event) => handleGroupEdit(event)}
-                      >
-                        Edit
-                      </button>
-                    ) : (
-                      "Cannot edit Main Group"
-                    )}
-                  </td>
-                  <td className="px-4 py-1">
-                    {group.name !== "Main" ? (
-                      <button
-                        className="text-pastel-red hover:text-red-600 transition-colors"
-                        onClick={(event) => handleGroupRemoval(event, group)}
-                      >
-                        Remove
-                      </button>
-                    ) : (
-                      "Cannot remove Main Group"
-                    )}
-                  </td>
-                </tr>
+                <Fragment key={group.key}>
+                  <tr
+                    key={group.withdrawalAddresses
+                      .map((elem) => elem.address)
+                      .toString()}
+                  >
+                    <td className="px-4 py-1">{group.name}</td>
+                    <td className="px-4 py-1 text-slate-gray grid grid-cols-3 w-max">
+                      {group.withdrawalAddresses.map((elem) => (
+                        <Fragment key={elem.address}>
+                          <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
+                            {elem.name}
+                          </p>
+                        </Fragment>
+                      ))}
+                    </td>
+                    <td className="px-4 py-1">
+                      {group.name !== "Main" ? (
+                        <button
+                          className="text-pastel-green hover:text-green-500 transition-colors w-"
+                          onClick={(event) => handleGroupEdit(event)}
+                        >
+                          Edit
+                        </button>
+                      ) : (
+                        "Cannot edit Main Group"
+                      )}
+                    </td>
+                    <td className="px-4 py-1">
+                      {group.name !== "Main" ? (
+                        <button
+                          className="text-pastel-red hover:text-red-600 transition-colors"
+                          onClick={(event) => handleGroupRemoval(event, group)}
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        "Cannot remove Main Group"
+                      )}
+                    </td>
+                  </tr>
+                </Fragment>
               ))}
             </tbody>
           </table>
