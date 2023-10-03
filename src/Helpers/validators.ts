@@ -1,5 +1,5 @@
 // constants
-import { consensys_explorer } from "./constants";
+import { consensys_explorer } from './constants';
 
 // types
 import {
@@ -8,14 +8,14 @@ import {
   Attestation,
   ConsensusPerformance,
   ExecutionPerformance,
-} from "../Types/FetchedDataTypes";
+} from '../Types/FetchedDataTypes';
 import {
   WithdrawalAddresses,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
-} from "../Types/UsedDataTypes";
-import { generateUUID } from "./utils";
+} from '../Types/UsedDataTypes';
+import { generateUUID } from './utils';
 
 const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
   if (validators.length === 0) {
@@ -25,22 +25,20 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
     try {
       await fetch(
         link.replace(
-          "{validators}",
-          validators.toString().replaceAll(",", "%2C")
+          '{validators}',
+          validators.toString().replaceAll(',', '%2C'),
         ),
         {
           headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            Pragma: "no-cache",
-            Expires: "0",
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
           },
-        }
+        },
       )
         .then((res) => res.json())
         .then(({ data }) => (dataCollection = data));
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
 
     return dataCollection;
   } else {
@@ -50,25 +48,23 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
       try {
         await fetch(
           link.replace(
-            "{validators}",
+            '{validators}',
             validators
               .slice(i, i + 100)
               .toString()
-              .replaceAll(",", "%2C")
+              .replaceAll(',', '%2C'),
           ),
           {
             headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              Pragma: 'no-cache',
+              Expires: '0',
             },
-          }
+          },
         ).then((res) =>
-          res.json().then(({ data }) => dataCollection.push(data))
+          res.json().then(({ data }) => dataCollection.push(data)),
         );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
 
     return dataCollection;
@@ -76,7 +72,7 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
 };
 
 export const fetchValidators = async (
-  withdrawalAddresses: WithdrawalAddresses[]
+  withdrawalAddresses: WithdrawalAddresses[],
 ) => {
   const validators: Record<string, string[]> = {};
   const validatorMap: Record<string, boolean> = {};
@@ -90,11 +86,11 @@ export const fetchValidators = async (
           `${consensys_explorer}/api/v1/validator/withdrawalCredentials/${withdrawalAddresses[i].address}?limit=200&offset=${offset}`,
           {
             headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              Pragma: 'no-cache',
+              Expires: '0',
             },
-          }
+          },
         )
           .then((res) => res.json())
           .then(
@@ -111,21 +107,19 @@ export const fetchValidators = async (
                   // Add entry to array
                   if (validators[withdrawalAddresses[i].address]) {
                     validators[withdrawalAddresses[i].address].push(
-                      data[j].publickey
+                      data[j].publickey,
                     );
                   } else {
                     validators[withdrawalAddresses[i].address] = [];
                     validators[withdrawalAddresses[i].address].push(
-                      data[j].publickey
+                      data[j].publickey,
                     );
                   }
                 }
               }
-            }
+            },
           );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
 
       if (elementsFound < 200) {
         limitReached = true;
@@ -138,7 +132,7 @@ export const fetchValidators = async (
 };
 
 export const fetchValidatorsData = async (
-  validators: Record<string, string[]>
+  validators: Record<string, string[]>,
 ) => {
   let activeValidators = {} as Record<string, ValidatorMap>;
   let pendingValidators = {} as Record<string, ValidatorMap>;
@@ -152,7 +146,7 @@ export const fetchValidatorsData = async (
     if (validatorArray.length > 100) {
       const dataCollection: Validator[][] = await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validator/{validators}`,
-        validatorArray
+        validatorArray,
       );
 
       for (let i = 0; i < dataCollection.length; i++) {
@@ -167,7 +161,7 @@ export const fetchValidatorsData = async (
               ...validatorData,
               key: generateUUID(),
             };
-          } else if (validatorData.status === "active_online") {
+          } else if (validatorData.status === 'active_online') {
             if (!activeValidators[pubKey]) {
               activeValidators[pubKey] = {};
             }
@@ -176,7 +170,7 @@ export const fetchValidatorsData = async (
               ...validatorData,
               key: generateUUID(),
             };
-          } else if (validatorData.status === "pending") {
+          } else if (validatorData.status === 'pending') {
             if (!pendingValidators[pubKey]) {
               pendingValidators[pubKey] = {};
             }
@@ -185,7 +179,7 @@ export const fetchValidatorsData = async (
               ...validatorData,
               key: generateUUID(),
             };
-          } else if (validatorData.status === "active_offline") {
+          } else if (validatorData.status === 'active_offline') {
             if (!offlineValidators[pubKey]) {
               offlineValidators[pubKey] = {};
             }
@@ -209,7 +203,7 @@ export const fetchValidatorsData = async (
     } else {
       const dataCollection: Validator[] = await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validator/{validators}`,
-        validatorArray
+        validatorArray,
       );
 
       for (let i = 0; i < dataCollection.length; i++) {
@@ -220,19 +214,19 @@ export const fetchValidatorsData = async (
           }
 
           slashedValidators[pubKey][validatorData.pubkey] = validatorData;
-        } else if (validatorData.status === "active_online") {
+        } else if (validatorData.status === 'active_online') {
           if (!activeValidators[pubKey]) {
             activeValidators[pubKey] = {};
           }
 
           activeValidators[pubKey][validatorData.pubkey] = validatorData;
-        } else if (validatorData.status === "pending") {
+        } else if (validatorData.status === 'pending') {
           if (!pendingValidators[pubKey]) {
             pendingValidators[pubKey] = {};
           }
 
           pendingValidators[pubKey][validatorData.pubkey] = validatorData;
-        } else if (validatorData.status === "active_offline") {
+        } else if (validatorData.status === 'active_offline') {
           if (!offlineValidators[pubKey]) {
             offlineValidators[pubKey] = {};
           }
@@ -259,7 +253,7 @@ export const fetchValidatorsData = async (
 };
 
 export const fetchValidatorsLuck = async (
-  activeValidators: Record<string, ValidatorMap>
+  activeValidators: Record<string, ValidatorMap>,
 ) => {
   let validatorsLuck: Record<string, ValidatorsLuck> = {};
 
@@ -270,7 +264,7 @@ export const fetchValidatorsLuck = async (
     if (validatorPubKeys.length > 100) {
       let dataCollection = (await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validators/proposalLuck?validators={validators}`,
-        validatorPubKeys
+        validatorPubKeys,
       )) as ValidatorsLuck[];
 
       let percentageSum = 0;
@@ -292,7 +286,7 @@ export const fetchValidatorsLuck = async (
         average_proposal_interval: 0,
         next_proposal_estimate_ts: 0,
         proposal_luck: (percentageSum / sampleSizeSum) * 100,
-        time_frame_name: "",
+        time_frame_name: '',
         sampleSize: validatorPubKeys.length,
       };
     } else {
@@ -300,23 +294,21 @@ export const fetchValidatorsLuck = async (
         await fetch(
           `${consensys_explorer}/api/v1/validators/proposalLuck?validators=${validatorPubKeys
             .toString()
-            .replaceAll(",", "%2C")}`,
+            .replaceAll(',', '%2C')}`,
           {
             headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-              Expires: "0",
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              Pragma: 'no-cache',
+              Expires: '0',
             },
-          }
+          },
         )
           .then((res) => res.json())
           .then(
             ({ data }: { data: ValidatorsLuck }) =>
-              (validatorsLuck[pubKey] = data)
+              (validatorsLuck[pubKey] = data),
           );
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   }
 
@@ -324,7 +316,7 @@ export const fetchValidatorsLuck = async (
 };
 
 export const fetchValidatorsPerformance = async (
-  activeValidators: Record<string, ValidatorMap>
+  activeValidators: Record<string, ValidatorMap>,
 ) => {
   const performanceData: Record<string, ValidatorsPerformance> = {};
 
@@ -335,17 +327,17 @@ export const fetchValidatorsPerformance = async (
     if (validatorPubKeys.length > 100) {
       const attestations: Attestation[][] = await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validator/{validators}/attestations`,
-        validatorPubKeys
+        validatorPubKeys,
       );
       const consensusPerformance: ConsensusPerformance[][] =
         await fetchValidatorDataByLink(
           `${consensys_explorer}/api/v1/validator/{validators}/performance`,
-          validatorPubKeys
+          validatorPubKeys,
         );
       const executionPerformance: ExecutionPerformance[][] =
         await fetchValidatorDataByLink(
           `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
-          validatorPubKeys
+          validatorPubKeys,
         );
 
       for (let i = 0; i < attestations.length; i++) {
@@ -409,17 +401,17 @@ export const fetchValidatorsPerformance = async (
     } else {
       const attestations: Attestation[] = await fetchValidatorDataByLink(
         `${consensys_explorer}/api/v1/validator/{validators}/attestations`,
-        validatorPubKeys
+        validatorPubKeys,
       );
       const consensusPerformance: ConsensusPerformance[] =
         await fetchValidatorDataByLink(
           `${consensys_explorer}/api/v1/validator/{validators}/performance`,
-          validatorPubKeys
+          validatorPubKeys,
         );
       const executionPerformance: ExecutionPerformance[] =
         await fetchValidatorDataByLink(
           `${consensys_explorer}/api/v1/validator/{validators}/execution/performance`,
-          validatorPubKeys
+          validatorPubKeys,
         );
 
       for (let i = 0; i < attestations.length; i++) {
@@ -481,7 +473,7 @@ export const fetchValidatorsPerformance = async (
 };
 
 export const fetchValidatorsWithdrawals = async (
-  activeValidators: Record<string, ValidatorMap>
+  activeValidators: Record<string, ValidatorMap>,
 ) => {
   const withdrawalsData: Record<string, ValidatorsWithdrawals[]> = {};
 
@@ -491,7 +483,7 @@ export const fetchValidatorsWithdrawals = async (
 
     const withdrawals: ValidatorsWithdrawals[] = await fetchValidatorDataByLink(
       `${consensys_explorer}/api/v1/validator/{validators}/withdrawals`,
-      validatorPubKeys
+      validatorPubKeys,
     );
 
     withdrawalsData[pubKey] = withdrawals;

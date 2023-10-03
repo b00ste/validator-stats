@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { WithdrawalBalanceParams } from "../../Types/ComponentParamsTypes";
-import { DisplayTokenPrice } from "../DisplayTokenPrice";
+import { Fragment, useEffect, useState } from 'react';
+import { WithdrawalBalanceParams } from '../../Types/ComponentParamsTypes';
+import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
 export const WithdrawalBalance = ({
   tileClasses,
@@ -28,19 +28,21 @@ export const WithdrawalBalance = ({
       <div className="text-pastel-blue text-xl mb-2">Withdrawal Balance</div>
       {selectedGroup.withdrawalAddresses.map((withdrawalAddress) =>
         withdrawalAddressesBalance[withdrawalAddress.address] ? (
-          <div className="grid grid-cols-2 w-full">
-            <p className="text-slate-gray font-bold col-span-1 text-left ml-4">
-              {`${withdrawalAddress.name}:`}
-            </p>
-            <p className="text-slate-gray font-bold col-span-1 text-right mr-4">
-              {`${withdrawalAddressesBalance[
-                withdrawalAddress.address
-              ].toLocaleString()} LYX`}
-            </p>
-          </div>
+          <Fragment key={withdrawalAddress.address}>
+            <div className="grid grid-cols-2 w-full">
+              <p className="text-slate-gray font-bold col-span-1 text-left ml-4">
+                {`${withdrawalAddress.name}:`}
+              </p>
+              <p className="text-slate-gray font-bold col-span-1 text-right mr-4">
+                {`${withdrawalAddressesBalance[
+                  withdrawalAddress.address
+                ].toLocaleString()} LYX`}
+              </p>
+            </div>
+          </Fragment>
         ) : (
-          <></>
-        )
+          <Fragment key={withdrawalAddress.address}></Fragment>
+        ),
       )}
       <div className="grid grid-cols-2 w-full">
         <p className="text-slate-gray font-bold col-span-1 text-left ml-4">

@@ -2,7 +2,7 @@ import {
   Validator,
   ConsensusPerformance,
   ExecutionPerformance,
-} from "./FetchedDataTypes";
+} from './FetchedDataTypes';
 
 export type WithdrawalAddresses = {
   address: string;

@@ -56,7 +56,7 @@ export const calculateStakingRewards = ({
 
 export type GetTimeframePercentageYieldParams = {
   totalAtStake: number;
-  timeframe: "daily" | "weekly" | "monthly" | "annual";
+  timeframe: 'daily' | 'weekly' | 'monthly' | 'annual';
 };
 
 export const getTimeframePercentageYieldUnformated = ({
@@ -69,16 +69,16 @@ export const getTimeframePercentageYieldUnformated = ({
   const formattedAPR = Math.round(currentAPR * 1000) / 10;
 
   switch (timeframe) {
-    case "daily": {
+    case 'daily': {
       return formattedAPR / 365;
     }
-    case "weekly": {
+    case 'weekly': {
       return (formattedAPR / 365) * 7;
     }
-    case "monthly": {
+    case 'monthly': {
       return formattedAPR / 12;
     }
-    case "annual": {
+    case 'annual': {
       return formattedAPR;
     }
   }
@@ -94,16 +94,16 @@ export const getTimeframePercentageYield = ({
   const formattedAPR = Math.round(currentAPR * 1000) / 10;
 
   switch (timeframe) {
-    case "daily": {
+    case 'daily': {
       return (formattedAPR / 365).toLocaleString();
     }
-    case "weekly": {
+    case 'weekly': {
       return ((formattedAPR / 365) * 7).toLocaleString();
     }
-    case "monthly": {
+    case 'monthly': {
       return (formattedAPR / 12).toLocaleString();
     }
-    case "annual": {
+    case 'annual': {
       return formattedAPR.toLocaleString();
     }
   }

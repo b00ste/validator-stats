@@ -1,9 +1,9 @@
 // helpers
-import { getTimeframePercentageYieldUnformated } from "../../Helpers/calculateStakingRewards";
+import { getTimeframePercentageYieldUnformated } from '../../Helpers/calculateStakingRewards';
 
 // ts types
-import { EarningsParams } from "../../Types/ComponentParamsTypes";
-import { DisplayTokenPrice } from "../DisplayTokenPrice";
+import { EarningsParams } from '../../Types/ComponentParamsTypes';
+import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
 export const Earnings = ({
   timeframe,
@@ -16,47 +16,47 @@ export const Earnings = ({
 }: EarningsParams) => {
   const getTimeframeParamNames = (): {
     consensusTimeframeParam:
-      | "performance1d"
-      | "performance7d"
-      | "performance31d"
-      | "performance365d"
-      | "performancetotal";
+      | 'performance1d'
+      | 'performance7d'
+      | 'performance31d'
+      | 'performance365d'
+      | 'performancetotal';
     executionTimeframeParam:
-      | "performance1d"
-      | "performance7d"
-      | "performance31d"
-      | "performance365d"
-      | "performanceTotal";
+      | 'performance1d'
+      | 'performance7d'
+      | 'performance31d'
+      | 'performance365d'
+      | 'performanceTotal';
   } => {
     switch (timeframe) {
-      case "daily": {
+      case 'daily': {
         return {
-          consensusTimeframeParam: "performance1d",
-          executionTimeframeParam: "performance1d",
+          consensusTimeframeParam: 'performance1d',
+          executionTimeframeParam: 'performance1d',
         };
       }
-      case "weekly": {
+      case 'weekly': {
         return {
-          consensusTimeframeParam: "performance7d",
-          executionTimeframeParam: "performance7d",
+          consensusTimeframeParam: 'performance7d',
+          executionTimeframeParam: 'performance7d',
         };
       }
-      case "monthly": {
+      case 'monthly': {
         return {
-          consensusTimeframeParam: "performance31d",
-          executionTimeframeParam: "performance31d",
+          consensusTimeframeParam: 'performance31d',
+          executionTimeframeParam: 'performance31d',
         };
       }
-      case "annual": {
+      case 'annual': {
         return {
-          consensusTimeframeParam: "performance365d",
-          executionTimeframeParam: "performance365d",
+          consensusTimeframeParam: 'performance365d',
+          executionTimeframeParam: 'performance365d',
         };
       }
-      case "total": {
+      case 'total': {
         return {
-          consensusTimeframeParam: "performancetotal",
-          executionTimeframeParam: "performanceTotal",
+          consensusTimeframeParam: 'performancetotal',
+          executionTimeframeParam: 'performanceTotal',
         };
       }
     }
@@ -64,20 +64,20 @@ export const Earnings = ({
 
   const getTimeframeTitle = () => {
     switch (timeframe) {
-      case "daily": {
-        return "Daily Earnings";
+      case 'daily': {
+        return 'Daily Earnings';
       }
-      case "weekly": {
-        return "Weekly Earnings";
+      case 'weekly': {
+        return 'Weekly Earnings';
       }
-      case "monthly": {
-        return "Monthly Earnings";
+      case 'monthly': {
+        return 'Monthly Earnings';
       }
-      case "annual": {
-        return "Annual Earnings";
+      case 'annual': {
+        return 'Annual Earnings';
       }
-      case "total": {
-        return "Total Earnings";
+      case 'total': {
+        return 'Total Earnings';
       }
     }
   };
@@ -114,7 +114,7 @@ export const Earnings = ({
   };
 
   const getErningsComparedToAPR = (earnings: number) => {
-    if (timeframe !== "total") {
+    if (timeframe !== 'total') {
       const stakingAPR = getTimeframePercentageYieldUnformated({
         totalAtStake: stakedLYX / 1e9,
         timeframe,
@@ -144,7 +144,7 @@ export const Earnings = ({
         <p className="text-slate-gray font-bold">
           {getErningsComparedToAPR(earnings)}
         </p>
-        {timeframe !== "total" ? (
+        {timeframe !== 'total' ? (
           <p className="text-xs">{`(Aproximate APR ${(
             (earnings / (activeBalance / 1e9)) * 100 || 0
           ).toLocaleString()} %)`}</p>

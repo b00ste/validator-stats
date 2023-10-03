@@ -1,12 +1,12 @@
-import { FormEvent, useRef, useState } from "react";
-import { consensys_explorer } from "../../Helpers/constants";
-import { UserPageParams } from "../../Types/ComponentParamsTypes";
-import Notification from "../Notification";
+import { FormEvent, Fragment, useRef, useState } from 'react';
+import { consensys_explorer } from '../../Helpers/constants';
+import { UserPageParams } from '../../Types/ComponentParamsTypes';
+import Notification from '../Notification';
 import {
   WithdrawalAddresses,
   WithdrawalAddressesGroup,
-} from "../../Types/UsedDataTypes";
-import { generateUUID } from "../../Helpers/utils";
+} from '../../Types/UsedDataTypes';
+import { generateUUID } from '../../Helpers/utils';
 
 const User = ({
   bodyClasses,
@@ -21,46 +21,46 @@ const User = ({
   withdrawalAddressesGroups,
   setWithdrawalAddressessGroups,
 }: UserPageParams) => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [newGroup, setNewGroup] = useState([] as WithdrawalAddresses[]);
-  const [newGroupError, setNewGroupError] = useState("");
+  const [newGroupError, setNewGroupError] = useState('');
 
   /// ------ Notifications ------
   const [addressAddedOpacity, setAddressAddedOpacity] = useState(
-    "opacity-0 pointer-events-none"
+    'opacity-0 pointer-events-none',
   );
   const [addressRemovedOpacity, setAddressRemovedOpacity] = useState(
-    "opacity-0 pointer-events-none"
+    'opacity-0 pointer-events-none',
   );
   const [groupCreatedOpacity, setGroupCreatedOpacity] = useState(
-    "opacity-0 pointer-events-none"
+    'opacity-0 pointer-events-none',
   );
   const [groupRemovedOpacity, setGroupRemovedOpacity] = useState(
-    "opacity-0 pointer-events-none"
+    'opacity-0 pointer-events-none',
   );
   const [defaultPageChangedOpacity, setDefaultPageChangedOpacity] = useState(
-    "opacity-0 pointer-events-none"
+    'opacity-0 pointer-events-none',
   );
   /// ---------------------------
 
   const addressRef = useRef<any>();
   const nameRef = useRef<any>();
   const groupNameRef = useRef<any>();
-  const groupElementsRef = useRef<any>("choose");
+  const groupElementsRef = useRef<any>('choose');
 
   const handleAddressSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     if (nameRef.current.value.length === 0) {
-      setError("Please set a name");
+      setError('Please set a name');
       return;
     }
 
     if (
-      !addressRef.current.value.startsWith("0x") ||
+      !addressRef.current.value.startsWith('0x') ||
       addressRef.current.value.length !== 42
     ) {
-      setError("Please set a valid address");
+      setError('Please set a valid address');
       return;
     }
 
@@ -69,11 +69,11 @@ const User = ({
         .map((elem) => elem.address)
         .includes(addressRef.current.value)
     ) {
-      setError("Addres already exists");
+      setError('Addres already exists');
       return;
     }
 
-    setAddressAddedOpacity("opacity-100");
+    setAddressAddedOpacity('opacity-100');
 
     setWithdrawalAddresses([
       ...withdrawalAddresses,
@@ -83,13 +83,13 @@ const User = ({
       },
     ]);
 
-    addressRef.current.value = "";
-    nameRef.current.value = "";
-    setError("");
+    addressRef.current.value = '';
+    nameRef.current.value = '';
+    setError('');
 
     setTimeout(
-      () => setAddressAddedOpacity("opacity-0 pointer-events-none"),
-      1500
+      () => setAddressAddedOpacity('opacity-0 pointer-events-none'),
+      1500,
     );
   };
 
@@ -97,7 +97,7 @@ const User = ({
     event.preventDefault();
 
     if (nameRef.current.value.length === 0) {
-      setError("Please set a name");
+      setError('Please set a name');
       return;
     }
 
@@ -106,51 +106,51 @@ const User = ({
         if (publicKey.address === addressToEdit)
           return { ...publicKey, name: nameRef.current.value };
         return publicKey;
-      })
+      }),
     );
 
-    nameRef.current.value = "";
-    setError("");
+    nameRef.current.value = '';
+    setError('');
   };
 
   const handleAddressDelete = (addressToDelete: string) => {
-    setAddressRemovedOpacity("opacity-100");
+    setAddressRemovedOpacity('opacity-100');
     setWithdrawalAddresses(() =>
       withdrawalAddresses.filter(
-        (publicKey) => publicKey.address !== addressToDelete
-      )
+        (publicKey) => publicKey.address !== addressToDelete,
+      ),
     );
     setValidators({ ...validators, [addressToDelete]: [] });
 
     setTimeout(
-      () => setAddressRemovedOpacity("opacity-0 pointer-events-none"),
-      1500
+      () => setAddressRemovedOpacity('opacity-0 pointer-events-none'),
+      1500,
     );
   };
 
   const handleCreateGroupChange = () => {
-    if (groupElementsRef.current.value !== "choose address") {
+    if (groupElementsRef.current.value !== 'choose address') {
       if (!newGroup.includes(groupElementsRef.current.value)) {
         const updatedGroup = [
           ...newGroup,
           withdrawalAddresses.filter(
-            (elem) => groupElementsRef.current.value === elem.name
+            (elem) => groupElementsRef.current.value === elem.name,
           )[0],
         ];
 
         setNewGroup(updatedGroup);
 
-        groupElementsRef.current.value = "choose address";
+        groupElementsRef.current.value = 'choose address';
       }
     }
   };
 
   const handleAddressRemovalFromNewGroup = (
-    elemToRemove: WithdrawalAddresses
+    elemToRemove: WithdrawalAddresses,
   ) => {
     if (newGroup.includes(elemToRemove)) {
       const updatedGroup = newGroup.filter(
-        (elem) => elem.address !== elemToRemove.address
+        (elem) => elem.address !== elemToRemove.address,
       );
 
       setNewGroup(updatedGroup);
@@ -161,16 +161,16 @@ const User = ({
     event.preventDefault();
 
     if (groupNameRef.current.value.length === 0) {
-      setNewGroupError("Please set a group name.");
+      setNewGroupError('Please set a group name.');
       return;
     }
 
     if (newGroup.length === 0) {
-      setNewGroupError("Please choose addresses for the new group.");
+      setNewGroupError('Please choose addresses for the new group.');
       return;
     }
 
-    setGroupCreatedOpacity("opacity-100");
+    setGroupCreatedOpacity('opacity-100');
 
     const newWithdrawalAddressesGroup = [
       ...withdrawalAddressesGroups,
@@ -183,70 +183,70 @@ const User = ({
     setWithdrawalAddressessGroups(newWithdrawalAddressesGroup);
 
     setNewGroup([]);
-    groupNameRef.current.value = "";
-    groupElementsRef.current.value = "choose address";
+    groupNameRef.current.value = '';
+    groupElementsRef.current.value = 'choose address';
 
     setTimeout(
-      () => setGroupCreatedOpacity("opacity-0 pointer-events-none"),
-      1500
+      () => setGroupCreatedOpacity('opacity-0 pointer-events-none'),
+      1500,
     );
   };
 
   const handleGroupRemoval = (
     event: FormEvent,
-    groupToRemove: WithdrawalAddressesGroup
+    groupToRemove: WithdrawalAddressesGroup,
   ) => {
     event.preventDefault();
 
-    if (groupToRemove.name === "Main") {
+    if (groupToRemove.name === 'Main') {
       return;
     }
 
-    setGroupRemovedOpacity("opacity-100");
+    setGroupRemovedOpacity('opacity-100');
 
     const newWithdrawalAddressesGroup = withdrawalAddressesGroups.filter(
-      (group) => group !== groupToRemove
+      (group) => group !== groupToRemove,
     );
     setWithdrawalAddressessGroups(newWithdrawalAddressesGroup);
 
     setTimeout(
-      () => setGroupRemovedOpacity("opacity-0 pointer-events-none"),
-      1500
+      () => setGroupRemovedOpacity('opacity-0 pointer-events-none'),
+      1500,
     );
   };
 
   const handleGroupEdit = (event: FormEvent) => {
     event.preventDefault();
-    alert("WIP");
+    alert('WIP');
   };
 
   const handleDefaultPageChange = (
-    pageName: "/home" | "/validatorStatistics" | "/validatorList" | "user"
+    pageName: '/home' | '/validatorStatistics' | '/validatorList' | 'user',
   ) => {
-    setDefaultPage(pageName === defaultPage ? "" : pageName);
+    setDefaultPage(pageName === defaultPage ? '' : pageName);
   };
 
   const handleDefaultPageSelect = (event: React.MouseEvent) => {
     event.preventDefault();
-    setDefaultPageChangedOpacity("opacity-100");
+    setDefaultPageChangedOpacity('opacity-100');
 
-    localStorage.setItem("defaultPage", defaultPage);
+    localStorage.setItem('defaultPage', defaultPage);
 
     setTimeout(
-      () => setDefaultPageChangedOpacity("opacity-0 pointer-events-none"),
-      1500
+      () => setDefaultPageChangedOpacity('opacity-0 pointer-events-none'),
+      1500,
     );
   };
 
   /// ------ Styling Handling ------
-  const tableHeadClasses = "text-slate-gray px-4 py-1 w-max font-extrabold";
+  const tableHeadClasses = 'text-slate-gray px-4 py-1 w-max font-extrabold';
 
   const textInputClasses =
-    "w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:border-pastel-blue text-center border-2 border-lavender-pink";
+    'w-full rounded-lg py-2 px-3 text-slate-gray focus:outline-none focus:border-pastel-blue text-center border-2 border-lavender-pink';
 
-  const checkboxLabelClasses = "ml-4 text-xl";
+  const checkboxLabelClasses = 'ml-4 text-xl';
 
-  const additionalButtonClasses = "w-full";
+  const additionalButtonClasses = 'w-full';
 
   const specificTileClasses = `${tileClasses} p-4`;
   /// ------------------------------
@@ -301,7 +301,7 @@ const User = ({
             Add Address
           </button>
         </form>
-        {error ? <p className="text-pastel-red font-bold">{error}</p> : ""}
+        {error ? <p className="text-pastel-red font-bold">{error}</p> : ''}
         <Notification
           notificationDescription="New address added!"
           opacity={addressAddedOpacity}
@@ -328,61 +328,63 @@ const User = ({
             </thead>
             <tbody>
               {withdrawalAddresses.map((publicKey) => (
-                <tr key={publicKey.address}>
-                  <td className="px-4 py-1">
-                    <a
-                      href={`${consensys_explorer}/address/${publicKey.address.substring(
-                        2
-                      )}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-pastel-blue hover:underline"
-                    >
-                      {`${publicKey.address.substring(
-                        0,
-                        4
-                      )}...${publicKey.address.substring(
-                        publicKey.address.length - 2,
-                        publicKey.address.length
-                      )}`}
-                    </a>
-                  </td>
-                  <td className="px-4 py-1 text-slate-gray">
-                    {publicKey.name}
-                  </td>
-                  <td className="px-4 py-1">
-                    <a
-                      href={`${consensys_explorer}/dashboard?validators=${
-                        validators[publicKey.address]
-                          ? validators[publicKey.address].toString()
-                          : ""
-                      }`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-pastel-blue hover:underline"
-                    >
-                      Dashboard
-                    </a>
-                  </td>
-                  <td className="px-4 py-1">
-                    <button
-                      className="text-pastel-green hover:text-green-500 transition-colors"
-                      onClick={(event) =>
-                        handleNameEdit(publicKey.address, event)
-                      }
-                    >
-                      Edit
-                    </button>
-                  </td>
-                  <td className="px-4 py-1">
-                    <button
-                      className="text-pastel-red hover:text-red-600 transition-colors"
-                      onClick={() => handleAddressDelete(publicKey.address)}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
+                <Fragment key={publicKey.address}>
+                  <tr>
+                    <td className="px-4 py-1">
+                      <a
+                        href={`${consensys_explorer}/address/${publicKey.address.substring(
+                          2,
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-pastel-blue hover:underline"
+                      >
+                        {`${publicKey.address.substring(
+                          0,
+                          4,
+                        )}...${publicKey.address.substring(
+                          publicKey.address.length - 2,
+                          publicKey.address.length,
+                        )}`}
+                      </a>
+                    </td>
+                    <td className="px-4 py-1 text-slate-gray">
+                      {publicKey.name}
+                    </td>
+                    <td className="px-4 py-1">
+                      <a
+                        href={`${consensys_explorer}/dashboard?validators=${
+                          validators[publicKey.address]
+                            ? validators[publicKey.address].toString()
+                            : ''
+                        }`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-pastel-blue hover:underline"
+                      >
+                        Dashboard
+                      </a>
+                    </td>
+                    <td className="px-4 py-1">
+                      <button
+                        className="text-pastel-green hover:text-green-500 transition-colors"
+                        onClick={(event) =>
+                          handleNameEdit(publicKey.address, event)
+                        }
+                      >
+                        Edit
+                      </button>
+                    </td>
+                    <td className="px-4 py-1">
+                      <button
+                        className="text-pastel-red hover:text-red-600 transition-colors"
+                        onClick={() => handleAddressDelete(publicKey.address)}
+                      >
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                </Fragment>
               ))}
             </tbody>
           </table>
@@ -419,25 +421,24 @@ const User = ({
           </div>
           <div className="mb-4">
             {newGroup.map((elem) => (
-              <div
-                className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl border-2 border-lavender-pink"
-                key={elem.address}
-              >
-                <p className="inline-block text-slate-gray">{elem.name}</p>
-                <span
-                  className="ml-2 font-extrabold hover:cursor-pointer hover:opacity-70"
-                  onClick={() => handleAddressRemovalFromNewGroup(elem)}
-                >
-                  X
-                </span>
-              </div>
+              <Fragment key={elem.address}>
+                <div className="inline-block bg-soft-pink px-4 py-2 m-2 rounded-xl border-2 border-lavender-pink">
+                  <p className="inline-block text-slate-gray">{elem.name}</p>
+                  <span
+                    className="ml-2 font-extrabold hover:cursor-pointer hover:opacity-70"
+                    onClick={() => handleAddressRemovalFromNewGroup(elem)}
+                  >
+                    X
+                  </span>
+                </div>
+              </Fragment>
             ))}
           </div>
           <div className="mb-4">
             <label htmlFor="withdawalAddressesList" className="block mb-4">
               {newGroup.length === 0
-                ? "Add a withdrawal address to the group"
-                : "Add another withdrawal address to the group"}
+                ? 'Add a withdrawal address to the group'
+                : 'Add another withdrawal address to the group'}
             </label>
             <select
               name="withdawalAddressesList"
@@ -450,9 +451,11 @@ const User = ({
               {withdrawalAddresses
                 .filter((elem) => !newGroup.includes(elem))
                 .map((withdrawalAddress) => (
-                  <option value={withdrawalAddress.name}>
-                    {withdrawalAddress.name}
-                  </option>
+                  <Fragment key={withdrawalAddress.address}>
+                    <option value={withdrawalAddress.name}>
+                      {withdrawalAddress.name}
+                    </option>
+                  </Fragment>
                 ))}
             </select>
           </div>
@@ -467,7 +470,7 @@ const User = ({
         {newGroupError ? (
           <p className="text-pastel-red font-bold">{newGroupError}</p>
         ) : (
-          ""
+          ''
         )}
         <Notification
           notificationDescription="New group created!"
@@ -494,44 +497,48 @@ const User = ({
             </thead>
             <tbody>
               {withdrawalAddressesGroups.map((group) => (
-                <tr
-                  key={group.withdrawalAddresses
-                    .map((elem) => elem.address)
-                    .toString()}
-                >
-                  <td className="px-4 py-1">{group.name}</td>
-                  <td className="px-4 py-1 text-slate-gray grid grid-cols-3 w-max">
-                    {group.withdrawalAddresses.map((elem) => (
-                      <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
-                        {elem.name}
-                      </p>
-                    ))}
-                  </td>
-                  <td className="px-4 py-1">
-                    {group.name !== "Main" ? (
-                      <button
-                        className="text-pastel-green hover:text-green-500 transition-colors w-"
-                        onClick={(event) => handleGroupEdit(event)}
-                      >
-                        Edit
-                      </button>
-                    ) : (
-                      "Cannot edit Main Group"
-                    )}
-                  </td>
-                  <td className="px-4 py-1">
-                    {group.name !== "Main" ? (
-                      <button
-                        className="text-pastel-red hover:text-red-600 transition-colors"
-                        onClick={(event) => handleGroupRemoval(event, group)}
-                      >
-                        Remove
-                      </button>
-                    ) : (
-                      "Cannot remove Main Group"
-                    )}
-                  </td>
-                </tr>
+                <Fragment key={group.key}>
+                  <tr
+                    key={group.withdrawalAddresses
+                      .map((elem) => elem.address)
+                      .toString()}
+                  >
+                    <td className="px-4 py-1">{group.name}</td>
+                    <td className="px-4 py-1 text-slate-gray grid grid-cols-3 w-max">
+                      {group.withdrawalAddresses.map((elem) => (
+                        <Fragment key={elem.address}>
+                          <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
+                            {elem.name}
+                          </p>
+                        </Fragment>
+                      ))}
+                    </td>
+                    <td className="px-4 py-1">
+                      {group.name !== 'Main' ? (
+                        <button
+                          className="text-pastel-green hover:text-green-500 transition-colors w-"
+                          onClick={(event) => handleGroupEdit(event)}
+                        >
+                          Edit
+                        </button>
+                      ) : (
+                        'Cannot edit Main Group'
+                      )}
+                    </td>
+                    <td className="px-4 py-1">
+                      {group.name !== 'Main' ? (
+                        <button
+                          className="text-pastel-red hover:text-red-600 transition-colors"
+                          onClick={(event) => handleGroupRemoval(event, group)}
+                        >
+                          Remove
+                        </button>
+                      ) : (
+                        'Cannot remove Main Group'
+                      )}
+                    </td>
+                  </tr>
+                </Fragment>
               ))}
             </tbody>
           </table>
@@ -553,8 +560,8 @@ const User = ({
               <input
                 type="checkbox"
                 id="/home"
-                checked={"/home" === defaultPage}
-                onChange={() => handleDefaultPageChange("/home")}
+                checked={'/home' === defaultPage}
+                onChange={() => handleDefaultPageChange('/home')}
               />
               <label className={checkboxLabelClasses} htmlFor="/home">
                 Home
@@ -564,8 +571,8 @@ const User = ({
               <input
                 type="checkbox"
                 id="/validatorStatistics"
-                checked={"/validatorStatistics" === defaultPage}
-                onChange={() => handleDefaultPageChange("/validatorStatistics")}
+                checked={'/validatorStatistics' === defaultPage}
+                onChange={() => handleDefaultPageChange('/validatorStatistics')}
               />
               <label
                 className={checkboxLabelClasses}
@@ -578,8 +585,8 @@ const User = ({
               <input
                 type="checkbox"
                 id="/validatorList"
-                checked={"/validatorList" === defaultPage}
-                onChange={() => handleDefaultPageChange("/validatorList")}
+                checked={'/validatorList' === defaultPage}
+                onChange={() => handleDefaultPageChange('/validatorList')}
               />
               <label className={checkboxLabelClasses} htmlFor="/validatorList">
                 Validator List
@@ -589,8 +596,8 @@ const User = ({
               <input
                 type="checkbox"
                 id="user"
-                checked={"user" === defaultPage}
-                onChange={() => handleDefaultPageChange("user")}
+                checked={'user' === defaultPage}
+                onChange={() => handleDefaultPageChange('user')}
               />
               <label className={checkboxLabelClasses} htmlFor="user">
                 User

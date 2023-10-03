@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { LuckParams } from "../../Types/ComponentParamsTypes";
+import { useEffect, useState } from 'react';
+import { LuckParams } from '../../Types/ComponentParamsTypes';
 
 export const Luck = ({
   tileClasses,
@@ -12,7 +12,7 @@ export const Luck = ({
     const withdrawalAddresses = selectedGroup.withdrawalAddresses;
     if (withdrawalAddresses.length === 1) {
       setProposalLuck(
-        validatorsLuck[withdrawalAddresses[0].address].proposal_luck
+        validatorsLuck[withdrawalAddresses[0].address].proposal_luck,
       );
     } else {
       let sum = 0;

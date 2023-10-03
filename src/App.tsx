@@ -1,21 +1,21 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 // components
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import Landing from "./Components/Pages/Landing";
-import ValidatorStats from "./Components/Pages/ValidatorStats";
-import User from "./Components/Pages/User";
-import Validators from "./Components/Pages/Validators";
-import TermsAndConditions from "./Components/Pages/TermsAndConditions";
-import PrivacyPolicy from "./Components/Pages/PrivacyPolicy";
-import License from "./Components/Pages/License";
+import Header from './Components/Header';
+import Footer from './Components/Footer';
+import Landing from './Components/Pages/Landing';
+import ValidatorStats from './Components/Pages/ValidatorStats';
+import User from './Components/Pages/User';
+import Validators from './Components/Pages/Validators';
+import TermsAndConditions from './Components/Pages/TermsAndConditions';
+import PrivacyPolicy from './Components/Pages/PrivacyPolicy';
+import License from './Components/Pages/License';
 
 // helpers
 import {
@@ -23,12 +23,12 @@ import {
   fetchValidatorsData,
   fetchValidatorsLuck,
   fetchValidatorsPerformance,
-} from "./Helpers/validators";
+} from './Helpers/validators';
 import {
   getLYXPrice,
   getLastEpoch,
   getWithdrawalAddressesBalance,
-} from "./Helpers/network";
+} from './Helpers/network';
 
 // ts types
 import {
@@ -37,104 +37,104 @@ import {
   ValidatorsLuck,
   ValidatorsPerformance,
   WithdrawalAddressesGroup,
-} from "./Types/UsedDataTypes";
-import PageNotFound from "./Components/Pages/PageNotFound";
-import { generateUUID } from "./Helpers/utils";
+} from './Types/UsedDataTypes';
+import PageNotFound from './Components/Pages/PageNotFound';
+import { generateUUID } from './Helpers/utils';
 
 function App() {
   /// Default page to redirect from `/`
-  const storedDefaultPage = localStorage.getItem("defaultPage");
+  const storedDefaultPage = localStorage.getItem('defaultPage');
   const [defaultPage, setDefaultPage] = useState(
     storedDefaultPage
       ? storedDefaultPage
-      : ("/home" as
-          | "/home"
-          | "/validatorStatistics"
-          | "/validatorList"
-          | "user"
-          | "")
+      : ('/home' as
+          | '/home'
+          | '/validatorStatistics'
+          | '/validatorList'
+          | 'user'
+          | ''),
   );
 
   /// ------ Withdrawal Addresses ------
-  const storedWithdrawalAddresses = localStorage.getItem("withdrawalAddresses");
+  const storedWithdrawalAddresses = localStorage.getItem('withdrawalAddresses');
   const [withdrawalAddresses, setWithdrawalAddresses] = useState(
     (storedWithdrawalAddresses
       ? JSON.parse(storedWithdrawalAddresses)
-      : []) as WithdrawalAddresses[]
+      : []) as WithdrawalAddresses[],
   );
   const [withdrawalAddressesBalance, setWithdrawalAddressessBalance] = useState(
-    undefined as Record<string, number> | undefined
+    undefined as Record<string, number> | undefined,
   );
   /// -------------------------------------------
 
   /// ------ Withdrawal Addresses Groups ------
   const storedWithdrawalAddressessGroups = localStorage.getItem(
-    "withdrawalAddressesGroups"
+    'withdrawalAddressesGroups',
   );
   const [withdrawalAddressesGroups, setWithdrawalAddressessGroups] = useState(
     (storedWithdrawalAddressessGroups
       ? JSON.parse(storedWithdrawalAddressessGroups)
       : [
-          { name: "Main", key: generateUUID(), withdrawalAddresses },
-        ]) as WithdrawalAddressesGroup[]
+          { name: 'Main', key: generateUUID(), withdrawalAddresses },
+        ]) as WithdrawalAddressesGroup[],
   );
   /// If the stored Main Group is different that the generated one, update it
   useEffect(() => {
     if (
       withdrawalAddresses &&
-      withdrawalAddressesGroups.filter((group) => group.name === "Main")[0]
+      withdrawalAddressesGroups.filter((group) => group.name === 'Main')[0]
         .withdrawalAddresses !== withdrawalAddresses
     ) {
       withdrawalAddressesGroups.map((group) =>
-        group.name === "Main"
+        group.name === 'Main'
           ? { name: group.name, key: group.key, withdrawalAddresses }
-          : group
+          : group,
       );
     }
   });
   /// -----------------------------------------
 
   /// ------ Validators withdrawalAddresses ------
-  const storedValidators = localStorage.getItem("validators");
+  const storedValidators = localStorage.getItem('validators');
   const [validators, setValidators] = useState(
     (storedValidators ? JSON.parse(storedValidators) : {}) as Record<
       string,
       string[]
-    >
+    >,
   );
   /// --------------------------------
 
   /// ------ Validator Data ------
   const [activeValidators, setActiveValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined
+    undefined as Record<string, ValidatorMap> | undefined,
   );
   const [pendingValidators, setPendingValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined
+    undefined as Record<string, ValidatorMap> | undefined,
   );
   const [offlineValidators, setOfflineValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined
+    undefined as Record<string, ValidatorMap> | undefined,
   );
   const [slashedValidators, setSlashedValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined
+    undefined as Record<string, ValidatorMap> | undefined,
   );
   const [otherValidators, setOtherValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined
+    undefined as Record<string, ValidatorMap> | undefined,
   );
   const [validatorsLuck, setValidatorsLuck] = useState(
-    undefined as Record<string, ValidatorsLuck> | undefined
+    undefined as Record<string, ValidatorsLuck> | undefined,
   );
   const [validatorsPerformance, setValidatorsPerformance] = useState(
-    undefined as Record<string, ValidatorsPerformance> | undefined
+    undefined as Record<string, ValidatorsPerformance> | undefined,
   );
   /// ----------------------------
 
   /// ------ Network Data ------
   const [stakedLYX, setStakedLYX] = useState(undefined as number | undefined);
   const [currentEpoch, setCurrentEpoch] = useState(
-    undefined as number | undefined
+    undefined as number | undefined,
   );
   const [networkValidators, setNetworkValidators] = useState(
-    undefined as number | undefined
+    undefined as number | undefined,
   );
   /// --------------------------
 
@@ -162,7 +162,7 @@ function App() {
       getWithdrawalAddressesBalance(withdrawalAddresses);
 
     newWithdrawalAddressesBalance.then((data) =>
-      setWithdrawalAddressessBalance(data)
+      setWithdrawalAddressessBalance(data),
     );
   }, [withdrawalAddresses]);
 
@@ -236,25 +236,25 @@ function App() {
   /// ------ Update storage items ------
   useEffect(() => {
     localStorage.setItem(
-      "withdrawalAddresses",
-      JSON.stringify(withdrawalAddresses)
+      'withdrawalAddresses',
+      JSON.stringify(withdrawalAddresses),
     );
   }, [withdrawalAddresses]);
 
   useEffect(() => {
-    if (withdrawalAddressesGroups[0].name === "Main") {
+    if (withdrawalAddressesGroups[0].name === 'Main') {
       withdrawalAddressesGroups[0].withdrawalAddresses = withdrawalAddresses;
     }
   }, [withdrawalAddressesGroups, withdrawalAddresses]);
 
   useEffect(() => {
-    localStorage.setItem("validators", JSON.stringify(validators));
+    localStorage.setItem('validators', JSON.stringify(validators));
   }, [validators]);
 
   useEffect(() => {
     localStorage.setItem(
-      "withdrawalAddressesGroups",
-      JSON.stringify(withdrawalAddressesGroups)
+      'withdrawalAddressesGroups',
+      JSON.stringify(withdrawalAddressesGroups),
     );
   }, [withdrawalAddressesGroups]);
   /// ----------------------------------
@@ -330,13 +330,13 @@ function App() {
 
   /// ------ Styling ------
   const bodyClasses =
-    "container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1";
+    'container mx-auto gap-4 p-4 transition-all duration-75 grid grid-cols-1';
 
   const tileClasses =
-    "relative bg-misty-rose border border-emerald rounded-lg shadow-lg";
+    'relative bg-misty-rose border border-emerald rounded-lg shadow-lg';
 
   const buttonClasses =
-    "bg-strong-pink hover:bg-dark-pink border-2 border-dark-pink text-white transition-colors px-4 py-2 rounded-lg ";
+    'bg-strong-pink hover:bg-dark-pink border-2 border-dark-pink text-white transition-colors px-4 py-2 rounded-lg ';
 
   /// ---------------------
 
@@ -356,8 +356,8 @@ function App() {
   };
 
   const tokenPrice = {
-    eurPrice: eurPrice ? eurPrice : "",
-    usdPrice: usdPrice ? usdPrice : "",
+    eurPrice: eurPrice ? eurPrice : '',
+    usdPrice: usdPrice ? usdPrice : '',
   };
 
   const networkData = {
@@ -370,7 +370,7 @@ function App() {
   return (
     <div
       className={`min-h-screen relative flex flex-col justify-center items-center bg-pink pb-12 transition-all ${
-        isDropdownOpen ? "pt-72" : "pt-44 delay-75 duration-200"
+        isDropdownOpen ? 'pt-72' : 'pt-44 delay-75 duration-200'
       }`}
     >
       <Router>
@@ -378,7 +378,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Navigate to={defaultPage ? defaultPage : "/home"} replace />
+              <Navigate to={defaultPage ? defaultPage : '/home'} replace />
             }
           />
           <Route

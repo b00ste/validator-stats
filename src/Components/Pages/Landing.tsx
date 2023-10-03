@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import Notification from "../Notification";
-import { useState } from "react";
-import { LandingPageParams } from "../../Types/ComponentParamsTypes";
+import { useNavigate } from 'react-router-dom';
+import Notification from '../Notification';
+import { useState } from 'react';
+import { LandingPageParams } from '../../Types/ComponentParamsTypes';
 
 const Landing = ({
   bodyClasses,
@@ -11,19 +11,19 @@ const Landing = ({
 }: LandingPageParams) => {
   const navigate = useNavigate();
   const [addressCopiedOpacity, setAddressCopiedOpacity] = useState(
-    "opacity-0 pointer-events-none"
+    'opacity-0 pointer-events-none',
   );
 
   const handleAddressCopy = () => {
-    setAddressCopiedOpacity("opacity-100");
+    setAddressCopiedOpacity('opacity-100');
     navigator.clipboard.writeText(supportProjectAddress);
     setTimeout(
-      () => setAddressCopiedOpacity("opacity-0 pointer-events-none"),
-      1500
+      () => setAddressCopiedOpacity('opacity-0 pointer-events-none'),
+      1500,
     );
   };
 
-  const supportProjectAddress = "0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1";
+  const supportProjectAddress = '0x6A0e62776530d9F9B73463F20e34D0f9fe5FEED1';
 
   const specificTileClasses = `${tileClasses} p-6`;
 
@@ -65,7 +65,7 @@ const Landing = ({
               <button
                 className={buttonClasses}
                 onClick={() =>
-                  handlePageNavigation(navigate, "/validatorStatistics")
+                  handlePageNavigation(navigate, '/validatorStatistics')
                 }
               >
                 Validator Stats
@@ -78,7 +78,7 @@ const Landing = ({
             <div className="flex justify-center mt-4">
               <button
                 className={buttonClasses}
-                onClick={() => handlePageNavigation(navigate, "/validatorList")}
+                onClick={() => handlePageNavigation(navigate, '/validatorList')}
               >
                 Validator List
               </button>
@@ -90,7 +90,7 @@ const Landing = ({
             <div className="flex justify-center mt-4">
               <button
                 className={buttonClasses}
-                onClick={() => handlePageNavigation(navigate, "/user")}
+                onClick={() => handlePageNavigation(navigate, '/user')}
               >
                 User
               </button>

@@ -1,13 +1,12 @@
-import { useState } from "react";
+import { Fragment, useState } from 'react';
 
 // utils
-import { consensys_explorer } from "../../Helpers/constants";
+import { consensys_explorer } from '../../Helpers/constants';
 
 // types
-import { ValidatorsPageParams } from "../../Types/ComponentParamsTypes";
-import { ValidatorMap, ValidatorsPerformance } from "../../Types/UsedDataTypes";
-import { generateUUID } from "../../Helpers/utils";
-import { Validator } from "../../Types/FetchedDataTypes";
+import { ValidatorsPageParams } from '../../Types/ComponentParamsTypes';
+import { ValidatorMap, ValidatorsPerformance } from '../../Types/UsedDataTypes';
+import { Validator } from '../../Types/FetchedDataTypes';
 
 export const Validators = ({
   bodyClasses,
@@ -24,9 +23,9 @@ export const Validators = ({
   validatorsPerformance,
 }: ValidatorsPageParams) => {
   const [selectedValidatorStatus, setSelectedValidatorStatus] =
-    useState("active");
+    useState('active');
   const [selectedAccount, SetSelectedAccount] = useState(
-    withdrawalAddresses[0] ? withdrawalAddresses[0].address : ""
+    withdrawalAddresses[0] ? withdrawalAddresses[0].address : '',
   );
 
   const findAddressName = (bytes: string) => {
@@ -34,7 +33,7 @@ export const Validators = ({
       const address = `0x${bytes.substring(bytes.length - 40)}`;
 
       return (
-        <td className={tableHeadStyle} key={address}>
+        <td className={tableHeadStyle}>
           <a
             href={`${consensys_explorer}/address/${address}`}
             target="_blank"
@@ -43,7 +42,7 @@ export const Validators = ({
           >
             {
               withdrawalAddresses.filter(
-                (elem) => elem.address.toLowerCase() === address.toLowerCase()
+                (elem) => elem.address.toLowerCase() === address.toLowerCase(),
               )[0].name
             }
           </a>
@@ -62,7 +61,7 @@ export const Validators = ({
           >
             {
               withdrawalAddresses.filter(
-                (elem) => elem.address.toLowerCase() === address.toLowerCase()
+                (elem) => elem.address.toLowerCase() === address.toLowerCase(),
               )[0].name
             }
           </a>
@@ -75,7 +74,7 @@ export const Validators = ({
 
   const getExecutedAttestations = (
     accountValidatorsPerformance: ValidatorsPerformance,
-    validatorData: Validator
+    validatorData: Validator,
   ) => {
     if (accountValidatorsPerformance) {
       const validatorPerformance =
@@ -88,12 +87,12 @@ export const Validators = ({
             : 0}
         </>
       );
-    } else return <></>;
+    } else return <>0</>;
   };
 
   const getMissedAttestations = (
     accountValidatorsPerformance: ValidatorsPerformance,
-    validatorData: Validator
+    validatorData: Validator,
   ) => {
     if (accountValidatorsPerformance) {
       const validatorPerformance =
@@ -106,11 +105,12 @@ export const Validators = ({
             : 0}
         </>
       );
-    } else return <></>;
+    } else return <>0</>;
   };
+
   const getAttestationsRatio = (
     accountValidatorsPerformance: ValidatorsPerformance,
-    validatorData: Validator
+    validatorData: Validator,
   ) => {
     if (accountValidatorsPerformance) {
       const validatorPerformance =
@@ -129,73 +129,70 @@ export const Validators = ({
             : 0}
         </>
       );
-    } else return <></>;
+    } else return <>0</>;
   };
 
   const getValidatorRow = (
     validatorMap: ValidatorMap,
     validator: string,
-    index: number
+    index: number,
   ) => {
     const validatorData = validatorMap[validator];
-    if (validatorData) {
-      return (
-        <tr key={validator}>
-          <td className={tableHeadStyle} key={validator + "_nr"}>
-            {`${index + 1}.`}
-          </td>
-          <td key={validator + "_link"}>
+    return (
+      <Fragment key={validator}>
+        <tr>
+          <td className={tableHeadStyle}>{`${index + 1}.`}</td>
+          <td>
             <a
               href={`${consensys_explorer}/validator/${validator.substring(2)}`}
               target="_blank"
               rel="noreferrer"
               className="text-pastel-blue hover:underline overflow-hidden"
-              key={generateUUID()}
             >
               {`${validator.substring(0, 4)}...${validator.substring(
                 validator.length - 2,
-                validator.length
+                validator.length,
               )}`}
             </a>
           </td>
-          <td className={tableHeadStyle} key={validator + "_index"}>
+          <td className={tableHeadStyle}>
             {validatorMap[validator].validatorindex}
           </td>
-          <td className={tableHeadStyle} key={validator + "_balance"}>
+          <td className={tableHeadStyle}>
             {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
           </td>
-          <td
-            className={tableHeadStyle}
-            key={validator + "_executedAttestations"}
-          >
-            {getExecutedAttestations(
-              validatorsPerformance[selectedAccount],
-              validatorData
-            )}
+          <td className={tableHeadStyle}>
+            {validatorData
+              ? getExecutedAttestations(
+                  validatorsPerformance[selectedAccount],
+                  validatorData,
+                )
+              : 0}
           </td>
-          <td
-            className={tableHeadStyle}
-            key={validator + "_missedAttestantions"}
-          >
-            {getMissedAttestations(
-              validatorsPerformance[selectedAccount],
-              validatorData
-            )}
+          <td className={tableHeadStyle}>
+            {validatorData
+              ? getMissedAttestations(
+                  validatorsPerformance[selectedAccount],
+                  validatorData,
+                )
+              : 0}
           </td>
-          <td className={tableHeadStyle} key={validator + "_performance"}>
-            {getAttestationsRatio(
-              validatorsPerformance[selectedAccount],
-              validatorData
-            )}
+          <td className={tableHeadStyle}>
+            {validatorData
+              ? getAttestationsRatio(
+                  validatorsPerformance[selectedAccount],
+                  validatorData,
+                )
+              : 0}
           </td>
           {findAddressName(validatorMap[validator].withdrawalcredentials)}
         </tr>
-      );
-    } else return <></>;
+      </Fragment>
+    );
   };
 
   /// ------ Styling Handling ------
-  const tableHeadStyle = "text-slate-gray px-4 py-1";
+  const tableHeadStyle = 'text-slate-gray px-4 py-1';
 
   const specificTileClasses = `${tileClasses} p-4`;
   /// ------------------------------
@@ -212,51 +209,51 @@ export const Validators = ({
         <div>
           <button
             className={`${
-              selectedValidatorStatus === "active"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'active'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("active")}
+            onClick={() => setSelectedValidatorStatus('active')}
           >
             Active
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "pending"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'pending'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("pending")}
+            onClick={() => setSelectedValidatorStatus('pending')}
           >
             Pending
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "offline"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'offline'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("offline")}
+            onClick={() => setSelectedValidatorStatus('offline')}
           >
             Offline
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "slashed"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'slashed'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("slashed")}
+            onClick={() => setSelectedValidatorStatus('slashed')}
           >
             Slashed
           </button>
           <button
             className={`${
-              selectedValidatorStatus === "other"
-                ? "bg-pastel-blue"
-                : "bg-strong-pink hover:bg-dark-pink"
+              selectedValidatorStatus === 'other'
+                ? 'bg-pastel-blue'
+                : 'bg-strong-pink hover:bg-dark-pink'
             } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
-            onClick={() => setSelectedValidatorStatus("other")}
+            onClick={() => setSelectedValidatorStatus('other')}
           >
             Other
           </button>
@@ -274,8 +271,8 @@ export const Validators = ({
               key={elem.address}
               className={`${
                 selectedAccount === elem.address
-                  ? "bg-pastel-blue"
-                  : "bg-strong-pink hover:bg-dark-pink"
+                  ? 'bg-pastel-blue'
+                  : 'bg-strong-pink hover:bg-dark-pink'
               } text-white px-4 py-2 rounded-lg mb-2 m-2 transition-colors`}
               onClick={() => SetSelectedAccount(elem.address)}
             >
@@ -306,60 +303,58 @@ export const Validators = ({
               {validators[selectedAccount] ? (
                 validators[selectedAccount].map((validator, index) => {
                   switch (selectedValidatorStatus) {
-                    case "active": {
+                    case 'active': {
                       if (activeValidators[selectedAccount]) {
                         return getValidatorRow(
                           activeValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "pending": {
+                    case 'pending': {
                       if (pendingValidators[selectedAccount]) {
                         return getValidatorRow(
                           pendingValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "offline": {
+                    case 'offline': {
                       if (offlineValidators[selectedAccount]) {
                         return getValidatorRow(
                           offlineValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "slashed": {
+                    case 'slashed': {
                       if (slashedValidators[selectedAccount]) {
                         return getValidatorRow(
                           slashedValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    case "other": {
+                    case 'other': {
                       if (otherValidators[selectedAccount]) {
                         return getValidatorRow(
                           otherValidators[selectedAccount],
                           validator,
-                          index
+                          index,
                         );
                       }
                       break;
                     }
-                    default:
-                      return <></>;
                   }
-                  return <></>;
+                  return <Fragment key={validator}></Fragment>;
                 })
               ) : (
                 <></>

@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Stats Tiles
-import { Earnings } from "../ValidatorStatsComponents/Earnings";
-import { TimeframePercentageRate } from "../ValidatorStatsComponents/TimeframePercentageRate";
-import { Attestations } from "../ValidatorStatsComponents/Attestations";
-import { Luck } from "../ValidatorStatsComponents/Luck";
-import { Validators } from "../ValidatorStatsComponents/Validators";
-import { Balance } from "../ValidatorStatsComponents/Balance";
-import { TotalWithdrawals } from "../ValidatorStatsComponents/TotalWithdrawals";
-import { WithdrawalBalance } from "../ValidatorStatsComponents/WithdrawalBalance";
-import { WithdrawableAmount } from "../ValidatorStatsComponents/WithdrawableAmount";
+import { Earnings } from '../ValidatorStatsComponents/Earnings';
+import { TimeframePercentageRate } from '../ValidatorStatsComponents/TimeframePercentageRate';
+import { Attestations } from '../ValidatorStatsComponents/Attestations';
+import { Luck } from '../ValidatorStatsComponents/Luck';
+import { Validators } from '../ValidatorStatsComponents/Validators';
+import { Balance } from '../ValidatorStatsComponents/Balance';
+import { TotalWithdrawals } from '../ValidatorStatsComponents/TotalWithdrawals';
+import { WithdrawalBalance } from '../ValidatorStatsComponents/WithdrawalBalance';
+import { WithdrawableAmount } from '../ValidatorStatsComponents/WithdrawableAmount';
 
 // ts types
-import { ValidatorStatsPageParams } from "../../Types/ComponentParamsTypes";
-import { ValidatorMap } from "../../Types/UsedDataTypes";
+import { ValidatorStatsPageParams } from '../../Types/ComponentParamsTypes';
+import { ValidatorMap } from '../../Types/UsedDataTypes';
 
 const ValidatorStats = ({
   bodyClasses,
@@ -32,7 +32,7 @@ const ValidatorStats = ({
     otherValidators,
   } = validatorsMaps;
   const [selectedGroup, setSelectedGroup] = useState(
-    withdrawalAddressesGroups[0]
+    withdrawalAddressesGroups[0],
   );
 
   const [activeValidatorsCount, setActiveValidatorsCount] = useState(0);
@@ -43,7 +43,7 @@ const ValidatorStats = ({
 
   useEffect(() => {
     const calculateValidatorsCount = (
-      validatorsMap: Record<string, ValidatorMap>
+      validatorsMap: Record<string, ValidatorMap>,
     ) => {
       let total = 0;
 
@@ -52,7 +52,7 @@ const ValidatorStats = ({
 
         if (validatorsMap[withdrawalAddress]) {
           total += Object.getOwnPropertyNames(
-            validatorsMap[withdrawalAddress]
+            validatorsMap[withdrawalAddress],
           ).length;
         }
       }
@@ -91,7 +91,7 @@ const ValidatorStats = ({
 
   useEffect(() => {
     const calculateValidatorsBalance = (
-      validatorsMap: Record<string, ValidatorMap>
+      validatorsMap: Record<string, ValidatorMap>,
     ) => {
       let balance = 0;
 
@@ -145,8 +145,8 @@ const ValidatorStats = ({
               key={group.key}
               className={`${
                 selectedGroup.name === group.name
-                  ? "bg-pastel-blue"
-                  : "bg-strong-pink hover:bg-dark-pink border-2"
+                  ? 'bg-pastel-blue'
+                  : 'bg-strong-pink hover:bg-dark-pink border-2'
               } inline-block text-white transition-colors px-4 py-2 rounded-xl m-1`}
               onClick={() => setSelectedGroup(group)}
             >

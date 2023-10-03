@@ -9,7 +9,7 @@ import {
   ValidatorsMaps,
   ValidatorsPerformance,
   WithdrawalAddressesGroup,
-} from "./UsedDataTypes";
+} from './UsedDataTypes';
 
 // ------------ MAIN COMPONENTS PARAM TYPES ------------
 
@@ -75,7 +75,7 @@ export type FooterParams = {
 // ------------ VALIDATOR STATS COMPONENTS PARAM TYPES ------------
 
 export type TimeframePercentageRateParams = {
-  timeframe: "daily" | "weekly" | "monthly" | "annual";
+  timeframe: 'daily' | 'weekly' | 'monthly' | 'annual';
   tileClasses: string;
   stakedLYX: number;
 };
@@ -87,7 +87,7 @@ export type BalanceParams = {
 };
 
 export type EarningsParams = {
-  timeframe: "daily" | "weekly" | "monthly" | "annual" | "total";
+  timeframe: 'daily' | 'weekly' | 'monthly' | 'annual' | 'total';
   tileClasses: string;
   tokenPrice: TokenPrice;
   stakedLYX: number;
