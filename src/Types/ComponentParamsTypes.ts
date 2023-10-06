@@ -1,6 +1,6 @@
 import {
   NetworkData,
-  WithdrawalAddresses,
+  WithdrawalAddress,
   TokenPrice,
   ValidatorMap,
   ValidatorsBalances,
@@ -36,9 +36,9 @@ export type UserPageParams = {
   bodyClasses: string;
   tileClasses: string;
   buttonClasses: string;
-  withdrawalAddresses: WithdrawalAddresses[];
+  withdrawalAddresses: WithdrawalAddress[];
   setWithdrawalAddresses: React.Dispatch<
-    React.SetStateAction<WithdrawalAddresses[]>
+    React.SetStateAction<WithdrawalAddress[]>
   >;
   validators: Record<string, string[]>;
   setValidators: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
@@ -53,7 +53,7 @@ export type UserPageParams = {
 export type ValidatorsPageParams = {
   bodyClasses: string;
   tileClasses: string;
-  withdrawalAddresses: WithdrawalAddresses[];
+  withdrawalAddresses: WithdrawalAddress[];
   validatorsMaps: ValidatorsMaps;
   validatorsPerformance: Record<string, ValidatorsPerformance>;
 };

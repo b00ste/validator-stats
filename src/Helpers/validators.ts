@@ -10,7 +10,7 @@ import {
   ExecutionPerformance,
 } from '../Types/FetchedDataTypes';
 import {
-  WithdrawalAddresses,
+  WithdrawalAddress,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
@@ -72,7 +72,7 @@ const fetchValidatorDataByLink = async (link: string, validators: string[]) => {
 };
 
 export const fetchValidators = async (
-  withdrawalAddresses: WithdrawalAddresses[],
+  withdrawalAddresses: WithdrawalAddress[],
 ) => {
   const validators: Record<string, string[]> = {};
   const validatorMap: Record<string, boolean> = {};

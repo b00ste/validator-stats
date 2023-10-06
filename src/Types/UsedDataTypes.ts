@@ -4,7 +4,7 @@ import {
   ExecutionPerformance,
 } from './FetchedDataTypes';
 
-export type WithdrawalAddresses = {
+export type WithdrawalAddress = {
   address: string;
   name: string;
 };
@@ -12,7 +12,7 @@ export type WithdrawalAddresses = {
 export type WithdrawalAddressesGroup = {
   name: string;
   key: string;
-  withdrawalAddresses: WithdrawalAddresses[];
+  withdrawalAddresses: WithdrawalAddress[];
 };
 
 export type ValidatorMap = Record<string, Validator>;

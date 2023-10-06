@@ -2,7 +2,7 @@
 import { consensys_explorer } from './constants';
 
 //types
-import { WithdrawalAddresses } from '../Types/UsedDataTypes';
+import { WithdrawalAddress } from '../Types/UsedDataTypes';
 import { Epoch } from '../Types/FetchedDataTypes';
 
 export const getLastEpoch = async () => {
@@ -23,7 +23,7 @@ export const getLastEpoch = async () => {
 };
 
 export const getWithdrawalAddressesBalance = async (
-  withdrawalAddresses: WithdrawalAddresses[],
+  withdrawalAddresses: WithdrawalAddress[],
 ) => {
   const withdrawalAddressessBalance = {} as Record<string, number>;
 

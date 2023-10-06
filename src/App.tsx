@@ -16,33 +16,33 @@ import Validators from './Components/Pages/Validators';
 import TermsAndConditions from './Components/Pages/TermsAndConditions';
 import PrivacyPolicy from './Components/Pages/PrivacyPolicy';
 import License from './Components/Pages/License';
+import PageNotFound from './Components/Pages/PageNotFound';
+
+// handlers
+import updateValidator from './Handlers/updateValidator';
+import updateWithdrawalAddressesBalances from './Handlers/updateWithdrawalAddressesBalances';
+import updateValidatorsMaps from './Handlers/updateValidatorsMaps';
+import updateVaildatorsLuck from './Handlers/updateVaildatorsLuck';
+import updateVaildatorsPerformance from './Handlers/updateVaildatorsPerformance';
+import updateNetworkData from './Handlers/updateNetworkData';
+import updateLYXPrice from './Handlers/updateLYXPrice';
 
 // helpers
-import {
-  fetchValidators,
-  fetchValidatorsData,
-  fetchValidatorsLuck,
-  fetchValidatorsPerformance,
-} from './Helpers/validators';
-import {
-  getLYXPrice,
-  getLastEpoch,
-  getWithdrawalAddressesBalance,
-} from './Helpers/network';
+import { generateUUID } from './Helpers/utils';
 
 // ts types
 import {
-  WithdrawalAddresses,
   ValidatorMap,
   ValidatorsLuck,
   ValidatorsPerformance,
+  WithdrawalAddress,
   WithdrawalAddressesGroup,
 } from './Types/UsedDataTypes';
-import PageNotFound from './Components/Pages/PageNotFound';
-import { generateUUID } from './Helpers/utils';
+
+// Redux Storage
 
 function App() {
-  /// Default page to redirect from `/`
+  /// ------ Default page to redirect from `/` ------
   const storedDefaultPage = localStorage.getItem('defaultPage');
   const [defaultPage, setDefaultPage] = useState(
     storedDefaultPage
@@ -51,20 +51,21 @@ function App() {
           | '/home'
           | '/validatorStatistics'
           | '/validatorList'
-          | 'user'
+          | '/user'
           | ''),
   );
+  /// -----------------------------------------------
 
   /// ------ Withdrawal Addresses ------
   const storedWithdrawalAddresses = localStorage.getItem('withdrawalAddresses');
   const [withdrawalAddresses, setWithdrawalAddresses] = useState(
     (storedWithdrawalAddresses
       ? JSON.parse(storedWithdrawalAddresses)
-      : []) as WithdrawalAddresses[],
+      : []) as WithdrawalAddress[],
   );
-  const [withdrawalAddressesBalance, setWithdrawalAddressessBalance] = useState(
-    undefined as Record<string, number> | undefined,
-  );
+
+  const [withdrawalAddressesBalances, setWithdrawalAddressessBalances] =
+    useState(undefined as Record<string, number> | undefined);
   /// -------------------------------------------
 
   /// ------ Withdrawal Addresses Groups ------
@@ -150,89 +151,6 @@ function App() {
   };
   /// --------------------------------
 
-  /// ------ Handlers for Data Update ------
-  const updateValidatorHandler = useCallback(() => {
-    const validators = fetchValidators(withdrawalAddresses);
-
-    validators.then((data) => setValidators(data));
-  }, [withdrawalAddresses]);
-
-  const updateWithdrawalAddressesBalanceHandler = useCallback(() => {
-    const newWithdrawalAddressesBalance =
-      getWithdrawalAddressesBalance(withdrawalAddresses);
-
-    newWithdrawalAddressesBalance.then((data) =>
-      setWithdrawalAddressessBalance(data),
-    );
-  }, [withdrawalAddresses]);
-
-  const updateValidatorsMaps = useCallback(() => {
-    const fetchedData = fetchValidatorsData(validators);
-
-    fetchedData.then((data) => {
-      setActiveValidators(data.activeValidators);
-      setPendingValidators(data.pendingValidators);
-      setOfflineValidators(data.offlineValidators);
-      setSlashedValidators(data.slashedValidators);
-      setOtherValidators(data.otherValidators);
-    });
-  }, [validators]);
-
-  const updateVaildatorsLuck = useCallback(() => {
-    if (activeValidators) {
-      let newValidatorsLuck = fetchValidatorsLuck(activeValidators);
-
-      newValidatorsLuck.then((data) => setValidatorsLuck(data));
-    }
-  }, [activeValidators]);
-
-  const updateVaildatorsPerformance = useCallback(() => {
-    if (activeValidators) {
-      let newValidatorsPerformance =
-        fetchValidatorsPerformance(activeValidators);
-
-      newValidatorsPerformance.then((data) => setValidatorsPerformance(data));
-    }
-  }, [activeValidators]);
-
-  const updateNetworkData = useCallback(() => {
-    const fetchedData = getLastEpoch();
-
-    fetchedData.then((epochData) => {
-      setStakedLYX(epochData.totalvalidatorbalance);
-      setCurrentEpoch(epochData.epoch);
-      setNetworkValidators(epochData.validatorscount);
-    });
-  }, []);
-
-  const updateLYXPrice = useCallback(() => {
-    const fetchedPrices = getLYXPrice();
-
-    fetchedPrices.then((data) => {
-      setEurPrce(data.eurPrice);
-      setUsdPrce(data.usdPrice);
-    });
-  }, []);
-
-  const refreshHandler = useCallback(() => {
-    updateValidatorHandler();
-    updateWithdrawalAddressesBalanceHandler();
-    updateValidatorsMaps();
-    updateVaildatorsLuck();
-    updateVaildatorsPerformance();
-    updateNetworkData();
-    updateLYXPrice();
-  }, [
-    updateValidatorHandler,
-    updateWithdrawalAddressesBalanceHandler,
-    updateValidatorsMaps,
-    updateVaildatorsLuck,
-    updateVaildatorsPerformance,
-    updateNetworkData,
-    updateLYXPrice,
-  ]);
-  /// --------------------------------------
-
   /// ------ Update storage items ------
   useEffect(() => {
     localStorage.setItem(
@@ -262,21 +180,27 @@ function App() {
   /// Update validators and withdrawal addresses balance if `withdrawalAddresses` changes
   useEffect(() => {
     if (withdrawalAddresses.length > 0) {
-      updateValidatorHandler();
-      updateWithdrawalAddressesBalanceHandler();
+      updateValidator(withdrawalAddresses, setValidators);
+      updateWithdrawalAddressesBalances(
+        withdrawalAddresses,
+        setWithdrawalAddressessBalances,
+      );
     }
-  }, [
-    withdrawalAddresses,
-    updateValidatorHandler,
-    updateWithdrawalAddressesBalanceHandler,
-  ]);
+  }, [withdrawalAddresses]);
 
   /// Update validators data (active/pending/slashed/other) if `validatorArray` changes
   useEffect(() => {
     if (Object.getOwnPropertyNames(validators).length > 0) {
-      updateValidatorsMaps();
+      updateValidatorsMaps(
+        validators,
+        setActiveValidators,
+        setPendingValidators,
+        setOfflineValidators,
+        setSlashedValidators,
+        setOtherValidators,
+      );
     }
-  }, [validators, updateValidatorsMaps]);
+  }, [validators]);
 
   /// Update validators luck & performance if `activeValidators` changes
   useEffect(() => {
@@ -286,39 +210,57 @@ function App() {
       activeValidators &&
       Object.getOwnPropertyNames(activeValidators).length > 0
     ) {
-      updateVaildatorsLuck();
-      updateVaildatorsPerformance();
+      updateVaildatorsLuck(activeValidators, setValidatorsLuck);
+      updateVaildatorsPerformance(activeValidators, setValidatorsPerformance);
     }
-  }, [
-    validatorsLuck,
-    validatorsPerformance,
-    activeValidators,
-    updateVaildatorsLuck,
-    updateVaildatorsPerformance,
-  ]);
+  }, [validatorsLuck, validatorsPerformance, activeValidators]);
 
   /// Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
     if (!stakedLYX || !currentEpoch || !networkValidators) {
-      updateNetworkData();
+      updateNetworkData(setStakedLYX, setCurrentEpoch, setNetworkValidators);
     }
-  }, [stakedLYX, currentEpoch, networkValidators, updateNetworkData]);
+  }, [stakedLYX, currentEpoch, networkValidators]);
 
   /// Fetch LYX price in both EUR & USD
   useEffect(() => {
     if (!eurPrice && !usdPrice) {
-      updateLYXPrice();
+      updateLYXPrice(setEurPrce, setUsdPrce);
     }
-  }, [eurPrice, usdPrice, updateLYXPrice]);
+  }, [eurPrice, usdPrice]);
 
   /// ------ Refresh Data ------
+  const refreshHandler = useCallback(() => {
+    updateValidator(withdrawalAddresses, setValidators);
+    updateWithdrawalAddressesBalances(
+      withdrawalAddresses,
+      setWithdrawalAddressessBalances,
+    );
+
+    if (activeValidators) {
+      updateValidatorsMaps(
+        validators,
+        setActiveValidators,
+        setPendingValidators,
+        setOfflineValidators,
+        setSlashedValidators,
+        setOtherValidators,
+      );
+      updateVaildatorsLuck(activeValidators, setValidatorsLuck);
+      updateVaildatorsPerformance(activeValidators, setValidatorsPerformance);
+    }
+
+    updateNetworkData(setStakedLYX, setCurrentEpoch, setNetworkValidators);
+    updateLYXPrice(setEurPrce, setUsdPrce);
+  }, [withdrawalAddresses, validators, activeValidators]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       refreshHandler();
     }, 10000);
 
     return () => clearInterval(interval);
-  }, [refreshHandler]);
+  });
   /// --------------------------
 
   /// ------ Navigating handler ------
@@ -404,7 +346,7 @@ function App() {
                 validatorsData={validatorsData}
                 withdrawalAddressesGroups={withdrawalAddressesGroups}
                 withdrawalAddressesBalance={
-                  withdrawalAddressesBalance ? withdrawalAddressesBalance : {}
+                  withdrawalAddressesBalances ? withdrawalAddressesBalances : {}
                 }
               />
             }
@@ -416,12 +358,12 @@ function App() {
                 bodyClasses={bodyClasses}
                 tileClasses={tileClasses}
                 buttonClasses={buttonClasses}
+                defaultPage={defaultPage}
+                setDefaultPage={setDefaultPage}
                 withdrawalAddresses={withdrawalAddresses}
                 setWithdrawalAddresses={setWithdrawalAddresses}
                 validators={validators}
                 setValidators={setValidators}
-                defaultPage={defaultPage}
-                setDefaultPage={setDefaultPage}
                 withdrawalAddressesGroups={withdrawalAddressesGroups}
                 setWithdrawalAddressessGroups={setWithdrawalAddressessGroups}
               />

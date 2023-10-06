@@ -1,9 +1,9 @@
 import { fetchValidators } from '../Helpers/validators';
-import { WithdrawalAddresses } from '../Types/UsedDataTypes';
+import { UpdateValidator } from '../Types/HandlerTypes';
 
-const updateValidator = (
-  withdrawalAddresses: WithdrawalAddresses[],
-  setValidators: React.Dispatch<React.SetStateAction<Record<string, string[]>>>,
+const updateValidator: UpdateValidator = (
+  withdrawalAddresses,
+  setValidators,
 ) => {
   const validators = fetchValidators(withdrawalAddresses);
 

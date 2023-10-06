@@ -1,28 +1,36 @@
 import { FormEvent, Fragment, useRef, useState } from 'react';
-import { consensys_explorer } from '../../Helpers/constants';
-import { UserPageParams } from '../../Types/ComponentParamsTypes';
+
+// Components
 import Notification from '../Notification';
+
+// Constants
+import { consensys_explorer } from '../../Helpers/constants';
+
+// Types
+import { UserPageParams } from '../../Types/ComponentParamsTypes';
 import {
-  WithdrawalAddresses,
+  WithdrawalAddress,
   WithdrawalAddressesGroup,
 } from '../../Types/UsedDataTypes';
+
+// Utils
 import { generateUUID } from '../../Helpers/utils';
 
 const User = ({
   bodyClasses,
   tileClasses,
   buttonClasses,
+  defaultPage,
+  setDefaultPage,
   withdrawalAddresses,
   setWithdrawalAddresses,
   validators,
   setValidators,
-  defaultPage,
-  setDefaultPage,
   withdrawalAddressesGroups,
   setWithdrawalAddressessGroups,
 }: UserPageParams) => {
   const [error, setError] = useState('');
-  const [newGroup, setNewGroup] = useState([] as WithdrawalAddresses[]);
+  const [newGroup, setNewGroup] = useState([] as WithdrawalAddress[]);
   const [newGroupError, setNewGroupError] = useState('');
 
   /// ------ Notifications ------
@@ -93,39 +101,26 @@ const User = ({
     );
   };
 
-  const handleNameEdit = (addressToEdit: string, event: FormEvent) => {
-    event.preventDefault();
-
-    if (nameRef.current.value.length === 0) {
-      setError('Please set a name');
-      return;
-    }
-
-    setWithdrawalAddresses(() =>
-      withdrawalAddresses.map((publicKey) => {
-        if (publicKey.address === addressToEdit)
-          return { ...publicKey, name: nameRef.current.value };
-        return publicKey;
-      }),
-    );
-
-    nameRef.current.value = '';
-    setError('');
-  };
-
   const handleAddressDelete = (addressToDelete: string) => {
     setAddressRemovedOpacity('opacity-100');
+
     setWithdrawalAddresses(() =>
       withdrawalAddresses.filter(
         (publicKey) => publicKey.address !== addressToDelete,
       ),
     );
+
     setValidators({ ...validators, [addressToDelete]: [] });
 
     setTimeout(
       () => setAddressRemovedOpacity('opacity-0 pointer-events-none'),
       1500,
     );
+  };
+
+  const handleNameEdit = (event: FormEvent) => {
+    event.preventDefault();
+    alert('WIP');
   };
 
   const handleCreateGroupChange = () => {
@@ -146,7 +141,7 @@ const User = ({
   };
 
   const handleAddressRemovalFromNewGroup = (
-    elemToRemove: WithdrawalAddresses,
+    elemToRemove: WithdrawalAddress,
   ) => {
     if (newGroup.includes(elemToRemove)) {
       const updatedGroup = newGroup.filter(
@@ -221,9 +216,11 @@ const User = ({
   };
 
   const handleDefaultPageChange = (
-    pageName: '/home' | '/validatorStatistics' | '/validatorList' | 'user',
+    pageName: '/home' | '/validatorStatistics' | '/validatorList' | '/user',
   ) => {
-    setDefaultPage(pageName === defaultPage ? '' : pageName);
+    if (pageName !== defaultPage) {
+      setDefaultPage(pageName);
+    }
   };
 
   const handleDefaultPageSelect = (event: React.MouseEvent) => {
@@ -327,65 +324,69 @@ const User = ({
               </tr>
             </thead>
             <tbody>
-              {withdrawalAddresses.map((publicKey) => (
-                <Fragment key={publicKey.address}>
-                  <tr>
-                    <td className="px-4 py-1">
-                      <a
-                        href={`${consensys_explorer}/address/${publicKey.address.substring(
-                          2,
-                        )}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-pastel-blue hover:underline"
-                      >
-                        {`${publicKey.address.substring(
-                          0,
-                          4,
-                        )}...${publicKey.address.substring(
-                          publicKey.address.length - 2,
-                          publicKey.address.length,
-                        )}`}
-                      </a>
-                    </td>
-                    <td className="px-4 py-1 text-slate-gray">
-                      {publicKey.name}
-                    </td>
-                    <td className="px-4 py-1">
-                      <a
-                        href={`${consensys_explorer}/dashboard?validators=${
-                          validators[publicKey.address]
-                            ? validators[publicKey.address].toString()
-                            : ''
-                        }`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-pastel-blue hover:underline"
-                      >
-                        Dashboard
-                      </a>
-                    </td>
-                    <td className="px-4 py-1">
-                      <button
-                        className="text-pastel-green hover:text-green-500 transition-colors"
-                        onClick={(event) =>
-                          handleNameEdit(publicKey.address, event)
-                        }
-                      >
-                        Edit
-                      </button>
-                    </td>
-                    <td className="px-4 py-1">
-                      <button
-                        className="text-pastel-red hover:text-red-600 transition-colors"
-                        onClick={() => handleAddressDelete(publicKey.address)}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                </Fragment>
-              ))}
+              {withdrawalAddresses ? (
+                withdrawalAddresses.map((withdrawalAddress) => (
+                  <Fragment key={withdrawalAddress.address}>
+                    <tr>
+                      <td className="px-4 py-1">
+                        <a
+                          href={`${consensys_explorer}/address/${withdrawalAddress.address.substring(
+                            2,
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-pastel-blue hover:underline"
+                        >
+                          {`${withdrawalAddress.address.substring(
+                            0,
+                            4,
+                          )}...${withdrawalAddress.address.substring(
+                            withdrawalAddress.address.length - 2,
+                            withdrawalAddress.address.length,
+                          )}`}
+                        </a>
+                      </td>
+                      <td className="px-4 py-1 text-slate-gray">
+                        {withdrawalAddress.name}
+                      </td>
+                      <td className="px-4 py-1">
+                        <a
+                          href={`${consensys_explorer}/dashboard?validators=${
+                            validators[withdrawalAddress.address]
+                              ? validators[withdrawalAddress.address].toString()
+                              : ''
+                          }`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-pastel-blue hover:underline"
+                        >
+                          Dashboard
+                        </a>
+                      </td>
+                      <td className="px-4 py-1">
+                        <button
+                          className="text-pastel-green hover:text-green-500 transition-colors"
+                          onClick={(event) => handleNameEdit(event)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className="px-4 py-1">
+                        <button
+                          className="text-pastel-red hover:text-red-600 transition-colors"
+                          onClick={() =>
+                            handleAddressDelete(withdrawalAddress.address)
+                          }
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  </Fragment>
+                ))
+              ) : (
+                <Fragment></Fragment>
+              )}
             </tbody>
           </table>
         </div>
@@ -505,13 +506,17 @@ const User = ({
                   >
                     <td className="px-4 py-1">{group.name}</td>
                     <td className="px-4 py-1 text-slate-gray grid grid-cols-3 w-max">
-                      {group.withdrawalAddresses.map((elem) => (
-                        <Fragment key={elem.address}>
-                          <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
-                            {elem.name}
-                          </p>
-                        </Fragment>
-                      ))}
+                      {group.withdrawalAddresses ? (
+                        group.withdrawalAddresses.map((elem) => (
+                          <Fragment key={elem.address}>
+                            <p className="px-2 py-1 m-1 bg-soft-pink rounded-lg border-2 border-lavender-pink w-max">
+                              {elem.name}
+                            </p>
+                          </Fragment>
+                        ))
+                      ) : (
+                        <Fragment></Fragment>
+                      )}
                     </td>
                     <td className="px-4 py-1">
                       {group.name !== 'Main' ? (
@@ -596,8 +601,8 @@ const User = ({
               <input
                 type="checkbox"
                 id="user"
-                checked={'user' === defaultPage}
-                onChange={() => handleDefaultPageChange('user')}
+                checked={'/user' === defaultPage}
+                onChange={() => handleDefaultPageChange('/user')}
               />
               <label className={checkboxLabelClasses} htmlFor="user">
                 User
