@@ -9,6 +9,7 @@ import {
   ValidatorsMaps,
   ValidatorsPerformance,
   WithdrawalAddressesGroup,
+  ValidatorsCount,
 } from './UsedDataTypes';
 
 // ------------ MAIN COMPONENTS PARAM TYPES ------------
@@ -53,7 +54,6 @@ export type ValidatorsPageParams = {
   bodyClasses: string;
   tileClasses: string;
   withdrawalAddresses: WithdrawalAddresses[];
-  validators: Record<string, string[]>;
   validatorsMaps: ValidatorsMaps;
   validatorsPerformance: Record<string, ValidatorsPerformance>;
 };
@@ -115,13 +115,7 @@ export type PerformanceParams = {
 
 export type ValidatorsParams = {
   tileClasses: string;
-  validatorsCount: {
-    activeValidatorsCount: number;
-    pendingValidatorsCount: number;
-    offlineValidatorsCount: number;
-    slashedValidatorsCount: number;
-    otherValidatorsCount: number;
-  };
+  validatorsCount: ValidatorsCount;
 };
 
 export type WithdrawalBalanceParams = {
@@ -141,8 +135,8 @@ export type WithdrawalsParams = {
 export type WithdrawableAmountParams = {
   tileClasses: string;
   tokenPrice: TokenPrice;
-  activeValidatorsCount: number;
-  activeBalance: number;
+  validatorsCount: ValidatorsCount;
+  validatorsBalances: ValidatorsBalances;
 };
 
 // ------------ UTILS COMPONENTS PARAM TYPES ------------

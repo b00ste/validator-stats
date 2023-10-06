@@ -434,7 +434,6 @@ function App() {
                 bodyClasses={bodyClasses}
                 tileClasses={tileClasses}
                 withdrawalAddresses={withdrawalAddresses}
-                validators={validators}
                 validatorsMaps={validatorsMaps}
                 validatorsPerformance={
                   validatorsPerformance ? validatorsPerformance : {}

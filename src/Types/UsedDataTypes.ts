@@ -53,6 +53,14 @@ export type ValidatorsBalances = {
   otherBalance: number;
 };
 
+export type ValidatorsCount = {
+  activeValidatorsCount: number;
+  pendingValidatorsCount: number;
+  offlineValidatorsCount: number;
+  slashedValidatorsCount: number;
+  otherValidatorsCount: number;
+};
+
 export type ValidatorsPerformance = Record<
   number,
   {

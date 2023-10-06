@@ -135,6 +135,21 @@ const ValidatorStats = ({
   const specificTileClasses = `${tileClasses} text-center p-2 flex flex-col items-center justify-evenly`;
   /// ------------------------------
 
+  const validatorsCount = {
+    activeValidatorsCount,
+    pendingValidatorsCount,
+    offlineValidatorsCount,
+    slashedValidatorsCount,
+    otherValidatorsCount,
+  };
+  const validatorsBalances = {
+    activeBalance,
+    pendingBalance,
+    offlineBalance,
+    slashedBalance,
+    otherBalance,
+  };
+
   return (
     <div className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3`}>
       <div className={`${specificTileClasses} sm:col-span-2 md:col-span-3`}>
@@ -157,30 +172,18 @@ const ValidatorStats = ({
       </div>
       <Validators
         tileClasses={specificTileClasses}
-        validatorsCount={{
-          activeValidatorsCount,
-          pendingValidatorsCount,
-          offlineValidatorsCount,
-          slashedValidatorsCount,
-          otherValidatorsCount,
-        }}
+        validatorsCount={validatorsCount}
       />
       <Balance
         tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
-        validatorsBalances={{
-          activeBalance,
-          pendingBalance,
-          offlineBalance,
-          slashedBalance,
-          otherBalance,
-        }}
+        validatorsBalances={validatorsBalances}
       />
       <WithdrawableAmount
         tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
-        activeValidatorsCount={activeValidatorsCount}
-        activeBalance={activeBalance}
+        validatorsCount={validatorsCount}
+        validatorsBalances={validatorsBalances}
       />
       <TotalWithdrawals
         tileClasses={specificTileClasses}

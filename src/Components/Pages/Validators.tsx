@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, ReactElement, useState } from 'react';
 
 // utils
 import { consensys_explorer } from '../../Helpers/constants';
@@ -12,7 +12,6 @@ export const Validators = ({
   bodyClasses,
   tileClasses,
   withdrawalAddresses,
-  validators,
   validatorsMaps: {
     activeValidators,
     pendingValidators,
@@ -22,15 +21,20 @@ export const Validators = ({
   },
   validatorsPerformance,
 }: ValidatorsPageParams) => {
-  const [selectedValidatorStatus, setSelectedValidatorStatus] =
-    useState('active');
+  const [selectedValidatorStatus, setSelectedValidatorStatus] = useState(
+    'active' as 'active' | 'pending' | 'offline' | 'slashed' | 'other',
+  );
   const [selectedAccount, SetSelectedAccount] = useState(
     withdrawalAddresses[0] ? withdrawalAddresses[0].address : '',
   );
 
   const findAddressName = (bytes: string) => {
-    if (bytes.length === 66) {
+    if (bytes.startsWith('0x01')) {
       const address = `0x${bytes.substring(bytes.length - 40)}`;
+
+      const withdrawalAddress = withdrawalAddresses.filter(
+        (elem) => elem.address.toLowerCase() === address.toLowerCase(),
+      )[0];
 
       return (
         <td className={tableHeadStyle}>
@@ -40,16 +44,16 @@ export const Validators = ({
             rel="noreferrer"
             className="text-pastel-blue hover:underline overflow-hidden"
           >
-            {
-              withdrawalAddresses.filter(
-                (elem) => elem.address.toLowerCase() === address.toLowerCase(),
-              )[0].name
-            }
+            {withdrawalAddress ? withdrawalAddress.name : 'Name not found!'}
           </a>
         </td>
       );
-    } else if (bytes.length === 42) {
-      const address = bytes;
+    } else if (bytes.startsWith('0x00')) {
+      const address = `0x${'00'.repeat(20)}`;
+
+      const withdrawalAddress = withdrawalAddresses.filter(
+        (elem) => elem.address.toLowerCase() === address.toLowerCase(),
+      )[0];
 
       return (
         <td className={tableHeadStyle} key={address}>
@@ -59,11 +63,7 @@ export const Validators = ({
             rel="noreferrer"
             className="text-pastel-blue hover:underline overflow-hidden"
           >
-            {
-              withdrawalAddresses.filter(
-                (elem) => elem.address.toLowerCase() === address.toLowerCase(),
-              )[0].name
-            }
+            {withdrawalAddress ? withdrawalAddress.name : 'Name not found!'}
           </a>
         </td>
       );
@@ -132,63 +132,101 @@ export const Validators = ({
     } else return <>0</>;
   };
 
-  const getValidatorRow = (
-    validatorMap: ValidatorMap,
-    validator: string,
-    index: number,
-  ) => {
-    const validatorData = validatorMap[validator];
-    return (
-      <Fragment key={validator}>
-        <tr>
-          <td className={tableHeadStyle}>{`${index + 1}.`}</td>
-          <td>
-            <a
-              href={`${consensys_explorer}/validator/${validator.substring(2)}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-pastel-blue hover:underline overflow-hidden"
-            >
-              {`${validator.substring(0, 4)}...${validator.substring(
-                validator.length - 2,
-                validator.length,
-              )}`}
-            </a>
-          </td>
-          <td className={tableHeadStyle}>
-            {validatorMap[validator].validatorindex}
-          </td>
-          <td className={tableHeadStyle}>
-            {`${(validatorMap[validator].balance / 1e9).toLocaleString()}`}
-          </td>
-          <td className={tableHeadStyle}>
-            {validatorData
-              ? getExecutedAttestations(
-                  validatorsPerformance[selectedAccount],
-                  validatorData,
-                )
-              : 0}
-          </td>
-          <td className={tableHeadStyle}>
-            {validatorData
-              ? getMissedAttestations(
-                  validatorsPerformance[selectedAccount],
-                  validatorData,
-                )
-              : 0}
-          </td>
-          <td className={tableHeadStyle}>
-            {validatorData
-              ? getAttestationsRatio(
-                  validatorsPerformance[selectedAccount],
-                  validatorData,
-                )
-              : 0}
-          </td>
-          {findAddressName(validatorMap[validator].withdrawalcredentials)}
-        </tr>
-      </Fragment>
-    );
+  const getValidatorRows = () => {
+    let validatorMap: ValidatorMap;
+
+    switch (selectedValidatorStatus) {
+      case 'active': {
+        validatorMap = activeValidators[selectedAccount];
+        break;
+      }
+      case 'pending': {
+        validatorMap = pendingValidators[selectedAccount];
+        break;
+      }
+      case 'offline': {
+        validatorMap = offlineValidators[selectedAccount];
+        break;
+      }
+      case 'slashed': {
+        validatorMap = slashedValidators[selectedAccount];
+        break;
+      }
+      case 'other': {
+        validatorMap = otherValidators[selectedAccount];
+        break;
+      }
+    }
+
+    const rows: ReactElement[] = [];
+
+    let index = 1;
+    for (const validator in validatorMap) {
+      const validatorData = validatorMap[validator];
+
+      rows.push(
+        <Fragment key={validator}>
+          <tr>
+            <td className={tableHeadStyle}>{`${index}.`}</td>
+            <td>
+              <a
+                href={`${consensys_explorer}/validator/${validator.substring(
+                  2,
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-pastel-blue hover:underline overflow-hidden"
+              >
+                {`${validator.substring(0, 4)}...${validator.substring(
+                  validator.length - 2,
+                  validator.length,
+                )}`}
+              </a>
+            </td>
+            <td className={tableHeadStyle}>
+              {validatorData ? validatorData.validatorindex : 0}
+            </td>
+            <td className={tableHeadStyle}>
+              {`${(validatorData
+                ? validatorData.balance / 1e9
+                : 0
+              ).toLocaleString()}`}
+            </td>
+            <td className={tableHeadStyle}>
+              {validatorData
+                ? getExecutedAttestations(
+                    validatorsPerformance[selectedAccount],
+                    validatorData,
+                  )
+                : 0}
+            </td>
+            <td className={tableHeadStyle}>
+              {validatorData
+                ? getMissedAttestations(
+                    validatorsPerformance[selectedAccount],
+                    validatorData,
+                  )
+                : 0}
+            </td>
+            <td className={tableHeadStyle}>
+              {validatorData
+                ? getAttestationsRatio(
+                    validatorsPerformance[selectedAccount],
+                    validatorData,
+                  )
+                : 0}
+            </td>
+            {findAddressName(
+              validatorData ? validatorData.withdrawalcredentials : '0x00',
+            )}
+          </tr>
+        </Fragment>,
+      );
+
+      index++;
+    }
+
+    return rows;
   };
 
   /// ------ Styling Handling ------
@@ -299,67 +337,7 @@ export const Validators = ({
                 <th className={tableHeadStyle}>Withdrawal Address</th>
               </tr>
             </thead>
-            <tbody>
-              {validators[selectedAccount] ? (
-                validators[selectedAccount].map((validator, index) => {
-                  switch (selectedValidatorStatus) {
-                    case 'active': {
-                      if (activeValidators[selectedAccount]) {
-                        return getValidatorRow(
-                          activeValidators[selectedAccount],
-                          validator,
-                          index,
-                        );
-                      }
-                      break;
-                    }
-                    case 'pending': {
-                      if (pendingValidators[selectedAccount]) {
-                        return getValidatorRow(
-                          pendingValidators[selectedAccount],
-                          validator,
-                          index,
-                        );
-                      }
-                      break;
-                    }
-                    case 'offline': {
-                      if (offlineValidators[selectedAccount]) {
-                        return getValidatorRow(
-                          offlineValidators[selectedAccount],
-                          validator,
-                          index,
-                        );
-                      }
-                      break;
-                    }
-                    case 'slashed': {
-                      if (slashedValidators[selectedAccount]) {
-                        return getValidatorRow(
-                          slashedValidators[selectedAccount],
-                          validator,
-                          index,
-                        );
-                      }
-                      break;
-                    }
-                    case 'other': {
-                      if (otherValidators[selectedAccount]) {
-                        return getValidatorRow(
-                          otherValidators[selectedAccount],
-                          validator,
-                          index,
-                        );
-                      }
-                      break;
-                    }
-                  }
-                  return <Fragment key={validator}></Fragment>;
-                })
-              ) : (
-                <></>
-              )}
-            </tbody>
+            <tbody>{getValidatorRows()}</tbody>
           </table>
         </div>
       </div>

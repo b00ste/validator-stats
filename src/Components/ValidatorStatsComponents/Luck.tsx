@@ -12,7 +12,9 @@ export const Luck = ({
     const withdrawalAddresses = selectedGroup.withdrawalAddresses;
     if (withdrawalAddresses.length === 1) {
       setProposalLuck(
-        validatorsLuck[withdrawalAddresses[0].address].proposal_luck,
+        validatorsLuck[withdrawalAddresses[0].address]
+          ? validatorsLuck[withdrawalAddresses[0].address].proposal_luck
+          : 0,
       );
     } else {
       let sum = 0;
