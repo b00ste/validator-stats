@@ -58,6 +58,29 @@ export type ValidatorsPageParams = {
   validatorsPerformance: Record<string, ValidatorsPerformance>;
 };
 
+export type BodyParams = {
+  bodyClasses: string;
+  tileClasses: string;
+  buttonClasses: string;
+  defaultPage: string;
+  setDefaultPage: React.Dispatch<React.SetStateAction<string>>;
+  handlePageNavigation: Function;
+  withdrawalAddresses: WithdrawalAddress[];
+  setWithdrawalAddresses: React.Dispatch<
+    React.SetStateAction<WithdrawalAddress[]>
+  >;
+  withdrawalAddressesGroups: WithdrawalAddressesGroup[];
+  setWithdrawalAddressessGroups: React.Dispatch<
+    React.SetStateAction<WithdrawalAddressesGroup[]>
+  >;
+  withdrawalAddressesBalances: Record<string, number> | undefined;
+  validators: Record<string, string[]>;
+  setValidators: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  validatorsData: ValidatorsData;
+  networkData: NetworkData;
+  tokenPrice: TokenPrice;
+};
+
 export type HeaderParams = {
   buttonClasses: string;
   networkData: NetworkData;

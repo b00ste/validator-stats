@@ -1,24 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-// components
+// Components
+import Body from './Components/Body';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
-import Landing from './Components/Pages/Landing';
-import ValidatorStats from './Components/Pages/ValidatorStats';
-import User from './Components/Pages/User';
-import Validators from './Components/Pages/Validators';
-import TermsAndConditions from './Components/Pages/TermsAndConditions';
-import PrivacyPolicy from './Components/Pages/PrivacyPolicy';
-import License from './Components/Pages/License';
-import PageNotFound from './Components/Pages/PageNotFound';
 
-// handlers
+// Handlers
 import updateValidator from './Handlers/updateValidator';
 import updateWithdrawalAddressesBalances from './Handlers/updateWithdrawalAddressesBalances';
 import updateValidatorsMaps from './Handlers/updateValidatorsMaps';
@@ -27,10 +15,10 @@ import updateVaildatorsPerformance from './Handlers/updateVaildatorsPerformance'
 import updateNetworkData from './Handlers/updateNetworkData';
 import updateLYXPrice from './Handlers/updateLYXPrice';
 
-// helpers
+// Helpers
 import { generateUUID } from './Helpers/utils';
 
-// ts types
+// Types
 import {
   ValidatorMap,
   ValidatorsLuck,
@@ -38,8 +26,6 @@ import {
   WithdrawalAddress,
   WithdrawalAddressesGroup,
 } from './Types/UsedDataTypes';
-
-// Redux Storage
 
 function App() {
   /// ------ Default page to redirect from `/` ------
@@ -316,78 +302,6 @@ function App() {
       }`}
     >
       <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Navigate to={defaultPage ? defaultPage : '/home'} replace />
-            }
-          />
-          <Route
-            path="/home"
-            element={
-              <Landing
-                bodyClasses={bodyClasses}
-                tileClasses={tileClasses}
-                buttonClasses={buttonClasses}
-                handlePageNavigation={handlePageNavigation}
-              />
-            }
-          />
-          <Route
-            path="/validatorStatistics"
-            element={
-              <ValidatorStats
-                bodyClasses={bodyClasses}
-                tileClasses={tileClasses}
-                buttonClasses={buttonClasses}
-                stakedLYX={stakedLYX ? stakedLYX : 0}
-                tokenPrice={tokenPrice}
-                validatorsData={validatorsData}
-                withdrawalAddressesGroups={withdrawalAddressesGroups}
-                withdrawalAddressesBalance={
-                  withdrawalAddressesBalances ? withdrawalAddressesBalances : {}
-                }
-              />
-            }
-          />
-          <Route
-            path="/user"
-            element={
-              <User
-                bodyClasses={bodyClasses}
-                tileClasses={tileClasses}
-                buttonClasses={buttonClasses}
-                defaultPage={defaultPage}
-                setDefaultPage={setDefaultPage}
-                withdrawalAddresses={withdrawalAddresses}
-                setWithdrawalAddresses={setWithdrawalAddresses}
-                validators={validators}
-                setValidators={setValidators}
-                withdrawalAddressesGroups={withdrawalAddressesGroups}
-                setWithdrawalAddressessGroups={setWithdrawalAddressessGroups}
-              />
-            }
-          />
-          <Route
-            path="/validatorList"
-            element={
-              <Validators
-                bodyClasses={bodyClasses}
-                tileClasses={tileClasses}
-                withdrawalAddresses={withdrawalAddresses}
-                validatorsMaps={validatorsMaps}
-                validatorsPerformance={
-                  validatorsPerformance ? validatorsPerformance : {}
-                }
-              />
-            }
-          />
-          <Route path="/terms" element={<TermsAndConditions />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/license" element={<License />} />
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
         <Header
           buttonClasses={buttonClasses}
           networkData={networkData}
@@ -396,6 +310,24 @@ function App() {
           toggleDropdown={toggleDropdown}
           refreshHandler={refreshHandler}
           handlePageNavigation={handlePageNavigation}
+        />
+        <Body
+          bodyClasses={bodyClasses}
+          tileClasses={tileClasses}
+          buttonClasses={buttonClasses}
+          defaultPage={defaultPage}
+          setDefaultPage={setDefaultPage}
+          handlePageNavigation={handlePageNavigation}
+          withdrawalAddresses={withdrawalAddresses}
+          setWithdrawalAddresses={setWithdrawalAddresses}
+          withdrawalAddressesGroups={withdrawalAddressesGroups}
+          setWithdrawalAddressessGroups={setWithdrawalAddressessGroups}
+          withdrawalAddressesBalances={withdrawalAddressesBalances}
+          validators={validators}
+          setValidators={setValidators}
+          validatorsData={validatorsData}
+          networkData={networkData}
+          tokenPrice={tokenPrice}
         />
         <Footer handlePageNavigation={handlePageNavigation} />
       </Router>
