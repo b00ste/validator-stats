@@ -194,6 +194,11 @@ export const Validators = ({
             </td>
             <td className={tableHeadStyle}>
               {validatorData
+                ? (validatorData.total_withdrawals / 1e9).toLocaleString()
+                : 0}
+            </td>
+            <td className={tableHeadStyle}>
+              {validatorData
                 ? getExecutedAttestations(
                     validatorsPerformance[selectedAccount],
                     validatorData,
@@ -230,7 +235,7 @@ export const Validators = ({
   };
 
   /// ------ Styling Handling ------
-  const tableHeadStyle = 'text-slate-gray px-4 py-1';
+  const tableHeadStyle = 'text-slate-gray px-4 py-1 break-keep';
 
   const specificTileClasses = `${tileClasses} p-4`;
   /// ------------------------------
@@ -298,7 +303,7 @@ export const Validators = ({
         </div>
       </div>
 
-      {/* <!-- Tile 1: Select Account Buttons --> */}
+      {/* <!-- Tile 2: Select Account Buttons --> */}
       <div
         className={`${specificTileClasses} text-center flex flex-col items-center`}
       >
@@ -320,7 +325,7 @@ export const Validators = ({
         </div>
       </div>
 
-      {/* <!-- Tile 2: List of Ethereum Validators --> */}
+      {/* <!-- Tile 3: List of Ethereum Validators --> */}
       <div className={specificTileClasses}>
         <h2 className="text-pastel-blue text-2xl mb-4">Ethereum Validators</h2>
         <div className="overflow-x-scroll">
@@ -331,6 +336,7 @@ export const Validators = ({
                 <th className={tableHeadStyle}>Address</th>
                 <th className={tableHeadStyle}>Index</th>
                 <th className={tableHeadStyle}>Balance (LYX)</th>
+                <th className={tableHeadStyle}>Income (LYX)</th>
                 <th className={tableHeadStyle}>Executed Attestations</th>
                 <th className={tableHeadStyle}>Missed Attestations</th>
                 <th className={tableHeadStyle}>Performance</th>
