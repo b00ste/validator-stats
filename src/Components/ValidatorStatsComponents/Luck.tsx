@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
 import { LuckParams } from '../../Types/ComponentParamsTypes';
 
-export const Luck = ({
-  tileClasses,
-  selectedGroup,
-  validatorsLuck,
-}: LuckParams) => {
+export const Luck = ({ selectedGroup, validatorsLuck }: LuckParams) => {
   const [proposalLuck, setProposalLuck] = useState(0);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export const Luck = ({
   }, [selectedGroup, validatorsLuck]);
 
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Luck</div>
       <p className="text-slate-gray font-bold">
         {`${proposalLuck.toLocaleString()} %`}

@@ -3,14 +3,15 @@ import { Fragment, ReactElement, useState } from 'react';
 // utils
 import { consensys_explorer } from '../../Helpers/constants';
 
+// theme
+import { bodyClasses, tileClasses } from '../../Theme/theme';
+
 // types
 import { ValidatorsPageParams } from '../../Types/ComponentParamsTypes';
 import { ValidatorMap, ValidatorsPerformance } from '../../Types/UsedDataTypes';
 import { Validator } from '../../Types/FetchedDataTypes';
 
 export const Validators = ({
-  bodyClasses,
-  tileClasses,
   withdrawalAddresses,
   validatorsMaps: {
     activeValidators,

@@ -14,9 +14,6 @@ import PageNotFound from './Pages/PageNotFound';
 import { BodyParams } from '../Types/ComponentParamsTypes';
 
 const Body = ({
-  bodyClasses,
-  tileClasses,
-  buttonClasses,
   defaultPage,
   setDefaultPage,
   handlePageNavigation,
@@ -39,22 +36,12 @@ const Body = ({
       />
       <Route
         path="/home"
-        element={
-          <Landing
-            bodyClasses={bodyClasses}
-            tileClasses={tileClasses}
-            buttonClasses={buttonClasses}
-            handlePageNavigation={handlePageNavigation}
-          />
-        }
+        element={<Landing handlePageNavigation={handlePageNavigation} />}
       />
       <Route
         path="/validatorStatistics"
         element={
           <ValidatorStats
-            bodyClasses={bodyClasses}
-            tileClasses={tileClasses}
-            buttonClasses={buttonClasses}
             stakedLYX={networkData.stakedLYX ? networkData.stakedLYX : 0}
             tokenPrice={tokenPrice}
             validatorsData={validatorsData}
@@ -69,9 +56,6 @@ const Body = ({
         path="/user"
         element={
           <User
-            bodyClasses={bodyClasses}
-            tileClasses={tileClasses}
-            buttonClasses={buttonClasses}
             defaultPage={defaultPage}
             setDefaultPage={setDefaultPage}
             withdrawalAddresses={withdrawalAddresses}
@@ -87,8 +71,6 @@ const Body = ({
         path="/validatorList"
         element={
           <Validators
-            bodyClasses={bodyClasses}
-            tileClasses={tileClasses}
             withdrawalAddresses={withdrawalAddresses}
             validatorsMaps={validatorsData.validatorsMaps}
             validatorsPerformance={

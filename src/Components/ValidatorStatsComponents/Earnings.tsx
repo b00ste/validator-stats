@@ -1,13 +1,20 @@
+// components
+import { DisplayTokenPrice } from '../DisplayTokenPrice';
+
 // helpers
-import { getTimeframePercentageYieldUnformated } from '../../Helpers/calculateStakingRewards';
+import {
+  getTimeframePercentageYield,
+  getTimeframePercentageYieldUnformated,
+} from '../../Helpers/calculateStakingRewards';
+
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
 
 // ts types
 import { EarningsParams } from '../../Types/ComponentParamsTypes';
-import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
 export const Earnings = ({
   timeframe,
-  tileClasses,
   tokenPrice,
   stakedLYX,
   activeBalance,
@@ -137,20 +144,52 @@ export const Earnings = ({
     const earnings = calculateEarnings();
 
     return (
-      <div className={tileClasses}>
+      <div className={validatorStatsSpecificTileClasses}>
         <div className="text-pastel-blue text-xl mb-2">
           {getTimeframeTitle()}
         </div>
-        <p className="text-slate-gray font-bold">
-          {getErningsComparedToAPR(earnings)}
-        </p>
-        {timeframe !== 'total' ? (
-          <p className="text-xs">{`(Aproximate APR ${(
-            (earnings / (activeBalance / 1e9)) * 100 || 0
-          ).toLocaleString()} %)`}</p>
-        ) : (
-          <></>
-        )}
+        <div className="w-full grid grid-cols-3 justify-around content-center">
+          {timeframe !== 'total' ? (
+            <>
+              <div className="col-span-1 flex justify-start">
+                <p className="text-slate-gray font-bold px-1">Calculated APR</p>
+              </div>
+              <div className="col-span-2 flex flex-col justify-center">
+                <p className="text-slate-gray font-bold">
+                  {`${getTimeframePercentageYield({
+                    totalAtStake: stakedLYX / 1e9,
+                    timeframe,
+                  }).toLocaleString()} %`}
+                </p>
+                <p className="text-xs">{`(Aproximate earnings: ${(
+                  (activeBalance / 1e9 / 100) *
+                  getTimeframePercentageYield({
+                    totalAtStake: stakedLYX / 1e9,
+                    timeframe,
+                  })
+                ).toLocaleString()} LYX)`}</p>
+              </div>
+              <div className="border-dark-pink col-span-3 border-b my-2 mx-4" />
+            </>
+          ) : (
+            <></>
+          )}
+          <div className="flex justify-start content-start col-span-1">
+            <p className="text-slate-gray font-bold px-1">Real Earnings</p>
+          </div>
+          <div className="col-span-2 flex flex-col justify-center">
+            <p className="text-slate-gray font-bold">
+              {getErningsComparedToAPR(earnings)}
+            </p>
+            {timeframe !== 'total' ? (
+              <p className="text-xs">{`(Aproximate APR ${(
+                (earnings / (activeBalance / 1e9)) * 100 || 0
+              ).toLocaleString()} %)`}</p>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
         <DisplayTokenPrice tokenPrice={tokenPrice} tokenAmount={earnings} />
       </div>
     );

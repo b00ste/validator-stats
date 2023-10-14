@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
-import { WithdrawableAmountParams } from '../../Types/ComponentParamsTypes';
+
+// components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
+import { WithdrawableAmountParams } from '../../Types/ComponentParamsTypes';
+
 export const WithdrawableAmount = ({
-  tileClasses,
   tokenPrice,
   validatorsCount: {
     activeValidatorsCount,
@@ -56,7 +62,7 @@ export const WithdrawableAmount = ({
   ]);
 
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Withdrawable Amount</div>
       <p className="text-slate-gray font-bold">
         {`${withdrawableAmount.toLocaleString()} LYX`}

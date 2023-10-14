@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 
-// types
-import { WithdrawalsParams } from '../../Types/ComponentParamsTypes';
+// components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
+import { WithdrawalsParams } from '../../Types/ComponentParamsTypes';
+
 export const TotalWithdrawals = ({
-  tileClasses,
   selectedGroup,
   activeValidators,
   tokenPrice,
@@ -36,7 +40,7 @@ export const TotalWithdrawals = ({
   }, [selectedGroup, activeValidators]);
 
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Total Withdrawals</div>
       <p className="text-slate-gray font-bold">{`${(
         totalWithdrawals / 1e9

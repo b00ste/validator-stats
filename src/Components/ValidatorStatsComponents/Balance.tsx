@@ -1,8 +1,13 @@
-import { BalanceParams } from '../../Types/ComponentParamsTypes';
+// components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
+import { BalanceParams } from '../../Types/ComponentParamsTypes';
+
 export const Balance = ({
-  tileClasses,
   tokenPrice,
   validatorsBalances: {
     activeBalance,
@@ -13,7 +18,7 @@ export const Balance = ({
   },
 }: BalanceParams) => {
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Validator Balance</div>
       <p className="text-slate-gray font-bold">
         Active:

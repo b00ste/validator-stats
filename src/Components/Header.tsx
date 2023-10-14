@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 
 // types
 import { HeaderParams } from '../Types/ComponentParamsTypes';
+import { buttonClasses } from '../Theme/theme';
 
 const Header = ({
-  buttonClasses,
   networkData: { stakedLYX, currentEpoch, networkValidators },
   tokenPrice: { eurPrice, usdPrice },
   isDropdownOpen,

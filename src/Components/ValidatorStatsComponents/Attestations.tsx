@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
+
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
 import { PerformanceParams } from '../../Types/ComponentParamsTypes';
 
 export const Attestations = ({
-  tileClasses,
   selectedGroup,
   validatorsPerformance,
 }: PerformanceParams) => {
@@ -60,7 +64,7 @@ export const Attestations = ({
   };
 
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Attestations</div>
       <div className="grid content-center grid-cols-2">
         <p className="text-slate-gray font-bold mr-1 text-right">Executed:</p>

@@ -1,9 +1,15 @@
 import { Fragment, useEffect, useState } from 'react';
-import { WithdrawalBalanceParams } from '../../Types/ComponentParamsTypes';
+
+// components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
+import { WithdrawalBalanceParams } from '../../Types/ComponentParamsTypes';
+
 export const WithdrawalBalance = ({
-  tileClasses,
   tokenPrice,
   selectedGroup,
   withdrawalAddressesBalance,
@@ -24,7 +30,7 @@ export const WithdrawalBalance = ({
   }, [selectedGroup, withdrawalAddressesBalance]);
 
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Withdrawal Balance</div>
       {selectedGroup.withdrawalAddresses.map((withdrawalAddress) =>
         withdrawalAddressesBalance[withdrawalAddress.address] ? (

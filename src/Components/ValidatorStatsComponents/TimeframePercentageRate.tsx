@@ -1,12 +1,14 @@
 // utils
 import { getTimeframePercentageYield } from '../../Helpers/calculateStakingRewards';
 
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
 // types
 import { TimeframePercentageRateParams } from '../../Types/ComponentParamsTypes';
 
 export const TimeframePercentageRate = ({
   timeframe,
-  tileClasses,
   stakedLYX,
   activeBalance,
 }: TimeframePercentageRateParams) => {
@@ -28,7 +30,7 @@ export const TimeframePercentageRate = ({
   };
 
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">{getTimeframeTitle()}</div>
       <p className="text-slate-gray font-bold">
         {`${getTimeframePercentageYield({

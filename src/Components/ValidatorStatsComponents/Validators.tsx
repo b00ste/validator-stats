@@ -1,7 +1,10 @@
+// theme
+import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+
+// types
 import { ValidatorsParams } from '../../Types/ComponentParamsTypes';
 
 export const Validators = ({
-  tileClasses,
   validatorsCount: {
     activeValidatorsCount,
     pendingValidatorsCount,
@@ -11,7 +14,7 @@ export const Validators = ({
   },
 }: ValidatorsParams) => {
   return (
-    <div className={tileClasses}>
+    <div className={validatorStatsSpecificTileClasses}>
       <div className="text-pastel-blue text-xl mb-2">Validators</div>
       <p className="text-slate-gray font-bold">
         Active:

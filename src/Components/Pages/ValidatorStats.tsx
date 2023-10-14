@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 // Stats Tiles
 import { Earnings } from '../ValidatorStatsComponents/Earnings';
-import { TimeframePercentageRate } from '../ValidatorStatsComponents/TimeframePercentageRate';
 import { Attestations } from '../ValidatorStatsComponents/Attestations';
 import { Luck } from '../ValidatorStatsComponents/Luck';
 import { Validators } from '../ValidatorStatsComponents/Validators';
@@ -10,14 +9,14 @@ import { Balance } from '../ValidatorStatsComponents/Balance';
 import { TotalWithdrawals } from '../ValidatorStatsComponents/TotalWithdrawals';
 import { WithdrawalBalance } from '../ValidatorStatsComponents/WithdrawalBalance';
 import { WithdrawableAmount } from '../ValidatorStatsComponents/WithdrawableAmount';
+// import { TimeframePercentageRate } from '../ValidatorStatsComponents/TimeframePercentageRate';
 
 // ts types
 import { ValidatorStatsPageParams } from '../../Types/ComponentParamsTypes';
 import { ValidatorMap } from '../../Types/UsedDataTypes';
+import { bodyClasses, tileClasses } from '../../Theme/theme';
 
 const ValidatorStats = ({
-  bodyClasses,
-  tileClasses,
   stakedLYX,
   tokenPrice,
   validatorsData: { validatorsMaps, validatorsLuck, validatorsPerformance },
@@ -170,36 +169,28 @@ const ValidatorStats = ({
           ))}
         </div>
       </div>
-      <Validators
-        tileClasses={specificTileClasses}
-        validatorsCount={validatorsCount}
-      />
+      <Validators validatorsCount={validatorsCount} />
       <Balance
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         validatorsBalances={validatorsBalances}
       />
       <WithdrawableAmount
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         validatorsCount={validatorsCount}
         validatorsBalances={validatorsBalances}
       />
       <TotalWithdrawals
-        tileClasses={specificTileClasses}
         selectedGroup={selectedGroup}
         activeValidators={activeValidators}
         tokenPrice={tokenPrice}
       />
       <WithdrawalBalance
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         selectedGroup={selectedGroup}
         withdrawalAddressesBalance={withdrawalAddressesBalance}
       />
       <Earnings
         timeframe="daily"
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -208,7 +199,6 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="weekly"
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -217,7 +207,6 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="monthly"
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -226,7 +215,6 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="annual"
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -235,7 +223,6 @@ const ValidatorStats = ({
       />
       <Earnings
         timeframe="total"
-        tileClasses={specificTileClasses}
         tokenPrice={tokenPrice}
         stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
@@ -243,39 +230,30 @@ const ValidatorStats = ({
         validatorsPerformance={validatorsPerformance}
       />
       <Attestations
-        tileClasses={specificTileClasses}
         selectedGroup={selectedGroup}
         validatorsPerformance={validatorsPerformance}
       />
-      <Luck
-        tileClasses={specificTileClasses}
-        selectedGroup={selectedGroup}
-        validatorsLuck={validatorsLuck}
-      />
-      <TimeframePercentageRate
-        tileClasses={specificTileClasses}
+      <Luck selectedGroup={selectedGroup} validatorsLuck={validatorsLuck} />
+      {/* <TimeframePercentageRate
         timeframe="daily"
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
       />
       <TimeframePercentageRate
-        tileClasses={specificTileClasses}
         timeframe="weekly"
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
       />
       <TimeframePercentageRate
-        tileClasses={specificTileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
       />
       <TimeframePercentageRate
-        tileClasses={specificTileClasses}
         timeframe="annual"
         stakedLYX={stakedLYX}
         activeBalance={activeBalance}
-      />
+      /> */}
     </div>
   );
 };

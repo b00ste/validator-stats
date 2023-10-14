@@ -1,14 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-import Notification from '../Notification';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// components
+import Notification from '../Notification';
+
+// theme
+import { bodyClasses, buttonClasses, tileClasses } from '../../Theme/theme';
+
+// types
 import { LandingPageParams } from '../../Types/ComponentParamsTypes';
 
-const Landing = ({
-  bodyClasses,
-  tileClasses,
-  buttonClasses,
-  handlePageNavigation,
-}: LandingPageParams) => {
+const Landing = ({ handlePageNavigation }: LandingPageParams) => {
   const navigate = useNavigate();
   const [addressCopiedOpacity, setAddressCopiedOpacity] = useState(
     'opacity-0 pointer-events-none',

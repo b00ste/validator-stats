@@ -3,6 +3,12 @@ import { FormEvent, Fragment, useRef, useState } from 'react';
 // Components
 import Notification from '../Notification';
 
+// Utils
+import { generateUUID } from '../../Helpers/utils';
+
+// theme
+import { bodyClasses, buttonClasses, tileClasses } from '../../Theme/theme';
+
 // Constants
 import { consensys_explorer } from '../../Helpers/constants';
 
@@ -13,13 +19,7 @@ import {
   WithdrawalAddressesGroup,
 } from '../../Types/UsedDataTypes';
 
-// Utils
-import { generateUUID } from '../../Helpers/utils';
-
 const User = ({
-  bodyClasses,
-  tileClasses,
-  buttonClasses,
   defaultPage,
   setDefaultPage,
   withdrawalAddresses,
