@@ -8,6 +8,7 @@ export const TimeframePercentageRate = ({
   timeframe,
   tileClasses,
   stakedLYX,
+  activeBalance,
 }: TimeframePercentageRateParams) => {
   let getTimeframeTitle = () => {
     switch (timeframe) {
@@ -33,8 +34,16 @@ export const TimeframePercentageRate = ({
         {`${getTimeframePercentageYield({
           totalAtStake: stakedLYX / 1e9,
           timeframe,
-        })} %`}
+        }).toLocaleString()} %`}
       </p>
+
+      <p className="text-xs">{`(Aproximate earnings: ${(
+        (activeBalance / 1e9 / 100) *
+        getTimeframePercentageYield({
+          totalAtStake: stakedLYX / 1e9,
+          timeframe,
+        })
+      ).toLocaleString()} LYX)`}</p>
     </div>
   );
 };

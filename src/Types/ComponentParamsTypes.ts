@@ -101,6 +101,7 @@ export type TimeframePercentageRateParams = {
   timeframe: 'daily' | 'weekly' | 'monthly' | 'annual';
   tileClasses: string;
   stakedLYX: number;
+  activeBalance: number;
 };
 
 export type BalanceParams = {

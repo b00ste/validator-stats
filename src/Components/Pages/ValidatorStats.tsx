@@ -256,21 +256,25 @@ const ValidatorStats = ({
         tileClasses={specificTileClasses}
         timeframe="daily"
         stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
       />
       <TimeframePercentageRate
         tileClasses={specificTileClasses}
         timeframe="weekly"
         stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
       />
       <TimeframePercentageRate
         tileClasses={specificTileClasses}
         timeframe="monthly"
         stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
       />
       <TimeframePercentageRate
         tileClasses={specificTileClasses}
         timeframe="annual"
         stakedLYX={stakedLYX}
+        activeBalance={activeBalance}
       />
     </div>
   );

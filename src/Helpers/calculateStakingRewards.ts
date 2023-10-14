@@ -95,16 +95,16 @@ export const getTimeframePercentageYield = ({
 
   switch (timeframe) {
     case 'daily': {
-      return (formattedAPR / 365).toLocaleString();
+      return formattedAPR / 365;
     }
     case 'weekly': {
-      return ((formattedAPR / 365) * 7).toLocaleString();
+      return (formattedAPR / 365) * 7;
     }
     case 'monthly': {
-      return (formattedAPR / 12).toLocaleString();
+      return formattedAPR / 12;
     }
     case 'annual': {
-      return formattedAPR.toLocaleString();
+      return formattedAPR;
     }
   }
 };
