@@ -318,6 +318,7 @@ const User = ({
               <tr className="border-b-2 border-gray-300">
                 <th className={tableHeadClasses}>Address</th>
                 <th className={tableHeadClasses}>Name</th>
+                <th className={tableHeadClasses}>Validators Count</th>
                 <th className={tableHeadClasses}>Consensus</th>
                 <th className={tableHeadClasses}></th>
                 <th className={tableHeadClasses}></th>
@@ -348,6 +349,9 @@ const User = ({
                       </td>
                       <td className="px-4 py-1 text-slate-gray">
                         {withdrawalAddress.name}
+                      </td>
+                      <td className="px-4 py-1 text-slate-gray">
+                        {validators[withdrawalAddress.address].length}
                       </td>
                       <td className="px-4 py-1">
                         <a
