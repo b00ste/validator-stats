@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react';
 // components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
-
 // types
-import { WithdrawableAmountParams } from '../../Types/ComponentParamsTypes';
+import { ValidatorsBalances, ValidatorsCount } from '../../Types/UsedDataTypes';
 
-export const WithdrawableAmount = ({
-  tokenPrice,
+interface Props {
+  validatorsCount: ValidatorsCount;
+  validatorsBalances: ValidatorsBalances;
+}
+
+export const WithdrawableAmount: React.FC<Props> = ({
   validatorsCount: {
     activeValidatorsCount,
     pendingValidatorsCount,
@@ -25,7 +26,7 @@ export const WithdrawableAmount = ({
     slashedBalance,
     otherBalance,
   },
-}: WithdrawableAmountParams) => {
+}) => {
   const [withdrawableAmount, setWithdrawableAmount] = useState(0);
 
   useEffect(() => {
@@ -62,15 +63,21 @@ export const WithdrawableAmount = ({
   ]);
 
   return (
-    <div className={validatorStatsSpecificTileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Withdrawable Amount</div>
-      <p className="text-slate-gray font-bold">
-        {`${withdrawableAmount.toLocaleString()} LYX`}
-      </p>
-      <DisplayTokenPrice
-        tokenPrice={tokenPrice}
-        tokenAmount={withdrawableAmount}
-      />
+    <div className="m-4">
+      <lukso-card variant="basic" size="medium">
+        <div
+          slot="content"
+          className="p-6 flex flex-col items-center justify-center"
+        >
+          <h2 className="heading-inter-21-semi-bold mb-4 text-center text-purple-31">
+            Withdrawable Amount
+          </h2>
+          <p className="paragraph-inter-14-medium">
+            {`${withdrawableAmount.toLocaleString()} LYX`}
+          </p>
+          <DisplayTokenPrice tokenAmount={withdrawableAmount} />
+        </div>
+      </lukso-card>
     </div>
   );
 };

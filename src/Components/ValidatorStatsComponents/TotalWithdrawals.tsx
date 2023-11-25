@@ -1,19 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 // components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
-
 // types
-import { WithdrawalsParams } from '../../Types/ComponentParamsTypes';
+import { WithdrawalAddressesGroup } from '../../Types/UsedDataTypes';
 
-export const TotalWithdrawals = ({
-  selectedGroup,
-  activeValidators,
-  tokenPrice,
-}: WithdrawalsParams) => {
+// context
+import { ValidatorsDataContext } from '../../App';
+
+interface Props {
+  selectedGroup: WithdrawalAddressesGroup;
+}
+
+export const TotalWithdrawals: React.FC<Props> = ({ selectedGroup }) => {
+  const { activeValidators = {} } = useContext(ValidatorsDataContext);
   const [totalWithdrawals, setTotalWithdrawals] = useState(0);
 
   useEffect(() => {
@@ -40,15 +41,21 @@ export const TotalWithdrawals = ({
   }, [selectedGroup, activeValidators]);
 
   return (
-    <div className={validatorStatsSpecificTileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Total Withdrawals</div>
-      <p className="text-slate-gray font-bold">{`${(
-        totalWithdrawals / 1e9
-      ).toLocaleString()} LYX`}</p>
-      <DisplayTokenPrice
-        tokenPrice={tokenPrice}
-        tokenAmount={totalWithdrawals / 1e9}
-      />
+    <div className="m-4">
+      <lukso-card variant="basic" size="medium">
+        <div
+          slot="content"
+          className="p-6 flex flex-col items-center justify-center"
+        >
+          <h2 className="heading-inter-21-semi-bold mb-4 text-center text-purple-31">
+            Total Withdrawals
+          </h2>
+          <p className="paragraph-inter-14-medium">{`${(
+            totalWithdrawals / 1e9
+          ).toLocaleString()} LYX`}</p>
+          <DisplayTokenPrice tokenAmount={totalWithdrawals / 1e9} />
+        </div>
+      </lukso-card>
     </div>
   );
 };

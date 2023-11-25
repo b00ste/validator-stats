@@ -40,9 +40,13 @@ export type ValidatorsMaps = {
 };
 
 export type ValidatorsData = {
-  validatorsMaps: ValidatorsMaps;
-  validatorsLuck: Record<string, ValidatorsLuck>;
-  validatorsPerformance: Record<string, ValidatorsPerformance>;
+  activeValidators?: Record<string, ValidatorMap>;
+  pendingValidators?: Record<string, ValidatorMap>;
+  offlineValidators?: Record<string, ValidatorMap>;
+  slashedValidators?: Record<string, ValidatorMap>;
+  otherValidators?: Record<string, ValidatorMap>;
+  validatorsLuck?: Record<string, ValidatorsLuck>;
+  validatorsPerformance?: Record<string, ValidatorsPerformance>;
 };
 
 export type ValidatorsBalances = {
@@ -70,13 +74,13 @@ export type ValidatorsPerformance = Record<
   }
 >;
 
-export type TokenPrice = {
-  eurPrice: string;
-  usdPrice: string;
+export type NetworkData = {
+  stakedLYX?: number;
+  currentEpoch?: number;
+  networkValidators?: number;
 };
 
-export type NetworkData = {
-  stakedLYX: number;
-  currentEpoch: number;
-  networkValidators: number;
+export type LYXPrice = {
+  eur?: number;
+  usd?: number;
 };

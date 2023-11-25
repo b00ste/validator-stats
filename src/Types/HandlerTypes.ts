@@ -1,5 +1,8 @@
 import {
+  LYXPrice,
+  NetworkData,
   ValidatorMap,
+  ValidatorsData,
   ValidatorsLuck,
   ValidatorsPerformance,
   WithdrawalAddress,
@@ -19,21 +22,7 @@ export type UpdateWithdrawalAddressesBalances = (
 
 export type UpdateValidatorsMaps = (
   validators: Record<string, string[]>,
-  setActiveValidators: React.Dispatch<
-    React.SetStateAction<Record<string, ValidatorMap> | undefined>
-  >,
-  setPendingValidators: React.Dispatch<
-    React.SetStateAction<Record<string, ValidatorMap> | undefined>
-  >,
-  setOfflineValidators: React.Dispatch<
-    React.SetStateAction<Record<string, ValidatorMap> | undefined>
-  >,
-  setSlashedValidators: React.Dispatch<
-    React.SetStateAction<Record<string, ValidatorMap> | undefined>
-  >,
-  setOtherValidators: React.Dispatch<
-    React.SetStateAction<Record<string, ValidatorMap> | undefined>
-  >,
+  setValidatorsData: React.Dispatch<React.SetStateAction<ValidatorsData>>,
 ) => void;
 
 export type UpdateVaildatorsLuck = (
@@ -51,16 +40,11 @@ export type UpdateVaildatorsPerformance = (
 ) => void;
 
 export type UpdateNetworkData = (
-  setStakedLYX: React.Dispatch<React.SetStateAction<number | undefined>>,
-  setCurrentEpoch: React.Dispatch<React.SetStateAction<number | undefined>>,
-  setNetworkValidators: React.Dispatch<
-    React.SetStateAction<number | undefined>
-  >,
+  setNetworkData: React.Dispatch<React.SetStateAction<NetworkData>>,
 ) => void;
 
 export type UpdateLYXPrice = (
-  setEurPrce: React.Dispatch<React.SetStateAction<string | undefined>>,
-  setUsdPrce: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setLYXPrice: React.Dispatch<React.SetStateAction<LYXPrice>>,
 ) => void;
 
 export type Refresh = (

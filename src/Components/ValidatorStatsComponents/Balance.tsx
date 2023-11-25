@@ -1,14 +1,14 @@
 // components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
-
 // types
-import { BalanceParams } from '../../Types/ComponentParamsTypes';
+import { ValidatorsBalances } from '../../Types/UsedDataTypes';
 
-export const Balance = ({
-  tokenPrice,
+interface Props {
+  validatorsBalances: ValidatorsBalances;
+}
+
+export const Balance: React.FC<Props> = ({
   validatorsBalances: {
     activeBalance,
     pendingBalance,
@@ -16,62 +16,71 @@ export const Balance = ({
     slashedBalance,
     otherBalance,
   },
-}: BalanceParams) => {
+}) => {
   return (
-    <div className={validatorStatsSpecificTileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Validator Balance</div>
-      <p className="text-slate-gray font-bold">
-        Active:
-        <span className="text-pastel-green">{` ${(
-          activeBalance / 1e9
-        ).toLocaleString()} LYX`}</span>
-      </p>
-      {pendingBalance > 0 ? (
-        <p className="text-slate-gray font-bold">
-          Pending:
-          <span className="text-pastel-orange">{` ${(
-            pendingBalance / 1e9
-          ).toLocaleString()} LYX`}</span>
-        </p>
-      ) : (
-        <></>
-      )}
-      {offlineBalance > 0 ? (
-        <p className="text-slate-gray font-bold">
-          Offline:
-          <span className="text-pastel-red">{` ${(
-            offlineBalance / 1e9
-          ).toLocaleString()} LYX`}</span>
-        </p>
-      ) : (
-        <></>
-      )}
-      {slashedBalance > 0 ? (
-        <p className="text-slate-gray font-bold">
-          Slashed:
-          <span className="text-pastel-red">{` ${(
-            slashedBalance / 1e9
-          ).toLocaleString()} LYX`}</span>
-        </p>
-      ) : (
-        <></>
-      )}
-      {otherBalance > 0 ? (
-        <p className="text-slate-gray font-bold">
-          Other:
-          <span className="text-pastel-red">{` ${(
-            otherBalance / 1e9
-          ).toLocaleString()} LYX`}</span>
-        </p>
-      ) : (
-        <></>
-      )}
-      <DisplayTokenPrice
-        tokenPrice={tokenPrice}
-        tokenAmount={
-          (activeBalance + pendingBalance + slashedBalance + otherBalance) / 1e9
-        }
-      />
+    <div className="m-4">
+      <lukso-card variant="basic" size="medium">
+        <div
+          slot="content"
+          className="p-6 flex flex-col items-center justify-center"
+        >
+          <h2 className="heading-inter-21-semi-bold mb-4 text-center text-purple-31">
+            Validator Balance
+          </h2>
+          <p className="paragraph-inter-14-medium">
+            Active:
+            <span className="text-green-45">{` ${(
+              activeBalance / 1e9
+            ).toLocaleString()} LYX`}</span>
+          </p>
+          {pendingBalance > 0 ? (
+            <p className="paragraph-inter-14-medium">
+              Pending:
+              <span className="text-yellow-55">{` ${(
+                pendingBalance / 1e9
+              ).toLocaleString()} LYX`}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+          {offlineBalance > 0 ? (
+            <p className="paragraph-inter-14-medium">
+              Offline:
+              <span className="text-yellow-55">{` ${(
+                offlineBalance / 1e9
+              ).toLocaleString()} LYX`}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+          {slashedBalance > 0 ? (
+            <p className="paragraph-inter-14-medium">
+              Slashed:
+              <span className="text-red-55">{` ${(
+                slashedBalance / 1e9
+              ).toLocaleString()} LYX`}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+          {otherBalance > 0 ? (
+            <p className="paragraph-inter-14-medium">
+              Other:
+              <span className="text-red-55">{` ${(
+                otherBalance / 1e9
+              ).toLocaleString()} LYX`}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+          <DisplayTokenPrice
+            tokenAmount={
+              (activeBalance + pendingBalance + slashedBalance + otherBalance) /
+              1e9
+            }
+          />
+        </div>
+      </lukso-card>
     </div>
   );
 };

@@ -3,17 +3,18 @@ import { Fragment, useEffect, useState } from 'react';
 // components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
-
 // types
-import { WithdrawalBalanceParams } from '../../Types/ComponentParamsTypes';
+import { WithdrawalAddressesGroup } from '../../Types/UsedDataTypes';
 
-export const WithdrawalBalance = ({
-  tokenPrice,
+interface Props {
+  selectedGroup: WithdrawalAddressesGroup;
+  withdrawalAddressesBalance: Record<string, number>;
+}
+
+export const WithdrawalBalance: React.FC<Props> = ({
   selectedGroup,
   withdrawalAddressesBalance,
-}: WithdrawalBalanceParams) => {
+}) => {
   const [totalBalance, setTotalBalance] = useState(0);
 
   useEffect(() => {
@@ -30,35 +31,44 @@ export const WithdrawalBalance = ({
   }, [selectedGroup, withdrawalAddressesBalance]);
 
   return (
-    <div className={validatorStatsSpecificTileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Withdrawal Balance</div>
-      {selectedGroup.withdrawalAddresses.map((withdrawalAddress) =>
-        withdrawalAddressesBalance[withdrawalAddress.address] ? (
-          <Fragment key={withdrawalAddress.address}>
-            <div className="grid grid-cols-2 w-full">
-              <p className="text-slate-gray font-bold col-span-1 text-left ml-4">
-                {`${withdrawalAddress.name}:`}
-              </p>
-              <p className="text-slate-gray font-bold col-span-1 text-right mr-4">
-                {`${withdrawalAddressesBalance[
-                  withdrawalAddress.address
-                ].toLocaleString()} LYX`}
-              </p>
-            </div>
-          </Fragment>
-        ) : (
-          <Fragment key={withdrawalAddress.address}></Fragment>
-        ),
-      )}
-      <div className="grid grid-cols-2 w-full">
-        <p className="text-slate-gray font-bold col-span-1 text-left ml-4">
-          Total:
-        </p>
-        <p className="text-slate-gray font-bold col-span-1 text-right mr-4">
-          {`${totalBalance.toLocaleString()} LYX`}
-        </p>
-      </div>
-      <DisplayTokenPrice tokenPrice={tokenPrice} tokenAmount={totalBalance} />
+    <div className="m-4">
+      <lukso-card variant="basic" size="medium">
+        <div
+          slot="content"
+          className="p-6 flex flex-col items-center justify-center"
+        >
+          <h2 className="heading-inter-21-semi-bold mb-4 text-center text-purple-31">
+            Withdrawal Balance
+          </h2>
+          {selectedGroup.withdrawalAddresses.map((withdrawalAddress) =>
+            withdrawalAddressesBalance[withdrawalAddress.address] ? (
+              <Fragment key={withdrawalAddress.address}>
+                <div className="grid grid-cols-2 w-full">
+                  <p className="paragraph-inter-14-medium col-span-1 text-left ml-4">
+                    {`${withdrawalAddress.name}:`}
+                  </p>
+                  <p className="paragraph-inter-14-medium col-span-1 text-right mr-4">
+                    {`${withdrawalAddressesBalance[
+                      withdrawalAddress.address
+                    ].toLocaleString()} LYX`}
+                  </p>
+                </div>
+              </Fragment>
+            ) : (
+              <Fragment key={withdrawalAddress.address}></Fragment>
+            ),
+          )}
+          <div className="grid grid-cols-2 w-full">
+            <p className="paragraph-inter-14-medium col-span-1 text-left ml-4">
+              Total:
+            </p>
+            <p className="paragraph-inter-14-medium col-span-1 text-right mr-4">
+              {`${totalBalance.toLocaleString()} LYX`}
+            </p>
+          </div>
+          <DisplayTokenPrice tokenAmount={totalBalance} />
+        </div>
+      </lukso-card>
     </div>
   );
 };

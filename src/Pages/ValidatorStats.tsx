@@ -1,35 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 // Stats Tiles
-import { Earnings } from '../ValidatorStatsComponents/Earnings';
-import { Attestations } from '../ValidatorStatsComponents/Attestations';
-import { Luck } from '../ValidatorStatsComponents/Luck';
-import { Validators } from '../ValidatorStatsComponents/Validators';
-import { Balance } from '../ValidatorStatsComponents/Balance';
-import { TotalWithdrawals } from '../ValidatorStatsComponents/TotalWithdrawals';
-import { WithdrawalBalance } from '../ValidatorStatsComponents/WithdrawalBalance';
-import { WithdrawableAmount } from '../ValidatorStatsComponents/WithdrawableAmount';
-// import { TimeframePercentageRate } from '../ValidatorStatsComponents/TimeframePercentageRate';
+import { Earnings } from '../Components/ValidatorStatsComponents/Earnings';
+import { Attestations } from '../Components/ValidatorStatsComponents/Attestations';
+import { Luck } from '../Components/ValidatorStatsComponents/Luck';
+import { Validators } from '../Components/ValidatorStatsComponents/Validators';
+import { Balance } from '../Components/ValidatorStatsComponents/Balance';
+import { TotalWithdrawals } from '../Components/ValidatorStatsComponents/TotalWithdrawals';
+import { WithdrawalBalance } from '../Components/ValidatorStatsComponents/WithdrawalBalance';
+import { WithdrawableAmount } from '../Components/ValidatorStatsComponents/WithdrawableAmount';
 
-// ts types
-import { ValidatorStatsPageParams } from '../../Types/ComponentParamsTypes';
-import { ValidatorMap } from '../../Types/UsedDataTypes';
-import { bodyClasses, tileClasses } from '../../Theme/theme';
+// types
+import { ValidatorMap, WithdrawalAddressesGroup } from '../Types/UsedDataTypes';
 
-const ValidatorStats = ({
-  stakedLYX,
-  tokenPrice,
-  validatorsData: { validatorsMaps, validatorsLuck, validatorsPerformance },
+// context
+import { ValidatorsDataContext } from '../App';
+
+interface Props {
+  withdrawalAddressesGroups: WithdrawalAddressesGroup[];
+  withdrawalAddressesBalance: Record<string, number>;
+}
+
+const ValidatorStats: React.FC<Props> = ({
   withdrawalAddressesGroups,
   withdrawalAddressesBalance,
-}: ValidatorStatsPageParams) => {
+}) => {
   const {
-    activeValidators,
-    pendingValidators,
-    offlineValidators,
-    slashedValidators,
-    otherValidators,
-  } = validatorsMaps;
+    activeValidators = {},
+    pendingValidators = {},
+    offlineValidators = {},
+    slashedValidators = {},
+    otherValidators = {},
+  } = useContext(ValidatorsDataContext);
   const [selectedGroup, setSelectedGroup] = useState(
     withdrawalAddressesGroups[0],
   );
@@ -130,10 +132,6 @@ const ValidatorStats = ({
     otherValidators,
   ]);
 
-  /// ------ Styling Handling ------
-  const specificTileClasses = `${tileClasses} text-center p-2 flex flex-col items-center justify-evenly`;
-  /// ------------------------------
-
   const validatorsCount = {
     activeValidatorsCount,
     pendingValidatorsCount,
@@ -150,110 +148,72 @@ const ValidatorStats = ({
   };
 
   return (
-    <div className={`${bodyClasses} sm:grid-cols-2 md:grid-cols-3`}>
-      <div className={`${specificTileClasses} sm:col-span-2 md:col-span-3`}>
-        <div className="text-pastel-blue text-xl mb-2">Select Group</div>
-        <div className="flex items-center justify-center flex-wrap">
-          {withdrawalAddressesGroups.map((group) => (
-            <button
-              key={group.key}
-              className={`${
-                selectedGroup.name === group.name
-                  ? 'bg-pastel-blue'
-                  : 'bg-strong-pink hover:bg-dark-pink border-2'
-              } inline-block text-white transition-colors px-4 py-2 rounded-xl m-1`}
-              onClick={() => setSelectedGroup(group)}
-            >
-              {group.name}
-            </button>
-          ))}
-        </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <div className="m-4 sm:col-span-2 md:col-span-3">
+        <lukso-card variant="basic" size="medium">
+          <div
+            slot="content"
+            className="p-6 flex flex-col items-center justify-center"
+          >
+            <h2 className="heading-inter-21-semi-bold mb-4 text-center text-purple-31">
+              Select Validators Group
+            </h2>
+            <div className="flex items-center justify-center flex-wrap">
+              {withdrawalAddressesGroups.map((group) => (
+                <lukso-button
+                  key={group.key}
+                  variant={
+                    selectedGroup.name === group.name ? 'primary' : 'landing'
+                  }
+                  onClick={() => setSelectedGroup(group)}
+                  custom-class="m-2"
+                >
+                  {group.name}
+                </lukso-button>
+              ))}
+            </div>
+          </div>
+        </lukso-card>
       </div>
+
       <Validators validatorsCount={validatorsCount} />
-      <Balance
-        tokenPrice={tokenPrice}
-        validatorsBalances={validatorsBalances}
-      />
+      <Balance validatorsBalances={validatorsBalances} />
       <WithdrawableAmount
-        tokenPrice={tokenPrice}
         validatorsCount={validatorsCount}
         validatorsBalances={validatorsBalances}
       />
-      <TotalWithdrawals
-        selectedGroup={selectedGroup}
-        activeValidators={activeValidators}
-        tokenPrice={tokenPrice}
-      />
       <WithdrawalBalance
-        tokenPrice={tokenPrice}
         selectedGroup={selectedGroup}
         withdrawalAddressesBalance={withdrawalAddressesBalance}
       />
+      <TotalWithdrawals selectedGroup={selectedGroup} />
       <Earnings
         timeframe="daily"
-        tokenPrice={tokenPrice}
-        stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
         activeBalance={activeBalance}
-        validatorsPerformance={validatorsPerformance}
       />
       <Earnings
         timeframe="weekly"
-        tokenPrice={tokenPrice}
-        stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
         activeBalance={activeBalance}
-        validatorsPerformance={validatorsPerformance}
       />
       <Earnings
         timeframe="monthly"
-        tokenPrice={tokenPrice}
-        stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
         activeBalance={activeBalance}
-        validatorsPerformance={validatorsPerformance}
       />
       <Earnings
         timeframe="annual"
-        tokenPrice={tokenPrice}
-        stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
         activeBalance={activeBalance}
-        validatorsPerformance={validatorsPerformance}
       />
       <Earnings
         timeframe="total"
-        tokenPrice={tokenPrice}
-        stakedLYX={stakedLYX}
         selectedGroup={selectedGroup}
         activeBalance={activeBalance}
-        validatorsPerformance={validatorsPerformance}
       />
-      <Attestations
-        selectedGroup={selectedGroup}
-        validatorsPerformance={validatorsPerformance}
-      />
-      <Luck selectedGroup={selectedGroup} validatorsLuck={validatorsLuck} />
-      {/* <TimeframePercentageRate
-        timeframe="daily"
-        stakedLYX={stakedLYX}
-        activeBalance={activeBalance}
-      />
-      <TimeframePercentageRate
-        timeframe="weekly"
-        stakedLYX={stakedLYX}
-        activeBalance={activeBalance}
-      />
-      <TimeframePercentageRate
-        timeframe="monthly"
-        stakedLYX={stakedLYX}
-        activeBalance={activeBalance}
-      />
-      <TimeframePercentageRate
-        timeframe="annual"
-        stakedLYX={stakedLYX}
-        activeBalance={activeBalance}
-      /> */}
+      <Attestations selectedGroup={selectedGroup} />
+      <Luck selectedGroup={selectedGroup} />
     </div>
   );
 };

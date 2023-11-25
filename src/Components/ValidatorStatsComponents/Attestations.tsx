@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
-
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+import { useContext, useEffect, useState } from 'react';
 
 // types
-import { PerformanceParams } from '../../Types/ComponentParamsTypes';
+import { WithdrawalAddressesGroup } from '../../Types/UsedDataTypes';
 
-export const Attestations = ({
-  selectedGroup,
-  validatorsPerformance,
-}: PerformanceParams) => {
+// context
+import { ValidatorsDataContext } from '../../App';
+
+interface Props {
+  selectedGroup: WithdrawalAddressesGroup;
+}
+
+export const Attestations: React.FC<Props> = ({ selectedGroup }) => {
+  const { validatorsPerformance = {} } = useContext(ValidatorsDataContext);
   const [performance, setPerformance] = useState({
     totalExecutedAttestations: 0,
     totalMissedAttestations: 0,
@@ -54,32 +56,43 @@ export const Attestations = ({
   const returnColouredAttestationsPerformance = () => {
     if (performance.executedAttestationsPercentage > 90) {
       return (
-        <p className="text-pastel-green font-bold ml-1 text-left">{`${performance.executedAttestationsPercentage.toLocaleString()} %`}</p>
+        <p className="text-green-45 font-bold ml-1 text-left">{`${performance.executedAttestationsPercentage.toLocaleString()} %`}</p>
       );
     } else {
       return (
-        <p className="text-pastel-red font-bold ml-1 text-left">{`${performance.executedAttestationsPercentage.toLocaleString()} %`}</p>
+        <p className="text-red-55 font-bold ml-1 text-left">{`${performance.executedAttestationsPercentage.toLocaleString()} %`}</p>
       );
     }
   };
 
   return (
-    <div className={validatorStatsSpecificTileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Attestations</div>
-      <div className="grid content-center grid-cols-2">
-        <p className="text-slate-gray font-bold mr-1 text-right">Executed:</p>
-        <p className="text-pastel-green font-bold ml-1 text-left">
-          {performance.totalExecutedAttestations}
-        </p>
-        <p className="text-slate-gray font-bold mr-1 text-right">Missed:</p>
-        <p className="text-pastel-red font-bold ml-1 text-left">
-          {performance.totalMissedAttestations}
-        </p>
-        <p className="text-slate-gray font-bold mr-1 text-right">
-          Performance:
-        </p>
-        {returnColouredAttestationsPerformance()}
-      </div>
+    <div className="m-4">
+      <lukso-card variant="basic" size="medium">
+        <div
+          slot="content"
+          className="p-6 flex flex-col items-center justify-center text-center"
+        >
+          <h2 className="heading-inter-21-semi-bold mb-4 text-purple-31">
+            Attestations
+          </h2>
+          <div className="grid content-center grid-cols-2">
+            <p className="paragraph-inter-14-medium mr-1 text-right">
+              Executed:
+            </p>
+            <p className="text-green-45 font-bold ml-1 text-left">
+              {performance.totalExecutedAttestations}
+            </p>
+            <p className="paragraph-inter-14-medium mr-1 text-right">Missed:</p>
+            <p className="text-red-55 font-bold ml-1 text-left">
+              {performance.totalMissedAttestations}
+            </p>
+            <p className="paragraph-inter-14-medium mr-1 text-right">
+              Performance:
+            </p>
+            {returnColouredAttestationsPerformance()}
+          </div>
+        </div>
+      </lukso-card>
     </div>
   );
 };

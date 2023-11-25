@@ -1,12 +1,11 @@
 import { getLYXPrice } from '../Helpers/network';
 import { UpdateLYXPrice } from '../Types/HandlerTypes';
 
-const updateLYXPrice: UpdateLYXPrice = (setEurPrce, setUsdPrce) => {
+const updateLYXPrice: UpdateLYXPrice = (steLYXPrice) => {
   const fetchedPrices = getLYXPrice();
 
-  fetchedPrices.then((data) => {
-    setEurPrce(data.eurPrice);
-    setUsdPrce(data.usdPrice);
+  fetchedPrices.then(({ eurPrice, usdPrice }) => {
+    steLYXPrice({ eur: Number(eurPrice), usd: Number(usdPrice) });
   });
 };
 

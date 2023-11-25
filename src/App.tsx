@@ -1,17 +1,29 @@
-import { useCallback, useEffect, useState } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { createContext, useCallback, useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
 
 // Components
-import Body from './Components/Body';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
+
+// Pages
+import Landing from './Pages/Landing';
+import ValidatorStats from './Pages/ValidatorStats';
+import Validators from './Pages/Validators';
+import User from './Pages/User';
+import TermsAndConditions from './Pages/TermsAndConditions';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+import License from './Pages/License';
+import PageNotFound from './Pages/PageNotFound';
 
 // Handlers
 import updateValidator from './Handlers/updateValidator';
 import updateWithdrawalAddressesBalances from './Handlers/updateWithdrawalAddressesBalances';
-import updateValidatorsMaps from './Handlers/updateValidatorsMaps';
-import updateVaildatorsLuck from './Handlers/updateVaildatorsLuck';
-import updateVaildatorsPerformance from './Handlers/updateVaildatorsPerformance';
+import updateValidatorsMaps from './Handlers/updateValidatorsData';
 import updateNetworkData from './Handlers/updateNetworkData';
 import updateLYXPrice from './Handlers/updateLYXPrice';
 
@@ -20,50 +32,51 @@ import { generateUUID } from './Helpers/utils';
 
 // Types
 import {
-  ValidatorMap,
-  ValidatorsLuck,
-  ValidatorsPerformance,
+  LYXPrice,
+  NetworkData,
+  ValidatorsData,
   WithdrawalAddress,
   WithdrawalAddressesGroup,
 } from './Types/UsedDataTypes';
+import updateValidatorsData from './Handlers/updateValidatorsData';
+
+// context
+export const LYXPriceContext = createContext<LYXPrice>({});
+export const NetworkContext = createContext<NetworkData>({});
+export const ValidatorsDataContext = createContext<ValidatorsData>({});
 
 function App() {
   /// ------ Default page to redirect from `/` ------
-  const storedDefaultPage = localStorage.getItem('defaultPage');
-  const [defaultPage, setDefaultPage] = useState(
-    storedDefaultPage
-      ? storedDefaultPage
-      : ('/home' as
-          | '/home'
-          | '/validatorStatistics'
-          | '/validatorList'
-          | '/user'
-          | ''),
-  );
+  const storedDefaultPage = localStorage.getItem('defaultPage') as
+    | '/home'
+    | '/validatorStatistics'
+    | '/validatorList'
+    | '/user';
+  const [defaultPage, setDefaultPage] = useState<
+    '/home' | '/validatorStatistics' | '/validatorList' | '/user'
+  >(storedDefaultPage ? storedDefaultPage : '/home');
   /// -----------------------------------------------
 
   /// ------ Withdrawal Addresses ------
   const storedWithdrawalAddresses = localStorage.getItem('withdrawalAddresses');
-  const [withdrawalAddresses, setWithdrawalAddresses] = useState(
-    (storedWithdrawalAddresses
-      ? JSON.parse(storedWithdrawalAddresses)
-      : []) as WithdrawalAddress[],
-  );
+  const [withdrawalAddresses, setWithdrawalAddresses] = useState<
+    WithdrawalAddress[]
+  >(storedWithdrawalAddresses ? JSON.parse(storedWithdrawalAddresses) : []);
 
   const [withdrawalAddressesBalances, setWithdrawalAddressessBalances] =
-    useState(undefined as Record<string, number> | undefined);
+    useState<Record<string, number>>();
   /// -------------------------------------------
 
   /// ------ Withdrawal Addresses Groups ------
   const storedWithdrawalAddressessGroups = localStorage.getItem(
     'withdrawalAddressesGroups',
   );
-  const [withdrawalAddressesGroups, setWithdrawalAddressessGroups] = useState(
-    (storedWithdrawalAddressessGroups
+  const [withdrawalAddressesGroups, setWithdrawalAddressessGroups] = useState<
+    WithdrawalAddressesGroup[]
+  >(
+    storedWithdrawalAddressessGroups
       ? JSON.parse(storedWithdrawalAddressessGroups)
-      : [
-          { name: 'Main', key: generateUUID(), withdrawalAddresses },
-        ]) as WithdrawalAddressesGroup[],
+      : [{ name: 'Main', key: generateUUID(), withdrawalAddresses }],
   );
   /// If the stored Main Group is different that the generated one, update it
   useEffect(() => {
@@ -92,50 +105,16 @@ function App() {
   /// --------------------------------
 
   /// ------ Validator Data ------
-  const [activeValidators, setActiveValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined,
-  );
-  const [pendingValidators, setPendingValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined,
-  );
-  const [offlineValidators, setOfflineValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined,
-  );
-  const [slashedValidators, setSlashedValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined,
-  );
-  const [otherValidators, setOtherValidators] = useState(
-    undefined as Record<string, ValidatorMap> | undefined,
-  );
-  const [validatorsLuck, setValidatorsLuck] = useState(
-    undefined as Record<string, ValidatorsLuck> | undefined,
-  );
-  const [validatorsPerformance, setValidatorsPerformance] = useState(
-    undefined as Record<string, ValidatorsPerformance> | undefined,
-  );
+  const [validatorsData, setValidatorsData] = useState<ValidatorsData>({});
   /// ----------------------------
 
   /// ------ Network Data ------
-  const [stakedLYX, setStakedLYX] = useState(undefined as number | undefined);
-  const [currentEpoch, setCurrentEpoch] = useState(
-    undefined as number | undefined,
-  );
-  const [networkValidators, setNetworkValidators] = useState(
-    undefined as number | undefined,
-  );
+  const [networkData, setNetworkData] = useState<NetworkData>({});
   /// --------------------------
 
   /// ------ Price Data ------
-  const [eurPrice, setEurPrce] = useState(undefined as string | undefined);
-  const [usdPrice, setUsdPrce] = useState(undefined as string | undefined);
+  const [LYXPrice, setLYXPrice] = useState<LYXPrice>({});
   /// --------------------------
-
-  /// ------ Header Menu Toggle ------
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
-  /// --------------------------------
 
   /// ------ Update storage items ------
   useEffect(() => {
@@ -177,43 +156,25 @@ function App() {
   /// Update validators data (active/pending/slashed/other) if `validatorArray` changes
   useEffect(() => {
     if (Object.getOwnPropertyNames(validators).length > 0) {
-      updateValidatorsMaps(
-        validators,
-        setActiveValidators,
-        setPendingValidators,
-        setOfflineValidators,
-        setSlashedValidators,
-        setOtherValidators,
-      );
+      updateValidatorsData(validators, setValidatorsData);
     }
   }, [validators]);
 
-  /// Update validators luck & performance if `activeValidators` changes
-  useEffect(() => {
-    if (
-      !validatorsLuck &&
-      !validatorsPerformance &&
-      activeValidators &&
-      Object.getOwnPropertyNames(activeValidators).length > 0
-    ) {
-      updateVaildatorsLuck(activeValidators, setValidatorsLuck);
-      updateVaildatorsPerformance(activeValidators, setValidatorsPerformance);
-    }
-  }, [validatorsLuck, validatorsPerformance, activeValidators]);
-
   /// Fetch network data (validators count, staked LYX count and current epoch)
   useEffect(() => {
+    const { stakedLYX, currentEpoch, networkValidators } = networkData;
+
     if (!stakedLYX || !currentEpoch || !networkValidators) {
-      updateNetworkData(setStakedLYX, setCurrentEpoch, setNetworkValidators);
+      updateNetworkData(setNetworkData);
     }
-  }, [stakedLYX, currentEpoch, networkValidators]);
+  }, [networkData]);
 
   /// Fetch LYX price in both EUR & USD
   useEffect(() => {
-    if (!eurPrice && !usdPrice) {
-      updateLYXPrice(setEurPrce, setUsdPrce);
+    if (!LYXPrice) {
+      updateLYXPrice(setLYXPrice);
     }
-  }, [eurPrice, usdPrice]);
+  }, [LYXPrice]);
 
   /// ------ Refresh Data ------
   const refreshHandler = useCallback(() => {
@@ -223,22 +184,11 @@ function App() {
       setWithdrawalAddressessBalances,
     );
 
-    if (activeValidators) {
-      updateValidatorsMaps(
-        validators,
-        setActiveValidators,
-        setPendingValidators,
-        setOfflineValidators,
-        setSlashedValidators,
-        setOtherValidators,
-      );
-      updateVaildatorsLuck(activeValidators, setValidatorsLuck);
-      updateVaildatorsPerformance(activeValidators, setValidatorsPerformance);
-    }
+    updateValidatorsMaps(validators, setValidatorsData);
 
-    updateNetworkData(setStakedLYX, setCurrentEpoch, setNetworkValidators);
-    updateLYXPrice(setEurPrce, setUsdPrce);
-  }, [withdrawalAddresses, validators, activeValidators]);
+    updateNetworkData(setNetworkData);
+    updateLYXPrice(setLYXPrice);
+  }, [withdrawalAddresses, validators]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -249,71 +199,69 @@ function App() {
   });
   /// --------------------------
 
-  /// ------ Navigating handler ------
-  const handlePageNavigation = (navigate: Function, page: string) => {
-    navigate(page);
-    toggleDropdown();
-  };
-  /// --------------------------------
-
-  /// ------ Compartimetised Data ------
-  const validatorsMaps = {
-    activeValidators: activeValidators ? activeValidators : {},
-    pendingValidators: pendingValidators ? pendingValidators : {},
-    offlineValidators: offlineValidators ? offlineValidators : {},
-    slashedValidators: slashedValidators ? slashedValidators : {},
-    otherValidators: otherValidators ? otherValidators : {},
-  };
-
-  const validatorsData = {
-    validatorsMaps,
-    validatorsLuck: validatorsLuck ? validatorsLuck : {},
-    validatorsPerformance: validatorsPerformance ? validatorsPerformance : {},
-  };
-
-  const tokenPrice = {
-    eurPrice: eurPrice ? eurPrice : '',
-    usdPrice: usdPrice ? usdPrice : '',
-  };
-
-  const networkData = {
-    stakedLYX: stakedLYX ? stakedLYX : 0,
-    currentEpoch: currentEpoch ? currentEpoch : 0,
-    networkValidators: networkValidators ? networkValidators : 0,
-  };
-  /// ----------------------------------
-
   return (
-    <div
-      className={`min-h-screen relative flex flex-col justify-center items-center bg-pink pb-12 transition-all ${
-        isDropdownOpen ? 'pt-72' : 'pt-44 delay-75 duration-200'
-      }`}
-    >
+    <div className="min-h-screen relative">
       <Router>
-        <Header
-          networkData={networkData}
-          tokenPrice={tokenPrice}
-          isDropdownOpen={isDropdownOpen}
-          toggleDropdown={toggleDropdown}
-          refreshHandler={refreshHandler}
-          handlePageNavigation={handlePageNavigation}
-        />
-        <Body
-          defaultPage={defaultPage}
-          setDefaultPage={setDefaultPage}
-          handlePageNavigation={handlePageNavigation}
-          withdrawalAddresses={withdrawalAddresses}
-          setWithdrawalAddresses={setWithdrawalAddresses}
-          withdrawalAddressesGroups={withdrawalAddressesGroups}
-          setWithdrawalAddressessGroups={setWithdrawalAddressessGroups}
-          withdrawalAddressesBalances={withdrawalAddressesBalances}
-          validators={validators}
-          setValidators={setValidators}
-          validatorsData={validatorsData}
-          networkData={networkData}
-          tokenPrice={tokenPrice}
-        />
-        <Footer handlePageNavigation={handlePageNavigation} />
+        <LYXPriceContext.Provider value={LYXPrice}>
+          <NetworkContext.Provider value={networkData}>
+            <Header refreshHandler={refreshHandler} />
+            <ValidatorsDataContext.Provider value={validatorsData}>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Navigate
+                      to={defaultPage ? defaultPage : '/home'}
+                      replace
+                    />
+                  }
+                />
+                <Route path="/home" element={<Landing />} />
+                <Route
+                  path="/validatorStatistics"
+                  element={
+                    <ValidatorStats
+                      withdrawalAddressesGroups={withdrawalAddressesGroups}
+                      withdrawalAddressesBalance={
+                        withdrawalAddressesBalances
+                          ? withdrawalAddressesBalances
+                          : {}
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/user"
+                  element={
+                    <User
+                      defaultPage={defaultPage}
+                      setDefaultPage={setDefaultPage}
+                      withdrawalAddresses={withdrawalAddresses}
+                      setWithdrawalAddresses={setWithdrawalAddresses}
+                      validators={validators}
+                      setValidators={setValidators}
+                      withdrawalAddressesGroups={withdrawalAddressesGroups}
+                      setWithdrawalAddressessGroups={
+                        setWithdrawalAddressessGroups
+                      }
+                    />
+                  }
+                />
+                <Route
+                  path="/validatorList"
+                  element={
+                    <Validators withdrawalAddresses={withdrawalAddresses} />
+                  }
+                />
+                <Route path="/terms" element={<TermsAndConditions />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/license" element={<License />} />
+                <Route path="/*" element={<PageNotFound />} />
+              </Routes>
+            </ValidatorsDataContext.Provider>
+            <Footer />
+          </NetworkContext.Provider>
+        </LYXPriceContext.Provider>
       </Router>
     </div>
   );

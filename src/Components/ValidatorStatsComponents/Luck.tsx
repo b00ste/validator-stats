@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react';
-
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+import { useContext, useEffect, useState } from 'react';
 
 // types
-import { LuckParams } from '../../Types/ComponentParamsTypes';
+import { WithdrawalAddressesGroup } from '../../Types/UsedDataTypes';
 
-export const Luck = ({ selectedGroup, validatorsLuck }: LuckParams) => {
+// context
+import { ValidatorsDataContext } from '../../App';
+
+interface Props {
+  selectedGroup: WithdrawalAddressesGroup;
+}
+
+export const Luck: React.FC<Props> = ({ selectedGroup }) => {
+  const { validatorsLuck = {} } = useContext(ValidatorsDataContext);
+
   const [proposalLuck, setProposalLuck] = useState(0);
 
   useEffect(() => {
@@ -34,11 +40,20 @@ export const Luck = ({ selectedGroup, validatorsLuck }: LuckParams) => {
   }, [selectedGroup, validatorsLuck]);
 
   return (
-    <div className={validatorStatsSpecificTileClasses}>
-      <div className="text-pastel-blue text-xl mb-2">Luck</div>
-      <p className="text-slate-gray font-bold">
-        {`${proposalLuck.toLocaleString()} %`}
-      </p>
+    <div className="m-4">
+      <lukso-card variant="basic" size="medium">
+        <div
+          slot="content"
+          className="p-6 flex flex-col items-center justify-center text-center"
+        >
+          <h2 className="heading-inter-21-semi-bold mb-4 text-purple-31">
+            Luck
+          </h2>
+          <p className="paragraph-inter-14-medium">
+            {`${proposalLuck.toLocaleString()} %`}
+          </p>
+        </div>
+      </lukso-card>
     </div>
   );
 };

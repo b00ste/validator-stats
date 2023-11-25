@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+
 // components
 import { DisplayTokenPrice } from '../DisplayTokenPrice';
 
@@ -7,20 +9,26 @@ import {
   getTimeframePercentageYieldUnformated,
 } from '../../Helpers/calculateStakingRewards';
 
-// theme
-import { validatorStatsSpecificTileClasses } from '../../Theme/theme';
+// types
+import { WithdrawalAddressesGroup } from '../../Types/UsedDataTypes';
 
-// ts types
-import { EarningsParams } from '../../Types/ComponentParamsTypes';
+// context
+import { NetworkContext, ValidatorsDataContext } from '../../App';
 
-export const Earnings = ({
+interface Props {
+  timeframe: 'daily' | 'weekly' | 'monthly' | 'annual' | 'total';
+  activeBalance: number;
+  selectedGroup: WithdrawalAddressesGroup;
+}
+
+export const Earnings: React.FC<Props> = ({
   timeframe,
-  tokenPrice,
-  stakedLYX,
   activeBalance,
   selectedGroup,
-  validatorsPerformance,
-}: EarningsParams) => {
+}) => {
+  const { validatorsPerformance = {} } = useContext(ValidatorsDataContext);
+  const { stakedLYX = 0 } = useContext(NetworkContext);
+
   const getTimeframeParamNames = (): {
     consensusTimeframeParam:
       | 'performance1d'
@@ -130,11 +138,11 @@ export const Earnings = ({
 
       if (earningsAPR > stakingAPR) {
         return (
-          <span className="text-pastel-green">{`${earnings.toLocaleString()} LYX`}</span>
+          <span className="text-green-45">{`${earnings.toLocaleString()} LYX`}</span>
         );
       }
       return (
-        <span className="text-pastel-red">{`${earnings.toLocaleString()} LYX`}</span>
+        <span className="text-red-55">{`${earnings.toLocaleString()} LYX`}</span>
       );
     }
     return `${earnings.toLocaleString()} LYX`;
@@ -144,53 +152,62 @@ export const Earnings = ({
     const earnings = calculateEarnings();
 
     return (
-      <div className={validatorStatsSpecificTileClasses}>
-        <div className="text-pastel-blue text-xl mb-2">
-          {getTimeframeTitle()}
-        </div>
-        <div className="w-full grid grid-cols-3 justify-around content-center">
-          {timeframe !== 'total' ? (
-            <>
-              <div className="col-span-1 flex justify-start">
-                <p className="text-slate-gray font-bold px-1">Calculated APR</p>
+      <div className="m-4">
+        <lukso-card variant="basic" size="medium">
+          <div
+            slot="content"
+            className="p-6 flex flex-col items-center justify-center text-center"
+          >
+            <h2 className="heading-inter-21-semi-bold mb-4 text-purple-31">
+              {getTimeframeTitle()}
+            </h2>
+            <div className="w-full grid grid-cols-3 justify-around content-center">
+              {timeframe !== 'total' ? (
+                <>
+                  <div className="col-span-1 flex justify-start">
+                    <p className="paragraph-inter-14-medium px-1">
+                      Calculated APR
+                    </p>
+                  </div>
+                  <div className="col-span-2 flex flex-col justify-center">
+                    <p className="paragraph-inter-14-medium">
+                      {`${getTimeframePercentageYield({
+                        totalAtStake: stakedLYX / 1e9,
+                        timeframe,
+                      }).toLocaleString()} %`}
+                    </p>
+                    <p className="paragraph-inter-12-medium">{`(Aproximate earnings: ${(
+                      (activeBalance / 1e9 / 100) *
+                      getTimeframePercentageYield({
+                        totalAtStake: stakedLYX / 1e9,
+                        timeframe,
+                      })
+                    ).toLocaleString()} LYX)`}</p>
+                  </div>
+                  <div className="border-lukso-70 col-span-3 border-b my-2 mx-4" />
+                </>
+              ) : (
+                <></>
+              )}
+              <div className="flex justify-start content-start col-span-1">
+                <p className="paragraph-inter-14-medium px-1">Real Earnings</p>
               </div>
               <div className="col-span-2 flex flex-col justify-center">
-                <p className="text-slate-gray font-bold">
-                  {`${getTimeframePercentageYield({
-                    totalAtStake: stakedLYX / 1e9,
-                    timeframe,
-                  }).toLocaleString()} %`}
+                <p className="paragraph-inter-14-medium">
+                  {getErningsComparedToAPR(earnings)}
                 </p>
-                <p className="text-xs">{`(Aproximate earnings: ${(
-                  (activeBalance / 1e9 / 100) *
-                  getTimeframePercentageYield({
-                    totalAtStake: stakedLYX / 1e9,
-                    timeframe,
-                  })
-                ).toLocaleString()} LYX)`}</p>
+                {timeframe !== 'total' ? (
+                  <p className="paragraph-inter-12-medium">{`(Aproximate APR ${(
+                    (earnings / (activeBalance / 1e9)) * 100 || 0
+                  ).toLocaleString()} %)`}</p>
+                ) : (
+                  <></>
+                )}
               </div>
-              <div className="border-dark-pink col-span-3 border-b my-2 mx-4" />
-            </>
-          ) : (
-            <></>
-          )}
-          <div className="flex justify-start content-start col-span-1">
-            <p className="text-slate-gray font-bold px-1">Real Earnings</p>
+            </div>
+            <DisplayTokenPrice tokenAmount={earnings} />
           </div>
-          <div className="col-span-2 flex flex-col justify-center">
-            <p className="text-slate-gray font-bold">
-              {getErningsComparedToAPR(earnings)}
-            </p>
-            {timeframe !== 'total' ? (
-              <p className="text-xs">{`(Aproximate APR ${(
-                (earnings / (activeBalance / 1e9)) * 100 || 0
-              ).toLocaleString()} %)`}</p>
-            ) : (
-              <></>
-            )}
-          </div>
-        </div>
-        <DisplayTokenPrice tokenPrice={tokenPrice} tokenAmount={earnings} />
+        </lukso-card>
       </div>
     );
   };
