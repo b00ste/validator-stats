@@ -16,6 +16,7 @@ import { ValidatorMap, WithdrawalAddressesGroup } from '../Types/UsedDataTypes';
 // context
 import { ValidatorsDataContext } from '../App';
 import Network from '../Components/ValidatorStatsComponents/Network';
+import SelectGroup from '../Components/ValidatorStatsComponents/SelectGroup';
 
 interface Props {
   withdrawalAddressesGroups: WithdrawalAddressesGroup[];
@@ -150,33 +151,11 @@ const ValidatorStats: React.FC<Props> = ({
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-      <div className="m-4 sm:col-span-2 md:col-span-3">
-        <lukso-card variant="basic" size="medium">
-          <div
-            slot="content"
-            className="p-6 flex flex-col items-center justify-center"
-          >
-            <h2 className="heading-inter-21-semi-bold mb-4 text-center text-purple-31">
-              Select Validators Group
-            </h2>
-            <div className="flex items-center justify-center flex-wrap">
-              {withdrawalAddressesGroups.map((group) => (
-                <lukso-button
-                  key={group.key}
-                  variant={
-                    selectedGroup.name === group.name ? 'primary' : 'landing'
-                  }
-                  onClick={() => setSelectedGroup(group)}
-                  custom-class="m-2"
-                >
-                  {group.name}
-                </lukso-button>
-              ))}
-            </div>
-          </div>
-        </lukso-card>
-      </div>
-
+      <SelectGroup
+        selectedGroup={selectedGroup}
+        setSelectedGroup={setSelectedGroup}
+        withdrawalAddressesGroups={withdrawalAddressesGroups}
+      />
       <Network />
       <Validators validatorsCount={validatorsCount} />
       <Balance validatorsBalances={validatorsBalances} />

@@ -12,11 +12,11 @@ const Network = () => {
   const { eur = 0, usd = 0 } = useContext(LYXPriceContext);
 
   return (
-    <div className="m-4 min-h-20">
+    <div className="m-4">
       <lukso-card variant="basic" size="medium">
         <div
           slot="content"
-          className="p-6 flex flex-col items-center justify-center text-center min"
+          className="p-6 flex flex-col items-center justify-center text-center"
         >
           <div className="mb-4 container flex flex-row flex-wrap justify-center">
             <div className="col-span-1 p-2 border-t border-purple-31 border-spacing-2">
