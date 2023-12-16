@@ -161,15 +161,13 @@ export const Earnings: React.FC<Props> = ({
             <h2 className="heading-inter-21-semi-bold mb-4 text-purple-31">
               {getTimeframeTitle()}
             </h2>
-            <div className="w-full grid grid-cols-3 justify-around content-center">
+            <div className="w-full flex flex-col justify-center items-center">
               {timeframe !== 'total' ? (
-                <>
-                  <div className="col-span-1 flex justify-start">
-                    <p className="paragraph-inter-14-medium px-1">
-                      Calculated APR
-                    </p>
-                  </div>
-                  <div className="col-span-2 flex flex-col justify-center">
+                <div className="flex flex-row flex-wrap justify-around border-b border-lukso-70 mb-2">
+                  <p className="paragraph-inter-14-medium p-1">
+                    Calculated APR
+                  </p>
+                  <div className="flex flex-col justify-center p-1">
                     <p className="paragraph-inter-14-medium">
                       {`${getTimeframePercentageYield({
                         totalAtStake: stakedLYX / 1e9,
@@ -184,25 +182,24 @@ export const Earnings: React.FC<Props> = ({
                       })
                     ).toLocaleString()} LYX)`}</p>
                   </div>
-                  <div className="border-lukso-70 col-span-3 border-b my-2 mx-4" />
-                </>
+                </div>
               ) : (
                 <></>
               )}
-              <div className="flex justify-start content-start col-span-1">
-                <p className="paragraph-inter-14-medium px-1">Real Earnings</p>
-              </div>
-              <div className="col-span-2 flex flex-col justify-center">
-                <p className="paragraph-inter-14-medium">
-                  {getErningsComparedToAPR(earnings)}
-                </p>
-                {timeframe !== 'total' ? (
-                  <p className="paragraph-inter-12-medium">{`(Aproximate APR ${(
-                    (earnings / (activeBalance / 1e9)) * 100 || 0
-                  ).toLocaleString()} %)`}</p>
-                ) : (
-                  <></>
-                )}
+              <div className="flex flex-row flex-wrap justify-around items-center">
+                <p className="paragraph-inter-14-medium p-1">Real Earnings</p>
+                <div className="flex flex-col justify-center p-1">
+                  <p className="paragraph-inter-14-medium">
+                    {getErningsComparedToAPR(earnings)}
+                  </p>
+                  {timeframe !== 'total' ? (
+                    <p className="paragraph-inter-12-medium">{`(Aproximate APR ${(
+                      (earnings / (activeBalance / 1e9)) * 100 || 0
+                    ).toLocaleString()} %)`}</p>
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
             </div>
             <DisplayTokenPrice tokenAmount={earnings} />

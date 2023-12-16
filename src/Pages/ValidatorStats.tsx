@@ -15,6 +15,7 @@ import { ValidatorMap, WithdrawalAddressesGroup } from '../Types/UsedDataTypes';
 
 // context
 import { ValidatorsDataContext } from '../App';
+import Network from '../Components/ValidatorStatsComponents/Network';
 
 interface Props {
   withdrawalAddressesGroups: WithdrawalAddressesGroup[];
@@ -176,6 +177,7 @@ const ValidatorStats: React.FC<Props> = ({
         </lukso-card>
       </div>
 
+      <Network />
       <Validators validatorsCount={validatorsCount} />
       <Balance validatorsBalances={validatorsBalances} />
       <WithdrawableAmount
